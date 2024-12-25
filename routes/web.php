@@ -1,0 +1,74 @@
+<?php
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HafizController;
+use App\Http\Controllers\MemorizationController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
+use App\Http\Middleware\Auth;
+use App\Http\Middleware\NonAuthenticated;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    if (auth()) {
+        return redirect()->route('dashboard');
+    }
+    return inertia('Welcome');
+})->name('home');
+
+Route::middleware(NonAuthenticated::class)->group(function () {
+    Route::prefix('auth')->group(function () {
+        Route::match(['get', 'post'], 'login', [AuthController::class, 'login'])->name('login');
+        Route::match(['get', 'post'], 'register', [AuthController::class, 'register'])->name('register');
+        Route::match(['get', 'post'], 'forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password');
+    });
+});
+
+Route::middleware([Auth::class])->group(function () {
+    Route::match(['get', 'post'], 'auth/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('', function () {
+        return redirect()->route('dashboard');
+    });
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
+
+    Route::prefix('reports')->group(function () {
+        Route::get('', [ReportController::class, 'index'])->name('report.index');
+    });
+
+    Route::prefix('huffaz')->group(function () {
+        Route::get('', [HafizController::class, 'index'])->name('hafiz.index');
+        Route::get('data', [HafizController::class, 'data'])->name('hafiz.data');
+        Route::get('add', [HafizController::class, 'editor'])->name('hafiz.add');
+        Route::get('edit/{id}', [HafizController::class, 'editor'])->name('hafiz.edit');
+        Route::post('save', [HafizController::class, 'save'])->name('hafiz.save');
+        Route::post('delete/{id}', [HafizController::class, 'delete'])->name('hafiz.delete');
+    });
+
+    Route::prefix('memorizations')->group(function () {
+        Route::get('', [MemorizationController::class, 'index'])->name('memorization.index');
+        Route::get('data', [MemorizationController::class, 'data'])->name('memorization.data');
+        Route::get('add', [MemorizationController::class, 'editor'])->name('memorization.add');
+        Route::get('edit/{id}', [MemorizationController::class, 'editor'])->name('memorization.edit');
+        Route::post('save', [MemorizationController::class, 'save'])->name('memorization.save');
+        Route::post('delete/{id}', [MemorizationController::class, 'delete'])->name('memorization.delete');
+    });
+
+    Route::prefix('settings')->group(function () {
+        Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('profile/update', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+
+        Route::prefix('users')->group(function () {
+            Route::get('', [UserController::class, 'index'])->name('user.index');
+            Route::get('data', [UserController::class, 'data'])->name('user.data');
+            Route::get('add', [UserController::class, 'editor'])->name('user.add');
+            Route::get('edit/{id}', [UserController::class, 'editor'])->name('user.edit');
+            Route::post('save', [UserController::class, 'save'])->name('user.save');
+            Route::post('delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+        });
+    });
+});
