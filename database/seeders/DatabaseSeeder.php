@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         DB::transaction(function () {
             $this->call([
+                SurahSeeder::class,
+                AyahSeeder::class,
                 UserSeeder::class,
                 HafizSeeder::class,
             ]);

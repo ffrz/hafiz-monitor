@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('memorizations', function (Blueprint $table) {
+        Schema::create('surahs', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name');
+            $table->unsignedTinyInteger('total_ayahs');
         });
     }
 
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('memorizations');
+        Schema::dropIfExists('surahs');
     }
 };

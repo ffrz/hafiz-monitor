@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Hafiz extends Model
 {
-    public $table = 'huffaz';
     use HasFactory;
+
+    protected $table = 'hafizes';
 
     /**
      * The attributes that are mass assignable.
