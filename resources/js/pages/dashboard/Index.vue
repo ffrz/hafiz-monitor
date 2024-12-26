@@ -11,7 +11,7 @@ const title = "Dashboard";
         <q-card class="col" square flat bordered>
           <q-card-section>
             <div class="text-h6">Dashboard</div>
-            <p class="q-my-md">Dashboard Works!!</p>
+            <p class="q-my-md">Mohon maaf, fitur dashboard belum tersedia.</p>
           </q-card-section>
         </q-card>
       </div>

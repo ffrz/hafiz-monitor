@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('surah_id')->constrained()->onDelete('restrict');
             $table->unsignedTinyInteger('number');
             $table->unsignedTinyInteger('juz')->nullable()->default(null);
-            $table->unsignedTinyInteger('text');
+            $table->text('text');
         });
     }
 

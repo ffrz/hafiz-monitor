@@ -8,7 +8,7 @@ import { Notify, Dialog } from "quasar";
 
 const page = usePage();
 const scores = reactive(page.props.scores);
-const title = "Sesi Hafalan Berjalan";
+const title = "Sesi Penilaian Hafalan";
 const data = ref(page.props.data);
 const surahs = page.props.surahs.map((item) => {
   return {

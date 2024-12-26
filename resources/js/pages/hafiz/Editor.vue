@@ -7,11 +7,25 @@ import DatePicker from "@/components/DatePicker.vue";
 const page = usePage();
 const title = !!page.props.data.id ? "Edit Hafidz" : "Tambah Hafidz";
 const genders = create_gender_options();
+const juzs = Array.from({ length: 30 }, (_, i) => i + 1).map((juz) => {
+  return {
+    value: juz,
+    label: `Juz ${juz}`,
+  };
+});
+const surahs = page.props.surahs.map((surah) => {
+  return {
+    value: surah.id,
+    label: `${surah.id} - ${surah.name}`,
+  };
+});
 const form = useForm({
   id: page.props.data.id,
   name: page.props.data.name,
+  juzs: page.props.data.juzs,
+  surahs: page.props.data.surahs,
   gender: page.props.data.gender,
-  birth_date: page.props.data.birth_date ?? '',
+  birth_date: page.props.data.birth_date ?? "",
   phone: page.props.data.phone,
   address: page.props.data.address,
   notes: page.props.data.notes,
@@ -42,6 +56,40 @@ const submit = () => handleSubmit({ form, url: route("hafiz.save") });
                 :rules="[
                   (val) => (val && val.length > 0) || 'Nama harus diisi.',
                 ]"
+              />
+              <q-select
+                v-model="form.surahs"
+                label="Hafalan Surat"
+                multiple
+                :options="surahs"
+                map-options
+                clearable
+                emit-value
+                lazy-rules
+                use-input
+                use-chips
+                :disable="form.processing"
+                transition-show="jump-up"
+                transition-hide="jump-up"
+                :error="!!form.errors.surahs"
+                :error-message="form.errors.surahs"
+              />
+              <q-select
+                v-model="form.juzs"
+                label="Hafalan Juz"
+                multiple
+                clearable
+                :options="juzs"
+                map-options
+                emit-value
+                lazy-rules
+                use-input
+                use-chips
+                :disable="form.processing"
+                transition-show="jump-up"
+                transition-hide="jump-up"
+                :error="!!form.errors.juzs"
+                :error-message="form.errors.juzs"
               />
               <date-picker
                 v-model="form.birth_date"

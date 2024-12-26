@@ -24,10 +24,22 @@ class Hafiz extends Model
         'address',
         'notes',
         'active',
+        'surahs',
+        'juzs',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function memorizedJuzs()
+    {
+        return $this->hasMany(HafizMemorizedJuz::class);
+    }
+
+    public function memorizedSurahs()
+    {
+        return $this->hasMany(HafizMemorizedJuz::class);
     }
 }

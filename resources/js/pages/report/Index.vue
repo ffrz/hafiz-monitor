@@ -11,7 +11,7 @@ const title = 'Report';
         <q-card class="col" square flat bordered>
           <q-card-section>
             <div class="text-h6">Report</div>
-            <p class="q-my-md">Report Works!!</p>
+            <p class="q-my-md">Mohon maaf, fitur laporan belum tersedia.</p>
           </q-card-section>
         </q-card>
       </div>
