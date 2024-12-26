@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AyahSeeder extends Seeder
 {
@@ -64,11 +65,16 @@ class AyahSeeder extends Seeder
     {
         $ayahs = DB::connection('al_quran_db')->table('table_ayat')->get();
         foreach ($ayahs as $ayah) {
+            $text = $ayah->Arab;
+            if ($ayah->Ayat == 1 && $ayah->Surah > 1) {
+                $text = trim(str_replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', '', $text));
+            }
+
             DB::connection()->table('ayahs')->insert([
                 'surah_id' => $ayah->Surah,
                 'number' => $ayah->Ayat,
                 'juz' => static::getJuz($ayah->Surah, $ayah->Ayat),
-                'text' => $ayah->Arab,
+                'text' => $text,
             ]);
         }
     }
