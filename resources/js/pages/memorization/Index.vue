@@ -212,7 +212,7 @@ const deleteItem = (row) =>
               {{ props.row.hafiz.name }}
             </q-td>
             <q-td key="score" :props="props">
-              {{ props.row.status == 'open' ? "-" : props.row.score }}
+              {{ props.row.status == 'open' ? "-" : Math.round(props.row.score) }}
             </q-td>
             <q-td key="status" :props="props">
               {{ props.row.status == 'open' ? "Sedang Berjalan" : "Selesai" }}
