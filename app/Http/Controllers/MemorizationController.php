@@ -129,7 +129,7 @@ class MemorizationController extends Controller
 
     public function run(Request $request)
     {
-        $memorization = Memorization::with('hafiz')->findOrFail($request->get('id', null));
+        $memorization = Memorization::with(['hafiz', 'hafiz.memorizedSurahs', 'hafiz.memorizedSurahs.surah'])->findOrFail($request->get('id', null));
         $scores = [];
         foreach ($memorization->details as $detail) {
             if (!isset($scores[$detail->ayah_id])) {
@@ -138,9 +138,14 @@ class MemorizationController extends Controller
             $scores[$detail->ayah_id]['score'] = $detail->score;
             $scores[$detail->ayah_id]['notes'] = $detail->notes;
         }
+
+        $data = $memorization->toArray();
+        $surahs = array_column($data['hafiz']['memorized_surahs'], 'surah');
+        unset($data['hafiz']['memorized_surahs']);
+
         return inertia('memorization/Run', [
-            'data' => $memorization,
-            'surahs' => Surah::all(),
+            'data' => $data,
+            'surahs' => $surahs ,
             'scores' => $scores,
         ]);
     }

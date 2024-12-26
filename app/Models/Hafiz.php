@@ -40,6 +40,6 @@ class Hafiz extends Model
 
     public function memorizedSurahs()
     {
-        return $this->hasMany(HafizMemorizedJuz::class);
+        return $this->hasMany(HafizMemorizedSurah::class);
     }
 }
