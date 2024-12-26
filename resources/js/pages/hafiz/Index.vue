@@ -199,7 +199,7 @@ const deleteItem = (row) =>
               {{ format_gender(props.row.gender) }}
             </q-td>
             <q-td key="birth_date" :props="props">
-              {{ props.row.birth_date ? dayjs(props.row.birth_date, 'DD MMMM YYYY') : '' }}
+              {{ props.row.birth_date ? dayjs(props.row.birth_date).format('DD MMMM YYYY') : '' }}
               {{ props.row.birth_date ? '(' + dayjs().diff(props.row.birth_date, 'year') + ' tahun)' : '' }}
             </q-td>
             <q-td key="phone" :props="props">

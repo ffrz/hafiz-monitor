@@ -203,7 +203,7 @@ const deleteItem = (row) =>
             :class="props.row.status == 'open' ? 'bg-orange-1' : ''"
           >
             <q-td key="created_at" :props="props">
-              {{ dayjs(props.row.created_at).format("YYYY-MM-DD HH:mm") }}
+              {{ dayjs(props.row.created_at).format("DD-MM-YYYY HH:mm") }}
             </q-td>
             <q-td key="title" :props="props">
               {{ props.row.title }}
