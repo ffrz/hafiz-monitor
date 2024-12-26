@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
                 AyahSeeder::class,
                 UserSeeder::class,
                 HafizSeeder::class,
+                MemorizationSeeder::class,
+                MemorizationDetailSeeder::class,
             ]);
         });
     }

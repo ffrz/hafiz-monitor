@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -17,15 +17,14 @@ class UserSeeder extends Seeder
     {
         UserFactory::$defaultPassword = Hash::make('12345');
 
-        User::factory()->create([
-            'name' => 'Fahmi Fauzi Rahman',
-            'email' => 'fahmifauzirahman@gmail.com',
-            'active' => 1,
-        ]);
+        $rows = DB::connection('online_db')->table('users')->get();
+        foreach ($rows as $row) {
+            DB::connection()->table('users')->insert((array)$row);
+        }
 
         User::factory()->create([
-            'name' => 'Neni Nurniah',
-            'email' => 'neninurniah@gmail.com',
+            'name' => 'Mentor',
+            'email' => 'mentor@example.com',
             'active' => 1,
         ]);
     }

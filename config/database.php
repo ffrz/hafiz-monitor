@@ -31,8 +31,13 @@ return [
 
     'connections' => [
         'al_quran_db' => [
-            'driver' => 'sqlite', // or mysql, pgsql, etc.
+            'driver' => 'sqlite',
             'database' => database_path('AlquranQ.sqlite'),
+            'prefix' => '',
+        ],
+        'online_db' => [
+            'driver' => 'sqlite',
+            'database' => database_path('online_database.sqlite'),
             'prefix' => '',
         ],
         'sqlite' => [
