@@ -7,6 +7,9 @@ import { router } from "@inertiajs/vue3";
 import { Notify, Dialog } from "quasar";
 
 const page = usePage();
+const show_notes_prompt = ref(false);
+const current_notes = ref("");
+const current_ayah = ref(null);
 const scores = reactive(page.props.scores);
 const title = "Sesi Penilaian Hafalan";
 const data = ref(page.props.data);
@@ -63,11 +66,20 @@ const toggleScore = (row, score) => {
   scores[row.id].score = score;
 };
 
+const filteredScores = () => {
+  const filteredItems = {};
+  for (let ayah_id in scores) {
+    if (!ayah_id) continue;
+    filteredItems[ayah_id] = scores[ayah_id];
+  }
+  return filteredItems;
+};
+
 const submitScore = async () => {
   const response = await axios.post(
     route("memorization.save", { id: data.value.id }),
     {
-      scores: scores,
+      scores: filteredScores(),
       closeSession: false,
     }
   );
@@ -78,21 +90,69 @@ const closeSession = async () => {
   Dialog.create({
     title: "Konfirmasi",
     icon: "question",
-    message: "Selesaikan sesi penilaian kali ini?",
+    message: "Anda setuju untuk mengakhiri sesi penilaian hafalan?",
     focus: "cancel",
     cancel: true,
     persistent: true,
   }).onOk(() => {
     router.post(route("memorization.save", { id: data.value.id }), {
-      scores: scores,
+      scores: filteredScores(),
       closeSession: true,
     });
   });
+};
+
+const addNotes = () => {
+  if (!current_ayah.value in scores) {
+    scores[current_ayah.value] = {};
+  }
+  scores[current_ayah.value].notes = current_notes.value;
+
+  // reset
+  current_notes.value = "";
+  current_ayah.value = null;
+};
+
+const showDialog = (selectedAyah) => {
+  current_ayah.value = selectedAyah;
+  current_notes.value = scores[selectedAyah]?.notes;
+  show_notes_prompt.value = true;
 };
 </script>
 
 <template>
   <i-head :title="title" />
+  <q-dialog v-model="show_notes_prompt" persistent>
+    <q-card style="min-width: 350px" class="q-pa-sm">
+      <q-card-section>
+        <div class="text-subtitle1 text-grey-9">
+          <b>Catatan</b> (ayat ke-{{ current_ayah }})
+        </div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <q-input
+          dense
+          v-model.trim="current_notes"
+          autofocus
+          autogrow
+          counter
+          maxlength="1000"
+          clearable
+        />
+      </q-card-section>
+      <q-card-actions align="right" class="text-primary">
+        <q-btn label="Batal" v-close-popup icon="cancel" />
+        <q-btn
+          label="Simpan"
+          v-close-popup
+          @click="addNotes"
+          icon="check"
+          color="primary"
+          class="text-bold"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
   <authenticated-layout>
     <template #title>{{ title }}</template>
     <div class="row justify-center">
@@ -151,24 +211,39 @@ const closeSession = async () => {
                     <div class="score row q-pa-xs q-gutter-sm">
                       <q-btn
                         class="col"
+                        :class="
+                          scores[props.row.id]?.score === 100 ? 'text-bold' : ''
+                        "
                         :color="
                           scores[props.row.id]?.score === 100 ? 'blue' : 'white'
                         "
-                        text-color="black"
+                        :text-color="
+                          scores[props.row.id]?.score === 100
+                            ? 'white'
+                            : 'black'
+                        "
                         @click="toggleScore(props.row, 100)"
                         label="A"
                       />
                       <q-btn
                         class="col"
+                        :class="
+                          scores[props.row.id]?.score === 90 ? 'text-bold' : ''
+                        "
                         :color="
                           scores[props.row.id]?.score === 90 ? 'green' : 'white'
                         "
-                        text-color="black"
+                        :text-color="
+                          scores[props.row.id]?.score === 90 ? 'white' : 'black'
+                        "
                         @click="toggleScore(props.row, 90)"
                         label="B"
                       />
                       <q-btn
                         class="col"
+                        :class="
+                          scores[props.row.id]?.score === 80 ? 'text-bold' : ''
+                        "
                         :color="
                           scores[props.row.id]?.score === 80
                             ? 'yellow'
@@ -180,42 +255,70 @@ const closeSession = async () => {
                       />
                       <q-btn
                         class="col"
+                        :class="
+                          scores[props.row.id]?.score === 70 ? 'text-bold' : ''
+                        "
                         :color="
                           scores[props.row.id]?.score === 70
                             ? 'orange'
                             : 'white'
                         "
-                        text-color="black"
+                        :text-color="
+                          scores[props.row.id]?.score === 70 ? 'white' : 'black'
+                        "
                         @click="toggleScore(props.row, 70)"
                         label="D"
                       />
                       <q-btn
                         class="col"
+                        :class="
+                          scores[props.row.id]?.score === 60 ? 'text-bold' : ''
+                        "
                         :color="
                           scores[props.row.id]?.score === 60 ? 'red' : 'white'
                         "
-                        text-color="black"
+                        :text-color="
+                          scores[props.row.id]?.score === 60 ? 'white' : 'black'
+                        "
                         @click="toggleScore(props.row, 60)"
                         label="E"
                       />
-                      <q-btn class="col" label="..." />
+                      <q-btn
+                        class="col"
+                        :icon="
+                          !scores[props.row.id]?.score
+                            ? 'edit_off'
+                            : !scores[props.row.id]?.notes
+                            ? 'edit_note'
+                            : 'comment'
+                        "
+                        @click="showDialog(props.row.id)"
+                        :text-color="
+                          !scores[props.row.id]?.notes ? 'grey' : 'red'
+                        "
+                        :disabled="!scores[props.row.id]"
+                      />
                     </div>
                   </q-td>
                 </q-tr>
               </template>
             </q-table>
+          </q-card-section>
+          <q-card-section>
             <div class="full-width q-py-sm">
               <div class="row q-gutter-sm">
                 <q-btn
+                  icon="save"
                   label="SIMPAN PENILAIAN"
                   color="grey"
-                  class="col q-mt-sm"
+                  class="col q-mt-sm text-bold"
                   @click="submitScore"
                 />
                 <q-btn
-                  label="SELESAI"
+                  icon="check"
+                  label="AKHIRI SESI"
                   color="primary"
-                  class="col q-mt-sm"
+                  class="col q-mt-sm text-bold"
                   @click="closeSession"
                 />
               </div>
@@ -248,6 +351,8 @@ const closeSession = async () => {
 
 /* Style the Ayah number on the left */
 .ayah-number {
+  color: #555;
+  font-weight: bold;
   width: auto; /* Auto width for the first column */
   font-size: 12px;
 }

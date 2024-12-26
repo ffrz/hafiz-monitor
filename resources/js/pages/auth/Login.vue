@@ -4,9 +4,9 @@ import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 let form = useForm({
-  email: "fahmifauzirahman@gmail.com",
-  password: "12345",
-  remember: true,
+  email: "",
+  password: "",
+  remember: false,
 });
 
 const submit = () => handleSubmit({ form, url: route("login") });

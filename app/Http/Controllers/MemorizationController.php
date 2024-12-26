@@ -97,8 +97,8 @@ class MemorizationController extends Controller
             $detail = new MemorizationDetail([
                 'memorization_id' => $memorization->id,
                 'ayah_id' => $ayah_id,
-                'score' => $score['score'],
-                'notes' => '', // TODO: IMPLEMENTASIKAN NOTES
+                'score' => $score['score'] ?? 0,
+                'notes' => trim($score['notes'] ?? ''),
             ]);
             $detail->save();
         }
@@ -141,6 +141,9 @@ class MemorizationController extends Controller
 
         $data = $memorization->toArray();
         $surahs = array_column($data['hafiz']['memorized_surahs'], 'surah');
+        usort($surahs, function ($a, $b) {
+            return $a['id'] <=> $b['id'];
+        });
         unset($data['hafiz']['memorized_surahs']);
 
         return inertia('memorization/Run', [

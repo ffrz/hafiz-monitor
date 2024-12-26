@@ -32,6 +32,7 @@ const submit = () => handleSubmit({ form, url: route("memorization.create") });
             <q-card-section class="q-pt-none">
               <input type="hidden" name="id" v-model="form.id" />
               <q-select
+                autofocus
                 v-model="form.hafiz_id"
                 label="Hafidz"
                 :options="hafizes"
@@ -45,7 +46,6 @@ const submit = () => handleSubmit({ form, url: route("memorization.create") });
                 :error-message="form.errors.hafiz_id"
               />
               <q-input
-                autofocus
                 v-model.trim="form.title"
                 label="Judul Sesi"
                 lazy-rules

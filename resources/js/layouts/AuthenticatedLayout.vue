@@ -1,7 +1,6 @@
 <script setup>
 import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
-import { check_role } from "@/helpers/utils";
 import { useQuasar } from "quasar";
 
 defineComponent({
