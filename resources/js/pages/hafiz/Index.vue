@@ -12,7 +12,7 @@ const statuses = [
   { value: "inactive", label: "Tidak Aktif" },
 ];
 
-const title = "Klien";
+const title = "Hafidz";
 const $q = useQuasar();
 const tableRef = ref(null);
 const rows = ref([]);

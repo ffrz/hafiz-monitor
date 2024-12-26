@@ -7,6 +7,7 @@ import AuthenticatedLayout from "./layouts/AuthenticatedLayout.vue";
 import GuestLayout from "./layouts/GuestLayout.vue";
 import "@quasar/extras/material-icons/material-icons.css";
 import "@quasar/extras/material-icons-outlined/material-icons-outlined.css";
+import "@quasar/extras/material-symbols-outlined/material-symbols-outlined.css";
 import "@quasar/extras/fontawesome-v6/fontawesome-v6.css";
 import "quasar/src/css/index.sass";
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
@@ -33,10 +34,7 @@ createInertiaApp({
       .use(Quasar, {
         plugins: { Notify, Loading, Dialog },
         config: {
-          framework: {
-            cssAddon: true,
-            iconSet: 'material-icons-outlined', // Change this to use the outlined icon set
-          }
+          iconSet: 'material-symbols-outlined',
         }
       })
       .component('i-head', Head)

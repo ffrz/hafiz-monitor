@@ -173,7 +173,7 @@ onUnmounted(() => {
               <q-icon class="material-icons-outlined">checklist_rtl</q-icon>
             </q-item-section>
             <q-item-section>
-              <q-item-label>Cek Hafalan</q-item-label>
+              <q-item-label>Penilaian Hafalan</q-item-label>
             </q-item-section>
           </q-item>
           <q-item

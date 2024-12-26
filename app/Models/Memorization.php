@@ -11,7 +11,8 @@ class Memorization extends Model
         'hafiz_id',
         'title',
         'score',
-        'notes'
+        'notes',
+        'status'
     ];
 
     public function user()

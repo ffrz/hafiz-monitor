@@ -36,15 +36,15 @@ class HafizController extends Controller
             });
         }
 
-        $clients = $q->paginate($request->get('per_page', 10))->withQueryString();
-        return response()->json($clients);
+        $hafizes = $q->paginate($request->get('per_page', 10))->withQueryString();
+        return response()->json($hafizes);
     }
 
     public function editor($id = 0)
     {
-        $client = $id ? Hafiz::findOrFail($id) : new Hafiz(['active' => true]);
+        $hafiz = $id ? Hafiz::findOrFail($id) : new Hafiz(['active' => true]);
         return inertia('hafiz/Editor', [
-            'data' => $client,
+            'data' => $hafiz,
         ]);
     }
 

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('memorization_details', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('memorization_id')->constrained()->onDelete('cascade');
             $table->foreignId('ayah_id')->constrained()->onDelete('restrict');
             $table->unsignedTinyInteger('score')->nullable()->defaut(null);
+            $table->text('notes')->nullable()->default(null);
         });
     }
 

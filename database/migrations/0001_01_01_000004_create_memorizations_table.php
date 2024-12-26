@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('memorizations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('hafiz_id')->constrained('huffaz')->onDelete('cascade');
+            $table->foreignId('hafiz_id')->constrained('hafizes')->onDelete('cascade');
             $table->string('title')->nullable()->default('');
             $table->unsignedTinyInteger('score')->default(0);
             $table->text('notes')->nullable()->default(null);
+            $table->enum('status', ['open', 'closed']);
             $table->timestamps();
         });
     }

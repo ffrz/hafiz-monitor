@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AyahController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HafizController;
 use App\Http\Controllers\MemorizationController;
@@ -39,6 +40,10 @@ Route::middleware([Auth::class])->group(function () {
         Route::get('', [ReportController::class, 'index'])->name('report.index');
     });
 
+    Route::prefix('ayahs')->group(function () {
+        Route::get('data', [AyahController::class, 'data'])->name('ayah.data');
+    });
+
     Route::prefix('huffaz')->group(function () {
         Route::get('', [HafizController::class, 'index'])->name('hafiz.index');
         Route::get('data', [HafizController::class, 'data'])->name('hafiz.data');
@@ -51,10 +56,11 @@ Route::middleware([Auth::class])->group(function () {
     Route::prefix('memorizations')->group(function () {
         Route::get('', [MemorizationController::class, 'index'])->name('memorization.index');
         Route::get('data', [MemorizationController::class, 'data'])->name('memorization.data');
-        Route::get('add', [MemorizationController::class, 'editor'])->name('memorization.add');
-        Route::get('edit/{id}', [MemorizationController::class, 'editor'])->name('memorization.edit');
+        Route::match(['get', 'post'], 'create', [MemorizationController::class, 'create'])->name('memorization.create');
         Route::post('save', [MemorizationController::class, 'save'])->name('memorization.save');
+        Route::get('preview-score', [MemorizationController::class, 'previewScore'])->name('memorization.preview-score');
         Route::post('delete/{id}', [MemorizationController::class, 'delete'])->name('memorization.delete');
+        Route::get('run', [MemorizationController::class, 'run'])->name('memorization.run');
     });
 
     Route::prefix('settings')->group(function () {

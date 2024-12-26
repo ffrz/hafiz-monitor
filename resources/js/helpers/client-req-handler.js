@@ -78,7 +78,7 @@ export function handleDelete(data) {
   });
 }
 
-export function handleFetchItems(options) {
+export function handleFetchItems(options, extraParams) {
   const { pagination, props, rows, url, loading, filter } = options;
 
   let params = {
@@ -99,7 +99,7 @@ export function handleFetchItems(options) {
   loading.value = true;
 
   axios
-    .get(url, { params: params })
+    .get(url, { params: params, ...extraParams })
     .then((response) => {
       rows.value = response.data.data;
       pagination.value.page = response.data.current_page;
