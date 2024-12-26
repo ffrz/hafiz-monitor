@@ -228,7 +228,7 @@ const deleteItem = (row) =>
                 dense
                 flat
                 @click="router.get(route('memorization.run', {id: props.row.id}))"
-                :icon="props.row.status == 'open' ? 'play_cicle' : 'edit'"
+                :icon="props.row.status == 'open' ? 'play_circle' : 'edit'"
               >
                 <q-tooltip>{{ props.row.status == 'open' ? 'Lanjutkan Sesi' : 'Edit Sesi' }}</q-tooltip>
               </q-btn>
