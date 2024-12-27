@@ -24,8 +24,6 @@ class Hafiz extends Model
         'address',
         'notes',
         'active',
-        'surahs',
-        'juzs',
     ];
 
     public function user()

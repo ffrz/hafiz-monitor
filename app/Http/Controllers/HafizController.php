@@ -61,7 +61,7 @@ class HafizController extends Controller
     public function save(Request $request)
     {
         $userId = Auth::user()->id;
-        $hafiz = !$request->id ? new Hafiz(['user_id', $userId]) : Hafiz::findOrFail($request->id);
+        $hafiz = !$request->id ? new Hafiz(['user_id' => $userId]) : Hafiz::findOrFail($request->id);
 
         $request->validate([
             'name' => 'required|max:255',
