@@ -41,8 +41,8 @@ class MemorizationController extends Controller
 
         $q->orderBy($orderBy, $orderType);
 
-        $clients = $q->paginate($request->get('per_page', 10))->withQueryString();
-        return response()->json($clients);
+        $data = $q->paginate($request->get('per_page', 10))->withQueryString();
+        return response()->json($data);
     }
 
     public function create(Request $request)
@@ -125,14 +125,6 @@ class MemorizationController extends Controller
         return response()->json(['message' => 'Berhasil disimpan']);
     }
 
-    public function previewScore(Request $request)
-    {
-        $memorization = Memorization::with(['hafiz', 'details'])->findOrFail($request->id);
-        return inertia('memorization/Preview', [
-            'data' => $memorization
-        ]);
-    }
-
     public function run(Request $request)
     {
         $memorization = Memorization::with(['hafiz'])->findOrFail($request->get('id', null));
@@ -148,16 +140,56 @@ class MemorizationController extends Controller
             $scores[$detail->ayah_id]['notes'] = $detail->notes;
         }
 
+        $surah_ids = range($memorization->start_surah_id, $memorization->end_surah_id);
         $surahs = DB::table('surahs')
-            ->whereIn('id', range($memorization->start_surah_id, $memorization->end_surah_id))
+            ->whereIn('id', $surah_ids)
             ->get();
 
         $data = $memorization->toArray();
+
+        DB::select('
+            select md.ayah_id, md.score, md.notes
+            from memorization_details md
+            join memorizations m on md.memorization_id = m.id
+            join ayahs a on a.id = md.ayah_id
+            where a.surah_id in (' . implode(',', $surah_ids) . ')
+            order by m.created_at desc
+        ');
+
+        $recent_scores = DB::table('memorization_details')
+        ->join('memorizations', 'memorization_details.memorization_id', '=', 'memorizations.id')
+        ->join('ayahs', 'memorization_details.ayah_id', '=', 'ayahs.id')
+        ->join('surahs', 'ayahs.surah_id', '=', 'surahs.id')
+        ->where('memorizations.hafiz_id', $memorization->hafiz_id)
+        ->where('memorizations.status', 'closed')
+        ->whereIn('surahs.id', $surah_ids)
+        ->select(
+            'ayahs.id as ayah_id',
+            'memorization_details.score',
+            'memorization_details.notes',
+            'memorizations.created_at'
+        )
+        ->orderBy('ayahs.id')
+        ->orderBy('memorizations.created_at', 'desc')
+        ->get()
+        ->groupBy('ayah_id')
+        ->mapWithKeys(function ($scores, $ayahId) {
+            return [
+                $ayahId => $scores->take(3)->map(function ($scoreDetail) {
+                    return [
+                        'score' => $scoreDetail->score,
+                        'notes' => $scoreDetail->notes,
+                    ];
+                })->toArray(), // Include the top 3 scores with details
+            ];
+        })
+        ->toArray();
 
         return inertia('memorization/Run', [
             'data' => $data,
             'surahs' => $surahs,
             'scores' => $scores,
+            'recent_scores' => $recent_scores,
         ]);
     }
 

@@ -5,12 +5,14 @@ import { ref, reactive, onMounted } from "vue";
 import { handleFetchItems } from "@/helpers/client-req-handler";
 import { router } from "@inertiajs/vue3";
 import { Notify, Dialog } from "quasar";
+import { score_to_letter, score_to_color } from "@/helpers/utils";
 
 const page = usePage();
 const show_notes_prompt = ref(false);
 const current_notes = ref("");
 const current_ayah = ref(null);
-const scores = reactive(page.props.scores);
+const scores = page.props.scores;
+const recent_scores = page.props.recent_scores;
 const title = "Sesi Penilaian Hafalan";
 const data = ref(page.props.data);
 const notes = ref(page.props.data.notes); // ga berhasil paka data bikin terpisah aja dulu
@@ -21,7 +23,7 @@ const surahs = page.props.surahs.map((item) => {
     label: `${item.id} - ${item.name} (${item.total_ayahs} ayat)`,
   };
 });
-console.log(surahs);
+
 const rows = ref([]);
 const selectedSurah = ref(null);
 
@@ -49,7 +51,7 @@ onMounted(() => {
     selectedSurah.value = surahs[0];
     handleSurahChanged();
   }
-})
+});
 const handleSurahChanged = () => {
   pagination.value.page = 1;
   fetchItems({ pagination });
@@ -274,36 +276,6 @@ const showDialog = (selectedAyah) => {
                         @click="toggleScore(props.row, 80)"
                         label="C"
                       />
-                      <!-- <q-btn
-                        class="col"
-                        :class="
-                          scores[props.row.id]?.score === 70 ? 'text-bold' : ''
-                        "
-                        :color="
-                          scores[props.row.id]?.score === 70
-                            ? 'orange'
-                            : 'white'
-                        "
-                        :text-color="
-                          scores[props.row.id]?.score === 70 ? 'white' : 'black'
-                        "
-                        @click="toggleScore(props.row, 70)"
-                        label="D"
-                      />
-                      <q-btn
-                        class="col"
-                        :class="
-                          scores[props.row.id]?.score === 60 ? 'text-bold' : ''
-                        "
-                        :color="
-                          scores[props.row.id]?.score === 60 ? 'red' : 'white'
-                        "
-                        :text-color="
-                          scores[props.row.id]?.score === 60 ? 'white' : 'black'
-                        "
-                        @click="toggleScore(props.row, 60)"
-                        label="E"
-                      /> -->
                       <q-btn
                         class="col"
                         :icon="
@@ -320,11 +292,32 @@ const showDialog = (selectedAyah) => {
                         :disabled="!scores[props.row.id]"
                       />
                     </div>
+                    <div
+                      class="recent-scores q-pa-xs text-grey-8"
+                      v-if="recent_scores[props.row.id]"
+                    >
+                      <q-icon name="history" class="q-mr-sm" /><span
+                        v-for="(row, index) in recent_scores[props.row.id]"
+                        :key="index"
+                        class="q-mr-sm"
+                      >
+                        <span class="score"
+                          :title="row.notes"
+                          :style="{
+                            color: score_to_color(row.score),
+                            'font-weight': 'bold',
+                          }"
+                          >{{ score_to_letter(row.score) }}
+                        </span>
+                        <span v-if="row.notes"> : {{ row.notes }} </span>
+                      </span>
+                    </div>
                   </q-td>
                 </q-tr>
               </template>
             </q-table>
-            <q-input class="q-pt-md"
+            <q-input
+              class="q-pt-md"
               label="Catatan (Keseluruhan)"
               v-model.trim="notes"
               autofocus
@@ -361,6 +354,11 @@ const showDialog = (selectedAyah) => {
 </template>
 
 <style scoped>
+
+.recent-scores .score:before {
+  content: "← ";
+}
+
 /* Style the q-table to look like a list */
 .q-table-list .q-td {
   padding: 0;

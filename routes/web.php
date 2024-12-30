@@ -61,7 +61,6 @@ Route::middleware([Auth::class])->group(function () {
         Route::get('data', [MemorizationController::class, 'data'])->name('memorization.data');
         Route::match(['get', 'post'], 'create', [MemorizationController::class, 'create'])->name('memorization.create');
         Route::post('save', [MemorizationController::class, 'save'])->name('memorization.save');
-        Route::get('preview-score', [MemorizationController::class, 'previewScore'])->name('memorization.preview-score');
         Route::post('delete/{id}', [MemorizationController::class, 'delete'])->name('memorization.delete');
         Route::get('run', [MemorizationController::class, 'run'])->name('memorization.run');
         Route::get('view', [MemorizationController::class, 'view'])->name('memorization.view');
