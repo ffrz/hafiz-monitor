@@ -4,7 +4,11 @@ import { useQuasar } from "quasar";
 import { router, usePage } from "@inertiajs/vue3";
 import { handleFetchItems, handleDelete } from "@/helpers/client-req-handler";
 import dayjs from "dayjs";
-import { create_options_v2 } from "@/helpers/utils";
+import {
+  create_options_v2,
+  score_to_letter,
+  score_to_color,
+} from "@/helpers/utils";
 
 const page = usePage();
 
@@ -19,7 +23,7 @@ const tableRef = ref(null);
 const rows = ref([]);
 const loading = ref(true);
 const filter = reactive({
-  hafiz: "all",
+  hafiz_id: "all",
   search: "",
 });
 
@@ -33,44 +37,21 @@ const pagination = ref({
 
 const columns = [
   {
-    name: "created_at",
-    label: "Waktu",
-    field: "created_at",
+    name: "col_1",
+    label: "Rincian",
+    field: "col_1",
     align: "left",
-    sortable: true,
   },
   {
-    name: "title",
-    label: "Judul Sesi",
-    field: "title",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "hafiz",
-    label: "Hafidz",
-    field: "hafiz",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "score",
-    label: "Nilai",
-    field: "score",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "status",
-    label: "Status",
-    field: "status",
-    align: "left",
-    sortable: true,
+    name: "col_2",
+    label: "Skor",
+    field: "col_2",
+    align: "center",
   },
   {
     name: "action",
-    label: "Aksi",
-    align: "center",
+    label: "",
+    align: "right",
   },
 ];
 
@@ -155,14 +136,14 @@ const deleteItem = (row) =>
                   color="primary"
                   icon="play_arrow"
                   @click="router.get(route('memorization.create'))"
-                  label="Sesi Baru"
+                  label="Penilaian Baru"
                 >
-                  <q-tooltip>Sesi Baru</q-tooltip>
+                  <q-tooltip>Penilaian Baru</q-tooltip>
                 </q-btn>
               </div>
               <q-space class="col-auto" />
               <q-select
-                v-model="filter.hafiz"
+                v-model="filter.hafiz_id"
                 class="custom-select col-12 col-sm-2"
                 :options="hafizes"
                 label="Hafidz"
@@ -202,28 +183,30 @@ const deleteItem = (row) =>
             :props="props"
             :class="props.row.status == 'open' ? 'bg-orange-1' : ''"
           >
-            <q-td key="created_at" :props="props">
-              {{ dayjs(props.row.created_at).format("DD-MM-YYYY HH:mm") }}
+            <q-td key="col_1" :props="props">
+              <div>
+                <div class="text-bold">{{ props.row.hafiz.name }}</div>
+                <div>
+                  <div class="text-grey-9">{{ props.row.title }}</div>
+                  <div class="text-grey-8 text-caption"><q-icon name="schedule" /> {{ dayjs(props.row.created_at).format("DD-MM-YYYY HH:mm") }}</div>
+                </div>
+              </div>
             </q-td>
-            <q-td key="title" :props="props">
-              {{ props.row.title }}
-            </q-td>
-            <q-td key="hafiz" :props="props">
-              {{ props.row.hafiz.name }}
-            </q-td>
-            <q-td key="score" :props="props">
-              {{
-                props.row.status == "open" ? "-" : Math.round(props.row.score)
-              }}
-            </q-td>
-            <q-td key="status" :props="props">
-              {{ props.row.status == "open" ? "Sedang Berjalan" : "Selesai" }}
+            <q-td key="col_2" :props="props">
+              <span v-if="props.row.status == 'open'">
+                Sedang Berlangsung
+              </span>
+              <span v-else class="text-bold" :style="{ color: score_to_color(props.row.score) }">
+                {{ score_to_letter(props.row.score) }} /
+                {{ props.row.score.toFixed(2) }}
+              </span>
             </q-td>
             <q-td
               key="action"
               class="q-gutter-x-sm"
               :props="props"
               align="center"
+              style="color: #555"
             >
               <q-btn
                 v-if="props.row.status == 'closed'"

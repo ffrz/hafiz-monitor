@@ -28,9 +28,8 @@ class MemorizationController extends Controller
 
         $q = Memorization::with('hafiz');
         $q->where('user_id', auth()->id());
-        $q->orderBy($orderBy, $orderType);
 
-        if (!empty($filter['hafiz_id'])) {
+        if (!empty($filter['hafiz_id']) && $filter['hafiz_id'] != 'all') {
             $q->where('hafiz_id', '=', $filter['hafiz_id']);
         }
 
@@ -39,6 +38,8 @@ class MemorizationController extends Controller
                 $query->where('hafizes.name', 'like', '%' . $filter['search'] . '%');
             });
         }
+
+        $q->orderBy($orderBy, $orderType);
 
         $clients = $q->paginate($request->get('per_page', 10))->withQueryString();
         return response()->json($clients);

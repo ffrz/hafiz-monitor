@@ -68,8 +68,8 @@ const columns = [
   // },
   {
     name: "action",
-    label: "Aksi",
-    align: "center",
+    label: "",
+    align: "right",
   },
 ];
 
