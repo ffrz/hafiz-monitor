@@ -1,7 +1,7 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { handleFetchItems } from "@/helpers/client-req-handler";
 import { router } from "@inertiajs/vue3";
 import { Notify, Dialog } from "quasar";
@@ -21,6 +21,7 @@ const surahs = page.props.surahs.map((item) => {
     label: `${item.id} - ${item.name} (${item.total_ayahs} ayat)`,
   };
 });
+console.log(surahs);
 const rows = ref([]);
 const selectedSurah = ref(null);
 
@@ -43,6 +44,12 @@ const columns = [
   },
 ];
 
+onMounted(() => {
+  if (surahs.length > 0) {
+    selectedSurah.value = surahs[0];
+    handleSurahChanged();
+  }
+})
 const handleSurahChanged = () => {
   pagination.value.page = 1;
   fetchItems({ pagination });

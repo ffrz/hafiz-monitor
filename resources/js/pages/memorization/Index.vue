@@ -194,7 +194,7 @@ const deleteItem = (row) =>
             </q-td>
             <q-td key="col_2" :props="props">
               <span v-if="props.row.status == 'open'">
-                Sedang Berlangsung
+                Berlangsung
               </span>
               <span v-else class="text-bold" :style="{ color: score_to_color(props.row.score) }">
                 {{ score_to_letter(props.row.score) }} /

@@ -94,7 +94,7 @@ const generateTitle = () => {
               />
               <q-select v-if="!!form.start_surah_id"
                 v-model="form.end_surah_id"
-                label="s.d Surat"
+                label="Sampai Surat"
                 :options="surahs"
                 map-options
                 clearable
