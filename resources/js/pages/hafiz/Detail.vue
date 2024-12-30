@@ -98,7 +98,7 @@ const onDeleteBtnClicked = () => {
             <div class="text-subtitle2 text-bold text-grey-8">
               Hafalan (Penilaian Terakhir)
             </div>
-            <div class="text-caption q-my-sm" v-if="details.length > 0">
+            <div class="text-caption q-my-sm" v-if="Object.keys(details).length > 0">
               <div class="flex">
                 Keterangan Warna:
                 <div class="flex q-mr-md q-ml-sm">
