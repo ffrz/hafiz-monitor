@@ -41,7 +41,10 @@ const columns = [
   },
 ];
 
-const handleSurahChanged = () => fetchItems();
+const handleSurahChanged = () => {
+  pagination.value.page = 1;
+  fetchItems({ pagination });
+};
 
 const fetchItems = (props = null) =>
   handleFetchItems({
@@ -181,7 +184,7 @@ const showDialog = (selectedAyah) => {
           </q-card-section>
           <q-card-section v-show="!!selectedSurah" class="q-pa-sm">
             <q-table
-              class="q-table-list"
+              class="q-table-list scrollable-table "
               style="margin: 0; padding: 0"
               flat
               bordered
