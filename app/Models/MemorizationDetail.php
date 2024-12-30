@@ -19,4 +19,9 @@ class MemorizationDetail extends Model
     {
         return $this->belongsTo(Memorization::class);
     }
+
+    public function ayah()
+    {
+        return $this->belongsTo(Ayah::class);
+    }
 }

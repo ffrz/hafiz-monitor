@@ -38,13 +38,14 @@ Route::middleware([Auth::class])->group(function () {
 
     Route::prefix('reports')->group(function () {
         Route::get('', [ReportController::class, 'index'])->name('report.index');
+        Route::get('data', [ReportController::class, 'index'])->name('report.data');
     });
 
     Route::prefix('ayahs')->group(function () {
         Route::get('data', [AyahController::class, 'data'])->name('ayah.data');
     });
 
-    Route::prefix('huffaz')->group(function () {
+    Route::prefix('hafizes')->group(function () {
         Route::get('', [HafizController::class, 'index'])->name('hafiz.index');
         Route::get('data', [HafizController::class, 'data'])->name('hafiz.data');
         Route::get('add', [HafizController::class, 'editor'])->name('hafiz.add');
@@ -61,6 +62,7 @@ Route::middleware([Auth::class])->group(function () {
         Route::get('preview-score', [MemorizationController::class, 'previewScore'])->name('memorization.preview-score');
         Route::post('delete/{id}', [MemorizationController::class, 'delete'])->name('memorization.delete');
         Route::get('run', [MemorizationController::class, 'run'])->name('memorization.run');
+        Route::get('view', [MemorizationController::class, 'view'])->name('memorization.view');
     });
 
     Route::prefix('settings')->group(function () {

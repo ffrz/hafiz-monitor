@@ -109,7 +109,7 @@ const fetchItems = (props = null) =>
 
 const deleteItem = (row) =>
   handleDelete({
-    url: route("memorization.delete", { id: row.id}),
+    url: route("memorization.delete", { id: row.id }),
     message:
       `Semua penilaian hafalan pada sesi ini akan dihapus. ` +
       (!!row.score ? "Hapus" : "Batalkan") +
@@ -212,10 +212,12 @@ const deleteItem = (row) =>
               {{ props.row.hafiz.name }}
             </q-td>
             <q-td key="score" :props="props">
-              {{ props.row.status == 'open' ? "-" : Math.round(props.row.score) }}
+              {{
+                props.row.status == "open" ? "-" : Math.round(props.row.score)
+              }}
             </q-td>
             <q-td key="status" :props="props">
-              {{ props.row.status == 'open' ? "Sedang Berjalan" : "Selesai" }}
+              {{ props.row.status == "open" ? "Sedang Berjalan" : "Selesai" }}
             </q-td>
             <q-td
               key="action"
@@ -224,13 +226,29 @@ const deleteItem = (row) =>
               align="center"
             >
               <q-btn
+                v-if="props.row.status == 'closed'"
                 rounded
                 dense
                 flat
-                @click="router.get(route('memorization.run', {id: props.row.id}))"
+                @click="
+                  router.get(route('memorization.view', { id: props.row.id }))
+                "
+                icon="visibility"
+              >
+                <q-tooltip>Lihat</q-tooltip>
+              </q-btn>
+              <q-btn
+                rounded
+                dense
+                flat
+                @click="
+                  router.get(route('memorization.run', { id: props.row.id }))
+                "
                 :icon="props.row.status == 'open' ? 'play_circle' : 'edit'"
               >
-                <q-tooltip>{{ props.row.status == 'open' ? 'Lanjutkan Sesi' : 'Edit Sesi' }}</q-tooltip>
+                <q-tooltip>{{
+                  props.row.status == "open" ? "Lanjutkan Sesi" : "Edit Sesi"
+                }}</q-tooltip>
               </q-btn>
               <q-btn
                 rounded
@@ -240,7 +258,7 @@ const deleteItem = (row) =>
                 @click="deleteItem(props.row)"
               >
                 <q-tooltip>{{
-                  props.row.status == 'open' ? "Batalkan Sesi" : "Hapus Sesi"
+                  props.row.status == "open" ? "Batalkan Sesi" : "Hapus Sesi"
                 }}</q-tooltip>
               </q-btn>
             </q-td>

@@ -103,7 +103,7 @@ class MemorizationController extends Controller
             $detail->save();
         }
 
-        $memorization->score = $totalScore > 0 && $count > 0? $totalScore / $count : 0;
+        $memorization->score = $totalScore > 0 && $count > 0 ? $totalScore / $count : 0;
         $redirect = false;
         if ($request->closeSession) {
             $memorization->status = 'closed';
@@ -130,8 +130,15 @@ class MemorizationController extends Controller
     public function run(Request $request)
     {
         $memorization = Memorization::with(['hafiz', 'hafiz.memorizedSurahs', 'hafiz.memorizedSurahs.surah'])->findOrFail($request->get('id', null));
+
         $scores = [];
+        $juzes = [];
+        $surahs = [];
+
         foreach ($memorization->details as $detail) {
+            $juzes[$detail->juz] = 1;
+            $surahs[$detail->surah_id] = 1;
+
             if (!isset($scores[$detail->ayah_id])) {
                 $scores[$detail->ayah_id] = [];
             }
@@ -140,6 +147,9 @@ class MemorizationController extends Controller
         }
 
         $data = $memorization->toArray();
+        $data['surahs'] = array_keys($surahs);
+        $data['juzes'] = array_keys($juzes);
+
         $surahs = array_column($data['hafiz']['memorized_surahs'], 'surah');
         usort($surahs, function ($a, $b) {
             return $a['id'] <=> $b['id'];
@@ -148,8 +158,61 @@ class MemorizationController extends Controller
 
         return inertia('memorization/Run', [
             'data' => $data,
-            'surahs' => $surahs ,
+            'surahs' => $surahs,
             'scores' => $scores,
+        ]);
+    }
+
+    public function view(Request $request)
+    {
+        $memorization = Memorization::select('*')
+            ->with(['hafiz:id,name', 'details', 'details.ayah'])
+            ->findOrFail($request->get('id', null));
+        $juzes = [];
+        $surah_ids = [];
+        $details_by_surahs = [];
+        foreach ($memorization->details as $detail) {
+            $juzes[$detail->ayah->juz] = $detail->ayah->juz;
+            $surah_ids[$detail->ayah->surah_id] = $detail->ayah->surah_id;
+            $details_by_surahs[$detail->ayah->surah_id][] = [
+                'ayah_id' => $detail->ayah_id,
+                'ayah_number' => $detail->ayah->number,
+                'ayah_text' => $detail->ayah->text,
+                'score' => $detail->score,
+                'notes' => $detail->notes,
+            ];
+        }
+
+        $data = $memorization->toArray();
+        $data['details'] = $details_by_surahs;
+        $surah_ids = array_keys($surah_ids);
+        $juzes = array_keys($juzes);
+
+        $surahNames = DB::table('surahs')
+            ->whereIn('id', $surah_ids)
+            ->pluck('name', 'id');
+
+        foreach ($surah_ids as $surah_id) {
+            $data['details'][$surah_id] = [
+                'id' => $surah_id,
+                'name' => $surahNames[$surah_id],
+                'score' => 0,
+                'details' => $details_by_surahs[$surah_id],
+            ];
+
+            $total = 0;
+            foreach ($details_by_surahs[$surah_id] as $detail) {
+                $total += $detail['score'];
+            }
+
+            $count = count($details_by_surahs[$surah_id]);
+            if ($count > 0) {
+                $data['details'][$surah_id]['score'] = $total / $count;
+            }
+        }
+
+        return inertia('memorization/View', [
+            'data' => $data
         ]);
     }
 
