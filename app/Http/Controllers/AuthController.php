@@ -13,10 +13,6 @@ class AuthController extends Controller
 {
     private function _logout(Request $request)
     {
-        $user = Auth::user();
-        if ($user) {
-            // TODO:: log activity
-        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -33,10 +29,6 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-        ], [
-            'email.required' => 'Email harus diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'password.required' => 'Kata sandi harus diisi.',
         ]);
 
         // basic validations
@@ -48,9 +40,9 @@ class AuthController extends Controller
         $data = $request->only(['email', 'password']);
 
         if (!Auth::attempt($data, $request->has('remember'))) {
-            $validator->errors()->add('email', 'Email atau password salah!');
+            $validator->errors()->add('email', __('messages.login-failed_invalid-email-or-password'));
         } else if (!Auth::user()->active) {
-            $validator->errors()->add('email', 'Akun anda tidak aktif. Silahkan hubungi tim administrator!');
+            $validator->errors()->add('email', __('messages.login-failed_inactive-account'));
             $this->_logout($request);
         } else {
             $request->session()->regenerate();
@@ -63,7 +55,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $this->_logout($request);
-        return redirect('/')->with('success', 'Anda telah logout.');
+        return redirect('/')->with('success', __('messages.logout-success'));
     }
 
     public function register(Request $request)
@@ -74,23 +66,10 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:2|max:100',
-            'email' => 'required|email|min:2|max:255',
+            'email' => 'required|unique:users,email|min:2|max:255',
             'password' => 'required|min:5|confirmed',
-        ], [
-            'name.min' => 'Nama terlalu pendek, minimal 2 karakter.',
-            'name.max' => 'Nama terlalu panjang, maksimal 100 karakter.',
-
-            'email.required' => 'Email harus harus diisi.',
-            'email.email' => 'Email tidak valid.',
-            'email.min' => 'Email terlalu pendek, minimal 2 karakter.',
-            'email.max' => 'Email terlalu panjang, maksimal 255 karakter.',
-
-            'password.required' => 'Kata sandi harus diisi.',
-            'password.min' => 'Kata sandi terlalu pendek, minimal 5 karakter.',
-            'password.confirmed' => 'Kata sandi yang anda konfirmasi salah.',
         ]);
 
-        // basic validations
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
@@ -101,7 +80,7 @@ class AuthController extends Controller
         $user->active = true;
         $user->save();
 
-        return redirect(route('login'))->with('success', 'Pendaftaran berhasil, silahkan login.');
+        return redirect(route('login'))->with('success', 'messages.registration-success');
     }
 
     public function forgotPassword(Request $request)
