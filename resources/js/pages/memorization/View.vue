@@ -21,13 +21,13 @@ const data = ref(page.props.data);
           bordered
           class="col q-pa-sm full-width full-height-card"
         >
-          <q-card-section class="q-pa-sm">
+          <q-card-section class="q-pa-sm text-center">
             <div class="text-h6">
               <span>{{ data.hafiz.name }}</span>
             </div>
             <div class="text-subtitle1">
               <span>
-                Total Nilai: <span class="text-bold" :style="{color: score_to_color(data.score)}">{{ score_to_letter(data.score) }}
+                <span class="text-bold" :style="{color: score_to_color(data.score)}">{{ score_to_letter(data.score) }}
                 ({{ data.score.toFixed(2) }})</span>
               </span>
             </div>
@@ -73,15 +73,20 @@ const data = ref(page.props.data);
 .detail-surah {
   font-weight: bold;
   color: #333;
-  background-color: rgb(228, 228, 228);
-  padding: 10px 5px;
+  background-color: #f8f8f8;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 3px;
   margin: 10px 0;
+  text-align: center;
 }
 
 .detail-item {
   border-bottom: 1px dashed #ddd;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
 }
 
 .ayah-item {

@@ -165,7 +165,7 @@ onUnmounted(() => {
           <q-item
             clickable
             v-ripple
-            :active="$page.url == '/memorizations'"
+            :active="$page.url.startsWith('/memorizations')"
             @click="router.get(route('memorization.index'))"
           >
             <q-item-section avatar>
@@ -175,7 +175,7 @@ onUnmounted(() => {
               <q-item-label>Penilaian Hafalan</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item
+          <!-- <q-item
             clickable
             v-ripple
             :active="$page.url == '/dashboard'"
@@ -200,7 +200,7 @@ onUnmounted(() => {
             <q-item-section>
               <q-item-label>Laporan</q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> -->
           <q-item
             clickable
             v-ripple
