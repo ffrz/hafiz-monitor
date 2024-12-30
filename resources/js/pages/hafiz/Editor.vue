@@ -57,40 +57,6 @@ const submit = () => handleSubmit({ form, url: route("hafiz.save") });
                   (val) => (val && val.length > 0) || 'Nama harus diisi.',
                 ]"
               />
-              <q-select
-                v-model="form.surahs"
-                label="Hafalan Surat"
-                multiple
-                :options="surahs"
-                map-options
-                clearable
-                emit-value
-                lazy-rules
-                use-input
-                use-chips
-                :disable="form.processing"
-                transition-show="jump-up"
-                transition-hide="jump-up"
-                :error="!!form.errors.surahs"
-                :error-message="form.errors.surahs"
-              />
-              <q-select
-                v-model="form.juzs"
-                label="Hafalan Juz"
-                multiple
-                clearable
-                :options="juzs"
-                map-options
-                emit-value
-                lazy-rules
-                use-input
-                use-chips
-                :disable="form.processing"
-                transition-show="jump-up"
-                transition-hide="jump-up"
-                :error="!!form.errors.juzs"
-                :error-message="form.errors.juzs"
-              />
               <date-picker
                 v-model="form.birth_date"
                 label="Tanggal Lahir"

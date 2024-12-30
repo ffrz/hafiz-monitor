@@ -9,9 +9,9 @@ export function score_to_letter(score) {
 }
 
 export function score_to_color(score) {
-  if (score > 90) return "blue";
-  if (score > 80) return "green";
-  if (score > 70) return "orange";
+  if (score > 90) return "green";
+  if (score > 80) return "orange";
+  if (score > 70) return "red";
   if (score > 60) return "red";
   return "red";
 }

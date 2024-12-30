@@ -38,34 +38,34 @@ const columns = [
     align: "left",
     sortable: true,
   },
-  {
-    name: "gender",
-    label: "Gender",
-    field: "gender",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "birth_date",
-    label: "Tanggal Lahir / Usia",
-    field: "birth_date",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "phone",
-    label: "Telepon",
-    field: "phone",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "address",
-    label: "Alamat",
-    field: "address",
-    align: "left",
-    sortable: true,
-  },
+  // {
+  //   name: "gender",
+  //   label: "Jenis Kelamin",
+  //   field: "gender",
+  //   align: "left",
+  //   sortable: true,
+  // },
+  // {
+  //   name: "birth_date",
+  //   label: "Tanggal Lahir / Usia",
+  //   field: "birth_date",
+  //   align: "left",
+  //   sortable: true,
+  // },
+  // {
+  //   name: "phone",
+  //   label: "Telepon",
+  //   field: "phone",
+  //   align: "left",
+  //   sortable: true,
+  // },
+  // {
+  //   name: "address",
+  //   label: "Alamat",
+  //   field: "address",
+  //   align: "left",
+  //   sortable: true,
+  // },
   {
     name: "action",
     label: "Aksi",
@@ -86,7 +86,10 @@ onMounted(() => {
 watch(
   filter,
   (newValue) => {
-    localStorage.setItem("hafiz-monitor.hafiz.filter", JSON.stringify(newValue));
+    localStorage.setItem(
+      "hafiz-monitor.hafiz.filter",
+      JSON.stringify(newValue)
+    );
   },
   { deep: true }
 );
@@ -103,13 +106,7 @@ const fetchItems = (props = null) =>
     url: route("hafiz.data"),
   });
 
-const deleteItem = (row) =>
-  handleDelete({
-    url: route("hafiz.delete", row.id),
-    message: `Semua riwayat nilai hafalan akan dihapus. Hapus ${row.name} dari daftar hafidz?`,
-    fetchItemsCallback: fetchItems,
-    loading,
-  });
+
 </script>
 
 <template>
@@ -195,19 +192,6 @@ const deleteItem = (row) =>
             <q-td key="name" :props="props">
               {{ props.row.name }}
             </q-td>
-            <q-td key="gender" :props="props">
-              {{ format_gender(props.row.gender) }}
-            </q-td>
-            <q-td key="birth_date" :props="props">
-              {{ props.row.birth_date ? dayjs(props.row.birth_date).format('DD MMMM YYYY') : '' }}
-              {{ props.row.birth_date ? '(' + dayjs().diff(props.row.birth_date, 'year') + ' tahun)' : '' }}
-            </q-td>
-            <q-td key="phone" :props="props">
-              {{ props.row.phone }}
-            </q-td>
-            <q-td key="address" :props="props">
-              {{ props.row.address }}
-            </q-td>
             <q-td
               key="action"
               class="q-gutter-x-sm"
@@ -218,19 +202,10 @@ const deleteItem = (row) =>
                 rounded
                 dense
                 flat
-                @click="router.get(route('hafiz.edit', props.row.id))"
-                icon="edit"
+                @click="router.get(route('hafiz.detail', props.row.id))"
+                icon="info"
               >
-                <q-tooltip>Edit Hafidz</q-tooltip>
-              </q-btn>
-              <q-btn
-                rounded
-                dense
-                flat
-                icon="delete"
-                @click="deleteItem(props.row)"
-              >
-                <q-tooltip>Hapus Hafidz</q-tooltip>
+                <q-tooltip>Rincian</q-tooltip>
               </q-btn>
             </q-td>
           </q-tr>

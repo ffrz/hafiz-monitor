@@ -204,7 +204,7 @@ onUnmounted(() => {
           <q-item
             clickable
             v-ripple
-            :active="$page.url.startsWith('/huffaz')"
+            :active="$page.url.startsWith('/hafizes')"
             @click="router.get(route('hafiz.index'))"
           >
             <q-item-section avatar>
