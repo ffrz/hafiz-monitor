@@ -25,15 +25,18 @@ const data = ref(page.props.data);
             <div class="text-h6">
               <span>{{ data.hafiz.name }}</span>
             </div>
+            <div class="text-caption text-grey-8">
+              <span>{{ data.title }}</span>
+              <span>- {{ dayjs(data.created_at).format("DD MMMM YYYY HH:mm") }}</span>
+            </div>
             <div class="text-subtitle1">
               <span>
                 <span class="text-bold" :style="{color: score_to_color(data.score)}">{{ score_to_letter(data.score) }}
                 ({{ data.score.toFixed(2) }})</span>
               </span>
             </div>
-            <div class="text-caption">
-              <span>{{ data.title }}</span>
-              <span>- {{ dayjs(data.created_at).format("DD MMMM YYYY HH:mm") }}</span>
+            <div v-if="data.notes" class="text-caption text-grey-8">
+              <q-icon name="note" /> {{ data.notes }}
             </div>
           </q-card-section>
           <q-card-section class="q-pa-sm">

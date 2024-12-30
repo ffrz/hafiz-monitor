@@ -114,7 +114,7 @@ class MemorizationController extends Controller
         DB::commit();
 
         if ($redirect) {
-            return redirect(route('memorization.index'))->with('success', 'Sesi telah selesai');
+            return redirect(route('memorization.view', ['id' => $memorization->id]))->with('success', 'Sesi telah selesai');
         }
         return response()->json(['message' => 'Berhasil disimpan']);
     }

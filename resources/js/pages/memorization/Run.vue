@@ -1,7 +1,7 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
-import { ref, reactive, computed } from "vue";
+import { ref, reactive } from "vue";
 import { handleFetchItems } from "@/helpers/client-req-handler";
 import { router } from "@inertiajs/vue3";
 import { Notify, Dialog } from "quasar";
