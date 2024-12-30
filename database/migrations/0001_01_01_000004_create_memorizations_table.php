@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('hafiz_id')->constrained('hafizes')->onDelete('cascade');
+            $table->unsignedTinyInteger('start_surah_id')->nullable();
+            $table->unsignedTinyInteger('end_surah_id')->nullable();
             $table->string('title')->nullable()->default('');
             $table->unsignedTinyInteger('score')->default(0);
             $table->text('notes')->nullable()->default(null);

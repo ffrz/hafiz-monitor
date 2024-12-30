@@ -11,14 +11,45 @@ const hafizes = page.props.hafizes.map((item) => {
     return { 'value': item.id, 'label': item.name };
 });
 
+const surahs = page.props.surahs.map((surah) => {
+  return {
+    value: surah.id,
+    label: `${surah.id} - ${surah.name} (${surah.total_ayahs} ayat)`,
+  };
+});
+
 const form = useForm({
   id: page.props.data.id,
   hafiz_id: page.props.data.hafiz_id,
-  title: page.props.data.title,
+  title: page.props.data.title ?? 'Muraja\'ah',
   notes: page.props.data.notes,
+  start_surah_id: page.props.data.start_surah_id,
+  end_surah_id: page.props.data.end_surah_id,
 });
 
 const submit = () => handleSubmit({ form, url: route("memorization.create") });
+
+const onStartSurahChanged = () => {
+  form.end_surah_id = form.start_surah_id;
+  generateTitle();
+};
+
+const onEndSurahChanged = () => {
+  generateTitle();
+}
+
+const generateTitle = () => {
+  let title = "Muraja'ah";
+  if (form.start_surah_id) {
+    title += " " + page.props.surahs[form.start_surah_id - 1].name;
+  }
+
+  if (form.end_surah_id && form.end_surah_id != form.start_surah_id) {
+    title += " s.d " + page.props.surahs[form.end_surah_id - 1].name;
+  }
+
+  form.title = title;
+}
 </script>
 
 <template>
@@ -44,6 +75,38 @@ const submit = () => handleSubmit({ form, url: route("memorization.create") });
                 transition-hide="jump-up"
                 :error="!!form.errors.hafiz_id"
                 :error-message="form.errors.hafiz_id"
+              />
+              <q-select
+                v-model="form.start_surah_id"
+                label="Mulai Surat"
+                :options="surahs"
+                map-options
+                clearable
+                emit-value
+                lazy-rules
+                use-input
+                :disable="form.processing"
+                @update:model-value="onStartSurahChanged"
+                transition-show="jump-up"
+                transition-hide="jump-up"
+                :error="!!form.errors.start_surah_id"
+                :error-message="form.errors.start_surah_id"
+              />
+              <q-select v-if="!!form.start_surah_id"
+                v-model="form.end_surah_id"
+                label="s.d Surat"
+                :options="surahs"
+                map-options
+                clearable
+                emit-value
+                lazy-rules
+                use-input
+                @update:model-value="onEndSurahChanged"
+                :disable="form.processing"
+                transition-show="jump-up"
+                transition-hide="jump-up"
+                :error="!!form.errors.end_surah_id"
+                :error-message="form.errors.end_surah_id"
               />
               <q-input
                 v-model.trim="form.title"

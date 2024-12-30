@@ -13,6 +13,8 @@ const current_ayah = ref(null);
 const scores = reactive(page.props.scores);
 const title = "Sesi Penilaian Hafalan";
 const data = ref(page.props.data);
+const notes = ref(page.props.data.notes); // ga berhasil paka data bikin terpisah aja dulu
+
 const surahs = page.props.surahs.map((item) => {
   return {
     value: item.id,
@@ -46,7 +48,7 @@ const handleSurahChanged = () => {
   fetchItems({ pagination });
 };
 
-const fetchItems = (props = null) =>
+const fetchItems = (props = null) => {
   handleFetchItems({
     pagination,
     props,
@@ -55,6 +57,8 @@ const fetchItems = (props = null) =>
     url: route("ayah.data"),
     filter: { surah_id: selectedSurah.value.value },
   });
+  scrollTo(window, 0, 300);
+};
 
 const toggleScore = (row, score) => {
   if (!(row.id in scores)) {
@@ -83,6 +87,7 @@ const submitScore = async () => {
     route("memorization.save", { id: data.value.id }),
     {
       scores: filteredScores(),
+      notes: notes.value,
       closeSession: false,
     }
   );
@@ -100,6 +105,7 @@ const closeSession = async () => {
   }).onOk(() => {
     router.post(route("memorization.save", { id: data.value.id }), {
       scores: filteredScores(),
+      notes: notes.value,
       closeSession: true,
     });
   });
@@ -129,7 +135,7 @@ const showDialog = (selectedAyah) => {
     <q-card style="min-width: 350px" class="q-pa-sm">
       <q-card-section>
         <div class="text-subtitle1 text-grey-9">
-          <b>Catatan</b> (ayat ke-{{ current_ayah }})
+          <b>Catatan Ayat</b> (ayat ke-{{ current_ayah }})
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none">
@@ -184,7 +190,7 @@ const showDialog = (selectedAyah) => {
           </q-card-section>
           <q-card-section v-show="!!selectedSurah" class="q-pa-sm">
             <q-table
-              class="q-table-list scrollable-table "
+              class="q-table-list"
               style="margin: 0; padding: 0"
               flat
               bordered
@@ -218,7 +224,9 @@ const showDialog = (selectedAyah) => {
                           scores[props.row.id]?.score === 100 ? 'text-bold' : ''
                         "
                         :color="
-                          scores[props.row.id]?.score === 100 ? 'blue' : 'white'
+                          scores[props.row.id]?.score === 100
+                            ? 'green'
+                            : 'white'
                         "
                         :text-color="
                           scores[props.row.id]?.score === 100
@@ -234,7 +242,9 @@ const showDialog = (selectedAyah) => {
                           scores[props.row.id]?.score === 90 ? 'text-bold' : ''
                         "
                         :color="
-                          scores[props.row.id]?.score === 90 ? 'green' : 'white'
+                          scores[props.row.id]?.score === 90
+                            ? 'orange'
+                            : 'white'
                         "
                         :text-color="
                           scores[props.row.id]?.score === 90 ? 'white' : 'black'
@@ -247,16 +257,17 @@ const showDialog = (selectedAyah) => {
                         :class="
                           scores[props.row.id]?.score === 80 ? 'text-bold' : ''
                         "
+                        :text-color="
+                          scores[props.row.id]?.score === 80 ? 'white' : 'black'
+                        "
                         :color="
-                          scores[props.row.id]?.score === 80
-                            ? 'yellow'
-                            : 'white'
+                          scores[props.row.id]?.score === 80 ? 'red' : 'white'
                         "
                         text-color="black"
                         @click="toggleScore(props.row, 80)"
                         label="C"
                       />
-                      <q-btn
+                      <!-- <q-btn
                         class="col"
                         :class="
                           scores[props.row.id]?.score === 70 ? 'text-bold' : ''
@@ -285,7 +296,7 @@ const showDialog = (selectedAyah) => {
                         "
                         @click="toggleScore(props.row, 60)"
                         label="E"
-                      />
+                      /> -->
                       <q-btn
                         class="col"
                         :icon="
@@ -306,20 +317,29 @@ const showDialog = (selectedAyah) => {
                 </q-tr>
               </template>
             </q-table>
+            <q-input class="q-pt-md"
+              label="Catatan (Keseluruhan)"
+              v-model.trim="notes"
+              autofocus
+              autogrow
+              counter
+              maxlength="1000"
+              clearable
+            />
           </q-card-section>
           <q-card-section>
             <div class="full-width q-py-sm">
               <div class="row q-gutter-sm">
                 <q-btn
                   icon="save"
-                  label="SIMPAN PENILAIAN"
+                  label="SIMPAN"
                   color="grey"
                   class="col q-mt-sm text-bold"
                   @click="submitScore"
                 />
                 <q-btn
                   icon="check"
-                  label="AKHIRI SESI"
+                  label="SELESAI"
                   color="primary"
                   class="col q-mt-sm text-bold"
                   @click="closeSession"
@@ -369,5 +389,14 @@ const showDialog = (selectedAyah) => {
   direction: rtl; /* Right-to-left direction for Arabic text */
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+</style>
+
+<style>
+.q-table-list .q-table__bottom .q-table__separator {
+  display: none;
+}
+.q-table-list .q-table__bottom {
+  justify-content: center;
 }
 </style>

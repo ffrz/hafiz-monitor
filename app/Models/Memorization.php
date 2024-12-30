@@ -9,6 +9,8 @@ class Memorization extends Model
     public $fillable = [
         'user_id',
         'hafiz_id',
+        'start_surah_id',
+        'end_surah_id',
         'title',
         'score',
         'notes',

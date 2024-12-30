@@ -54,18 +54,21 @@ class MemorizationController extends Controller
             $rules = [
                 'hafiz_id' => 'required',
                 'title' => 'required|max:255',
-            ];
-            $messages = [
-                'hafiz_id.required' => 'Pilih hafidz terlebih dahulu.',
-                'title.required' => 'Judul sesi harus diisi.',
-                'title.max' => 'Nama sesi maksimal 255 karakter.',
+                'start_surah_id' => 'required',
+                'end_surah_id' => 'required',
             ];
 
             $message = '';
-            $fields = ['title', 'hafiz_id', 'notes'];
-            $request->validate($rules, $messages);
+            $fields = ['title', 'hafiz_id', 'notes', 'start_surah_id', 'end_surah_id'];
+            $request->validate($rules);
             $data = $request->only($fields);
             $memorization->fill($data);
+            // swap dulu bos, supaya konsisten start surah harus dimulai dari surat nomor kecil
+            if ($memorization->start_surah_id > $memorization->end_surah_id) {
+                $tmp = $memorization->start_surah_id;
+                $memorization->start_surah_id = $memorization->end_surah_id;
+                $memorization->end_surah_id = $tmp;
+            }
             $memorization->user_id = Auth::user()->id;
             $memorization->save();
 
@@ -74,6 +77,7 @@ class MemorizationController extends Controller
 
         return inertia('memorization/Create', [
             'data' => $memorization,
+            'surahs' => Surah::all(),
             'hafizes' => Hafiz::where('user_id', auth()->id())
                 ->orderBy('name', 'asc')->get(),
         ]);
@@ -109,6 +113,7 @@ class MemorizationController extends Controller
             $memorization->status = 'closed';
             $redirect = true;
         }
+        $memorization->notes = $request->notes;
         $memorization->save();
 
         DB::commit();
@@ -129,16 +134,12 @@ class MemorizationController extends Controller
 
     public function run(Request $request)
     {
-        $memorization = Memorization::with(['hafiz', 'hafiz.memorizedSurahs', 'hafiz.memorizedSurahs.surah'])->findOrFail($request->get('id', null));
+        $memorization = Memorization::with(['hafiz'])->findOrFail($request->get('id', null));
 
         $scores = [];
-        $juzes = [];
-        $surahs = [];
 
         foreach ($memorization->details as $detail) {
-            $juzes[$detail->juz] = 1;
             $surahs[$detail->surah_id] = 1;
-
             if (!isset($scores[$detail->ayah_id])) {
                 $scores[$detail->ayah_id] = [];
             }
@@ -146,15 +147,11 @@ class MemorizationController extends Controller
             $scores[$detail->ayah_id]['notes'] = $detail->notes;
         }
 
-        $data = $memorization->toArray();
-        $data['surahs'] = array_keys($surahs);
-        $data['juzes'] = array_keys($juzes);
+        $surahs = DB::table('surahs')
+            ->whereIn('id', range($memorization->start_surah_id, $memorization->end_surah_id))
+            ->get();
 
-        $surahs = array_column($data['hafiz']['memorized_surahs'], 'surah');
-        usort($surahs, function ($a, $b) {
-            return $a['id'] <=> $b['id'];
-        });
-        unset($data['hafiz']['memorized_surahs']);
+        $data = $memorization->toArray();
 
         return inertia('memorization/Run', [
             'data' => $data,

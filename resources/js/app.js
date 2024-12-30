@@ -2,7 +2,7 @@ import "@/bootstrap";
 
 import { createApp, h } from "vue";
 import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
-import { Dialog, Loading, Notify, Quasar } from "quasar";
+import { Dialog, Loading, Notify, Quasar, scroll } from "quasar";
 import AuthenticatedLayout from "./layouts/AuthenticatedLayout.vue";
 import GuestLayout from "./layouts/GuestLayout.vue";
 import "@quasar/extras/material-icons/material-icons.css";
@@ -32,7 +32,7 @@ createInertiaApp({
       .use(plugin)
       .use(ZiggyVue)
       .use(Quasar, {
-        plugins: { Notify, Loading, Dialog },
+        plugins: { Notify, Loading, Dialog, scroll },
         config: {
           iconSet: 'material-symbols-outlined',
         }
