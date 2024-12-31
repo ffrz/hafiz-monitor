@@ -46,7 +46,7 @@ class AuthController extends Controller
             $this->_logout($request);
         } else {
             $request->session()->regenerate();
-            return redirect(route('dashboard'));
+            return redirect(route('memorization.index'));
         }
 
         return redirect()->back()->withInput()->withErrors($validator);

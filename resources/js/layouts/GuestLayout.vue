@@ -25,7 +25,7 @@ defineComponent({
           </q-avatar>
           <my-link
             class="q-pl-md text-white"
-            :href="route('login')"
+            :href="route('home')"
             :label="$config.APP_NAME"
           />
         </q-toolbar-title>

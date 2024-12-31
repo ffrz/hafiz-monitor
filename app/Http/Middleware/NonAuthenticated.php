@@ -18,7 +18,7 @@ class NonAuthenticated
     {
         $user = Auth::user();
         if ($user) {
-            return redirect()->route('dashboard');
+            return redirect()->route('memorization.index');
         }
 
         return $next($request);

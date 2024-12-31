@@ -13,9 +13,6 @@ use App\Http\Middleware\NonAuthenticated;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (auth()) {
-        return redirect()->route('dashboard');
-    }
     return inertia('Welcome');
 })->name('home');
 
@@ -30,9 +27,6 @@ Route::middleware(NonAuthenticated::class)->group(function () {
 Route::middleware([Auth::class])->group(function () {
     Route::match(['get', 'post'], 'auth/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('', function () {
-        return redirect()->route('dashboard');
-    });
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
 

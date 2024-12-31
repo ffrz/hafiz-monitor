@@ -7,55 +7,94 @@ import BtnLink from "@/components/BtnLink.vue";
     <q-page>
       <div class="row">
         <q-card class="col q-pa-xl q-ma-md q-mt-xl" square flat bordered>
-          <div class="text-h4 text-center text-bold q-my-md">
-            HoursHub Time Tracker App
-          </div>
+          <div class="text-h4 text-center text-bold q-my-md">Hafiz Monitor</div>
           <p class="text-subtitle1 text-center q-my-xl">
-            HoursHub is an innovative internal time-tracking application
-            designed to streamline employee work-hour management and project
-            tracking. With a user-friendly interface and robust functionality,
-            HoursHub helps businesses accurately monitor productivity and
-            simplify time management processes.
+            <b>Hafiz Monitor</b> adalah aplikasi inovatif yang dirancang untuk
+            memantau dan mendukung perkembangan hafalan Al-Qur'an secara
+            efektif. Dengan fitur unggulan seperti penilaian setiap ayat,
+            histori perkembangan dalam bentuk grafik interaktif,
+            <b>Hafiz Monitor</b> menjadi solusi modern untuk para penghafal dan
+            pembimbing. Dikembangkan menggunakan teknologi mutakhir, aplikasi
+            ini tidak hanya mempermudah proses pencatatan hafalan, tetapi juga
+            memberikan analisis mendalam untuk meningkatkan kualitas hafalan.
+            Cocok untuk individu, lembaga tahfiz, dan komunitas.
+            <b>Hafiz Monitor</b> hadir untuk membantu Anda menggapai hafalan
+            yang lebih terstruktur dan terukur.
           </p>
-          <p class="text-center q-my-sm">
+          <p class="text-center q-my-sm flex q-gutter-md">
             <btn-link
+            class="col"
+              size="lg"
+              color="secondary"
+              label="Buat Akun Gratis"
+              :href="route('register')"
+            />
+
+            <btn-link
+            class="col"
+              size="lg"
               color="accent"
-              label="Click Here to Login"
-              :href="route('admin.auth.login')"
+              label="Login Aplikasi"
+              :href="route('login')"
             />
           </p>
-          <p class="text-subtitle1 q-mt-xl">Key Features:</p>
+          <p class="text-subtitle1 q-mt-xl">
+            Fitur-fitur Kunci <b>Hafiz Monitor</b>:
+          </p>
           <ul>
             <li>
-              Intuitive Time Tracking: Easily log work hours with a built-in
-              timer or manual input options.
+              <b>Penilaian Hafalan Per Ayat</b>: Memungkinkan pengguna untuk
+              memberikan penilaian detail pada setiap ayat, membantu pemantauan
+              kemajuan secara spesifik.
             </li>
             <li>
-              Project Management Integration: Assign tasks and track progress
-              across multiple projects.
+              <b>Grafik Histori Perkembangan</b>: Menyajikan visualisasi data
+              dalam bentuk grafik untuk melacak peningkatan hafalan dari waktu
+              ke waktu.
             </li>
             <li>
-              User Management: Configure roles and permissions to ensure secure
-              and efficient collaboration.
+              <b>Manajemen Profil Hafiz</b>: Mendukung pengelolaan data personal
+              para penghafal, seperti nama, target hafalan, dan catatan
+              kemajuan.
             </li>
             <li>
-              Client Management: Manage client information and associate
-              projects for seamless invoicing and reporting.
+              <b>Pencatatan Riwayat Kesalahan</b>: Mencatat kesalahan yang
+              sering terjadi pada ayat tertentu untuk membantu fokus dalam
+              perbaikan.
             </li>
             <li>
-              Real-Time Analytics: Gain insights into productivity through
-              detailed reports and visual dashboards.
+              <b>Analisis Kualitas Hafalan</b>: Memberikan insight berbasis
+              data, seperti ayat yang sering salah atau butuh pengulangan, untuk
+              meningkatkan kualitas hafalan.
             </li>
             <li>
-              Mobile Responsiveness: Access and manage time tracking on-the-go
-              with a responsive design.
+              <b>Dukungan Multi-Platform</b>: Tersedia untuk perangkat desktop,
+              web, dan mobile, memberikan fleksibilitas dalam penggunaan.
+            </li>
+            <li>
+              <b>Pengelolaan Grup atau Kelas (Coming Soon)</b>: Memungkinkan
+              pembimbing untuk mengelola kelompok hafiz dengan mudah, termasuk
+              laporan perkembangan setiap anggota.
+            </li>
+            <li>
+              <b>Notifikasi dan Pengingat (Coming Soon)</b>: Fitur untuk
+              mengingatkan jadwal mengulang hafalan atau target harian.
+            </li>
+            <li>
+              <b>Mode Offline (Coming Soon)</b>: Mendukung penggunaan tanpa
+              koneksi internet, sehingga tetap dapat digunakan kapan saja dan di
+              mana saja.
+            </li>
+            <li>
+              <b>Sinkronisasi Data ke Server (Coming Soon)</b>: Memungkinkan
+              pencadangan dan pemulihan data secara terpusat untuk menghindari
+              kehilangan data.
+            </li>
+            <li>
+              <b>Target Hafalan (Coming Soon)</b>: Memungkinkan pengguna menetapkan target hafalan
+              harian, mingguan, atau bulanan.
             </li>
           </ul>
-          <p class="text-subtitle1">
-            Whether you’re a startup or a growing company, HoursHub ensures
-            accurate, transparent, and hassle-free time tracking for better
-            workforce efficiency.
-          </p>
         </q-card>
       </div>
     </q-page>
