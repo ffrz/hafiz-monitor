@@ -30,14 +30,4 @@ class Hafiz extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function memorizedJuzs()
-    {
-        return $this->hasMany(HafizMemorizedJuz::class);
-    }
-
-    public function memorizedSurahs()
-    {
-        return $this->hasMany(HafizMemorizedSurah::class);
-    }
 }

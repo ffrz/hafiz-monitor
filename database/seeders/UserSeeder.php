@@ -22,11 +22,5 @@ class UserSeeder extends Seeder
             DB::connection()->table('users')->insert((array)$row);
         }
 
-        // user mentor sudah ada di online_db
-        // User::factory()->create([
-        //     'name' => 'Mentor',
-        //     'email' => 'mentor@example.com',
-        //     'active' => 1,
-        // ]);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ayahs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('surah_id')->constrained()->onDelete('restrict');
-            $table->unsignedTinyInteger('number');
+            $table->unsignedSmallInteger('number');
             $table->unsignedTinyInteger('juz')->nullable()->default(null);
             $table->text('text');
         });

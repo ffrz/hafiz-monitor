@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('surahs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedTinyInteger('total_ayahs');
+            $table->unsignedSmallInteger('total_ayahs');
         });
     }
 

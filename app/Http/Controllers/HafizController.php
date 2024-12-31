@@ -52,20 +52,20 @@ class HafizController extends Controller
         $global_score = 0;
         $surah_ids = [];
         $result = DB::select('
-        SELECT s.id as surah_id, a.number as ayah_number, md.score
-        FROM memorization_details md
-        JOIN (
-            SELECT md.ayah_id, MAX(m.created_at) AS latest
+            SELECT s.id as surah_id, a.number as ayah_number, md.score
             FROM memorization_details md
+            JOIN (
+                SELECT md.ayah_id, MAX(m.created_at) AS latest
+                FROM memorization_details md
+                JOIN memorizations m ON md.memorization_id = m.id
+                WHERE m.hafiz_id = :hafiz_id
+                GROUP BY md.ayah_id
+            ) recent ON md.ayah_id = recent.ayah_id
+            AND m.created_at = recent.latest
             JOIN memorizations m ON md.memorization_id = m.id
+            JOIN ayahs a ON md.ayah_id = a.id
+            JOIN surahs s ON s.id = a.surah_id
             WHERE m.hafiz_id = :hafiz_id
-            GROUP BY md.ayah_id
-        ) recent ON md.ayah_id = recent.ayah_id
-        AND m.created_at = recent.latest
-        JOIN memorizations m ON md.memorization_id = m.id
-        JOIN ayahs a ON md.ayah_id = a.id
-        JOIN surahs s ON s.id = a.surah_id
-        WHERE m.hafiz_id = :hafiz_id
         ', [$hafiz->id]);
         $global_score_count = count($result);
 
@@ -206,11 +206,8 @@ class HafizController extends Controller
             return response()->json(['error' => 'You are not authorized to edit this hafiz'], 403);
         }
 
-        $juzs = HafizMemorizedJuz::where('hafiz_id', $hafiz->id)->get()->toArray();
-        $surahs = HafizMemorizedSurah::where('hafiz_id', $hafiz->id)->get()->toArray();
         $data = $hafiz->toArray();
-        $data['juzs'] = array_column($juzs, 'juz');
-        $data['surahs'] = array_column($surahs, 'surah_id');
+
         return inertia('hafiz/Editor', [
             'data' => $data,
             'surahs' => Surah::all(),
@@ -231,33 +228,10 @@ class HafizController extends Controller
             'name.max' => 'Nama hafidz maksimal 255 karakter.',
         ]);
 
-        $juzs = $request->post('juzs', []);
-        $surahs = $request->post('surahs', []);
-
         $data = $request->only(['name', 'gender', 'birth_date', 'phone', 'address', 'active', 'notes']);
         $hafiz->fill($data);
 
-        DB::beginTransaction();
         $hafiz->save();
-
-        HafizMemorizedJuz::where('hafiz_id', $hafiz->id)->delete();
-        foreach ($juzs as $num) {
-            $juz = new HafizMemorizedJuz([
-                'hafiz_id' => $hafiz->id,
-                'juz' => $num,
-            ]);
-            $juz->save();
-        }
-
-        HafizMemorizedSurah::where('hafiz_id', $hafiz->id)->delete();
-        foreach ($surahs as $surah_id) {
-            $surah = new HafizMemorizedSurah([
-                'hafiz_id' => $hafiz->id,
-                'surah_id' => $surah_id,
-            ]);
-            $surah->save();
-        }
-        DB::commit();
         return redirect(route('hafiz.index'))->with('success', "Hafiz {$hafiz->name} telah disimpan.");
     }
 
