@@ -81,10 +81,8 @@ const generateTitle = () => {
                 label="Mulai Surat"
                 :options="surahs"
                 map-options
-                clearable
                 emit-value
                 lazy-rules
-                use-input
                 :disable="form.processing"
                 @update:model-value="onStartSurahChanged"
                 transition-show="jump-up"
@@ -97,10 +95,8 @@ const generateTitle = () => {
                 label="Sampai Surat"
                 :options="surahs"
                 map-options
-                clearable
                 emit-value
                 lazy-rules
-                use-input
                 @update:model-value="onEndSurahChanged"
                 :disable="form.processing"
                 transition-show="jump-up"

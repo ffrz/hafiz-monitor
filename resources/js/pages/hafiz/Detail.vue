@@ -10,7 +10,6 @@ const page = usePage();
 const data = page.props.data;
 const details = reactive(page.props.details);
 const title = data.name;
-console.log(data);
 
 const onDeleteMemorizationClicked = () => {
   Dialog.create({
