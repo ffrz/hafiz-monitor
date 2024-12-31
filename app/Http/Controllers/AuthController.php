@@ -80,7 +80,7 @@ class AuthController extends Controller
         $user->active = true;
         $user->save();
 
-        return redirect(route('login'))->with('success', 'messages.registration-success');
+        return redirect(route('login'))->with('success', __('messages.registration-success'));
     }
 
     public function forgotPassword(Request $request)
