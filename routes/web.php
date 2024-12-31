@@ -51,6 +51,7 @@ Route::middleware([Auth::class])->group(function () {
         Route::get('add', [HafizController::class, 'editor'])->name('hafiz.add');
         Route::get('edit/{id}', [HafizController::class, 'editor'])->name('hafiz.edit');
         Route::get('detail/{id}', [HafizController::class, 'detail'])->name('hafiz.detail');
+        Route::get('surah-history/{hafiz_id}/{surah_id}', [HafizController::class, 'surahHistory'])->name('hafiz.surah-history');
         Route::post('clear-score/{id}', [HafizController::class, 'clearScore'])->name('hafiz.clear-score');
         Route::post('save', [HafizController::class, 'save'])->name('hafiz.save');
         Route::post('delete/{id}', [HafizController::class, 'delete'])->name('hafiz.delete');

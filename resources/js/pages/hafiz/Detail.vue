@@ -10,7 +10,7 @@ const page = usePage();
 const data = page.props.data;
 const details = reactive(page.props.details);
 const title = data.name;
-console.log(data)
+console.log(data);
 
 const onDeleteMemorizationClicked = () => {
   Dialog.create({
@@ -98,7 +98,10 @@ const onDeleteBtnClicked = () => {
             <div class="text-subtitle2 text-bold text-grey-8">
               Hafalan (Penilaian Terakhir)
             </div>
-            <div class="text-caption q-my-sm" v-if="Object.keys(details).length > 0">
+            <div
+              class="text-caption q-my-sm"
+              v-if="Object.keys(details).length > 0"
+            >
               <div class="flex">
                 Keterangan Warna:
                 <div class="flex q-mr-md q-ml-sm">
@@ -125,30 +128,35 @@ const onDeleteBtnClicked = () => {
               </div>
             </div>
             <div v-else>
-              <div class="text-grey-8 text-italic text-caption">Belum ada rekaman</div>
+              <div class="text-grey-8 text-italic text-caption">
+                Belum ada rekaman
+              </div>
             </div>
             <div
               v-for="surah in details"
               :key="surah.surah_id"
               class="hafiz-surah-item"
             >
-              <div class="text-bold text-grey-8 text-caption">
-                {{ surah.surah_id }}: {{ surah.surah_name }} ({{
-                  surah.memorized_ayah_count != surah.ayah_count
-                    ? `${surah.memorized_ayah_count}/${surah.ayah_count}`
-                    : surah.ayah_count
-                }}
-                ayat :
-                {{
-                  (
-                    (surah.memorized_ayah_count / surah.ayah_count) *
-                    100
-                  ).toFixed(0)
-                }}%) -
-                <span :style="{ color: score_to_color(surah.average_score) }"
-                  >{{ score_to_letter(surah.average_score) }} /
-                  {{ surah.average_score.toFixed(2) }}</span
-                >
+              <div class="text-bold text-grey-8 text-caption flex" >
+                <div class="col">
+                  {{ surah.surah_id }}: {{ surah.surah_name }} ({{
+                    surah.memorized_ayah_count != surah.ayah_count
+                      ? `${surah.memorized_ayah_count}/${surah.ayah_count}`
+                      : surah.ayah_count
+                  }}
+                  ayat :
+                  {{
+                    (
+                      (surah.memorized_ayah_count / surah.ayah_count) *
+                      100
+                    ).toFixed(0)
+                  }}%) -
+                  <span :style="{ color: score_to_color(surah.average_score) }"
+                    >{{ score_to_letter(surah.average_score) }} /
+                    {{ surah.average_score.toFixed(2) }}</span
+                  >
+                </div>
+                <BtnLink dense flat icon="history" rounded :url="route('hafiz.surah-history', { surah_id: surah.surah_id, hafiz_id: data.id })" />
               </div>
               <div class="flex">
                 <div

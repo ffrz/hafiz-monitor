@@ -123,6 +123,81 @@ class HafizController extends Controller
         ]);
     }
 
+    public function surahHistory(Request $request, $hafiz_id, $surah_id)
+    {
+        $memorizations = DB::select('
+            select
+                m.id, m.created_at, m.score, m.title
+            from memorizations as m
+            join memorization_details as d on d.memorization_id = m.id
+            join ayahs as a on a.id = d.ayah_id
+            join surahs as s on s.id = a.surah_id
+            where m.hafiz_id = ? and s.id = ?
+            group by m.id
+            order by created_at desc
+            limit 10
+        ', [$hafiz_id, $surah_id]);
+
+        $memorization_ids = array_map(function ($memorization) {
+            return $memorization->id;
+        }, $memorizations);
+
+        $details = DB::select('
+            SELECT
+                m.id, a.id AS ayah_id, a.number AS ayah_number, d.score, a.text ayah_text, m.created_at
+            FROM memorizations AS m
+            JOIN memorization_details AS d ON d.memorization_id = m.id
+            JOIN ayahs AS a ON a.id = d.ayah_id
+            JOIN surahs AS s ON s.id = a.surah_id
+            WHERE m.id IN (' . implode(',', array_fill(0, count($memorization_ids), '?')) . ')
+            AND s.id=' . intval($surah_id) . '
+            ORDER BY m.created_at DESC
+        ', $memorization_ids);
+
+        $scores = [];
+
+        foreach ($details as $detail) {
+            $key = (string)$detail->id;
+
+            if (!isset($scores[$key])) {
+                $scores[$key] = [
+                    'id' => $detail->id,
+                    'created_at' => $detail->created_at,
+                    'details' => []
+                ];
+            }
+
+            $scores[$key]['details'][$detail->ayah_number] = $detail->score;
+        }
+
+        // buat rata rata, dipisah supaya tidak terlalu rumit
+        $alltime_score = 0;
+        foreach ($scores as $id => $memorization) {
+            $total_score = 0;
+            foreach ($scores[$id]['details'] as $score) {
+                $total_score += $score;
+            }
+
+            if (count($memorization['details'])) {
+                $scores[$id]['average_score'] = $total_score / count($memorization['details']);
+            }
+            else {
+                $scores[$id]['average_score'] = 0;
+            }
+
+            $alltime_score += $scores[$id]['average_score'];
+        }
+
+        $hafiz = Hafiz::findOrFail($hafiz_id);
+        $hafiz->average_score = $alltime_score / count($scores);
+
+        return inertia('hafiz/SurahHistory', [
+            'hafiz' => $hafiz,
+            'surah' => Surah::findOrFail($surah_id),
+            'scores' => $scores,
+        ]);
+    }
+
     public function editor($id = 0)
     {
         $hafiz = $id ? Hafiz::findOrFail($id) : new Hafiz(['active' => true]);
