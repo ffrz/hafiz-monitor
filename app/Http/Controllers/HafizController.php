@@ -51,22 +51,21 @@ class HafizController extends Controller
         $memorized_ayah_count = 0;
         $global_score = 0;
         $surah_ids = [];
-        $result = DB::select('
+        $result = DB::select("
             SELECT s.id as surah_id, a.number as ayah_number, md.score
             FROM memorization_details md
+            JOIN memorizations m ON md.memorization_id = m.id
+            JOIN ayahs a ON md.ayah_id = a.id
+            JOIN surahs s ON s.id = a.surah_id
             JOIN (
                 SELECT md.ayah_id, MAX(m.created_at) AS latest
                 FROM memorization_details md
                 JOIN memorizations m ON md.memorization_id = m.id
-                WHERE m.hafiz_id = :hafiz_id
+                WHERE m.hafiz_id = $hafiz->id
                 GROUP BY md.ayah_id
-            ) recent ON md.ayah_id = recent.ayah_id
-            AND m.created_at = recent.latest
-            JOIN memorizations m ON md.memorization_id = m.id
-            JOIN ayahs a ON md.ayah_id = a.id
-            JOIN surahs s ON s.id = a.surah_id
-            WHERE m.hafiz_id = :hafiz_id
-        ', [$hafiz->id]);
+            ) recent ON md.ayah_id = recent.ayah_id AND m.created_at = recent.latest
+            WHERE m.hafiz_id = $hafiz->id
+        ");
         $global_score_count = count($result);
 
         $details = [];
@@ -133,7 +132,7 @@ class HafizController extends Controller
             join ayahs as a on a.id = d.ayah_id
             join surahs as s on s.id = a.surah_id
             where m.hafiz_id = ? and s.id = ?
-            group by m.id
+            group by m.id, m.created_at, m.score, m.title
             order by created_at desc
             limit 10
         ', [$hafiz_id, $surah_id]);
