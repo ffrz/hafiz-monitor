@@ -1,27 +1,57 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
+import { usePage, useForm } from "@inertiajs/vue3";
 import dayjs from "dayjs";
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { handleFetchItems } from "@/helpers/client-req-handler";
+import { useApiForm } from "@/helpers/useApiForm.js";
 import { router } from "@inertiajs/vue3";
 import { Notify, Dialog } from "quasar";
 import { score_to_letter, score_to_color } from "@/helpers/utils";
 
 const page = usePage();
 const show_notes_prompt = ref(false);
+const show_edit_dialog = ref(false);
 const current_notes = ref("");
 const current_ayah = ref(null);
 const scores = page.props.scores;
 const recent_scores = page.props.recent_scores;
-const title = "Sesi Penilaian Hafalan";
-const data = ref(page.props.data);
-const notes = ref(page.props.data.notes); // ga berhasil paka data bikin terpisah aja dulu
-
-const surahs = page.props.surahs.map((item) => {
+const pageTitle = "Sesi Penilaian Hafalan";
+const hafizes = page.props.hafizes.map((item) => {
+  return { value: item.id, label: item.name };
+});
+const all_surahs = page.props.all_surahs.map((surah) => {
   return {
-    value: item.id,
-    label: `${item.id} - ${item.name} (${item.total_ayahs} ayat)`,
+    value: surah.id,
+    label: `${surah.id} - ${surah.name} (${surah.total_ayahs} ayat)`,
   };
+});
+
+const currentHafiz = computed(
+  () => page.props.hafizes.find((item) => item.id === form.hafiz_id).name
+);
+
+const surahs = computed(() => {
+  const surah_ids = [];
+  for (let i = form.start_surah_id; i <= form.end_surah_id; i++) {
+    const surah = page.props.all_surahs.find((surah) => surah.id == i);
+    const surahName = surah.name;
+    const totalAyahs = surah.total_ayahs;
+    surah_ids.push({
+      value: i,
+      label: `${i} - ${surahName} (${totalAyahs} ayat)`,
+    });
+  }
+  return surah_ids;
+});
+
+const form = useApiForm({
+  id: page.props.data.id,
+  hafiz_id: page.props.data.hafiz_id,
+  title: page.props.data.title ?? "Muraja'ah",
+  notes: page.props.data.notes,
+  start_surah_id: page.props.data.start_surah_id,
+  end_surah_id: page.props.data.end_surah_id,
+  close_session: false,
 });
 
 const rows = ref([]);
@@ -47,11 +77,12 @@ const columns = [
 ];
 
 onMounted(() => {
-  if (surahs.length > 0) {
-    selectedSurah.value = surahs[0];
+  if (surahs.value.length > 0) {
+    selectedSurah.value = surahs.value[0];
     handleSurahChanged();
   }
 });
+
 const handleSurahChanged = () => {
   pagination.value.page = 1;
   fetchItems({ pagination });
@@ -92,18 +123,21 @@ const filteredScores = () => {
 };
 
 const submitScore = async () => {
+  const data = form.data();
   const response = await axios.post(
-    route("memorization.save", { id: data.value.id }),
+    route("memorization.save", { id: data.id }),
     {
       scores: filteredScores(),
-      notes: notes.value,
       closeSession: false,
+      ...data
     }
   );
   Notify.create({ message: response.data.message });
+
 };
 
 const closeSession = async () => {
+  const data = form.data();
   Dialog.create({
     title: "Konfirmasi",
     icon: "question",
@@ -112,10 +146,10 @@ const closeSession = async () => {
     cancel: true,
     persistent: true,
   }).onOk(() => {
-    router.post(route("memorization.save", { id: data.value.id }), {
+    router.post(route("memorization.save", { id: data.id }), {
       scores: filteredScores(),
-      notes: notes.value,
       closeSession: true,
+      ...data
     });
   });
 };
@@ -126,20 +160,44 @@ const addNotes = () => {
   }
   scores[current_ayah.value].notes = current_notes.value;
 
-  // reset
   current_notes.value = "";
   current_ayah.value = null;
 };
 
-const showDialog = (selectedAyah) => {
+const showNotesDialog = (selectedAyah) => {
   current_ayah.value = selectedAyah;
   current_notes.value = scores[selectedAyah]?.notes;
   show_notes_prompt.value = true;
 };
+
+const showEditForm = () => {
+  show_edit_dialog.value = true;
+};
+
+const onStartSurahChanged = () => {
+  generateTitle();
+};
+
+const onEndSurahChanged = () => {
+  generateTitle();
+}
+
+const generateTitle = () => {
+  let title = "Muraja'ah";
+  if (form.start_surah_id) {
+    title += " " + page.props.all_surahs[form.start_surah_id - 1].name;
+  }
+
+  if (form.end_surah_id && form.end_surah_id != form.start_surah_id) {
+    title += " s.d " + page.props.all_surahs[form.end_surah_id - 1].name;
+  }
+
+  form.title = title;
+}
 </script>
 
 <template>
-  <i-head :title="title" />
+  <i-head :title="pageTitle" />
   <q-dialog v-model="show_notes_prompt" persistent>
     <q-card style="min-width: 350px" class="q-pa-sm">
       <q-card-section>
@@ -171,8 +229,92 @@ const showDialog = (selectedAyah) => {
       </q-card-actions>
     </q-card>
   </q-dialog>
+
+  <q-dialog v-model="show_edit_dialog" persistent>
+    <q-card style="min-width: 350px" class="q-pa-sm">
+      <q-card-section>
+        <div class="text-subtitle1 text-grey-9">Ubah Info</div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <q-select
+          v-model="form.hafiz_id"
+          label="Hafidz"
+          :options="hafizes"
+          map-options
+          emit-value
+          lazy-rules
+          transition-show="jump-up"
+          transition-hide="jump-up"
+        />
+        <q-select
+          v-model="form.start_surah_id"
+          label="Mulai Surat"
+          :options="all_surahs"
+          map-options
+          emit-value
+          lazy-rules
+          :disable="form.processing"
+          @update:model-value="onStartSurahChanged"
+          transition-show="jump-up"
+          transition-hide="jump-up"
+          :error="!!form.errors.start_surah_id"
+          :error-message="form.errors.start_surah_id"
+        />
+        <q-select
+          v-if="!!form.start_surah_id"
+          v-model="form.end_surah_id"
+          label="Sampai Surat"
+          :options="all_surahs"
+          map-options
+          emit-value
+          lazy-rules
+          @update:model-value="onEndSurahChanged"
+          :disable="form.processing"
+          transition-show="jump-up"
+          transition-hide="jump-up"
+          :error="!!form.errors.end_surah_id"
+          :error-message="form.errors.end_surah_id"
+        />
+        <q-input
+          v-model.trim="form.title"
+          label="Judul Sesi"
+          clearable
+          :disable="form.processing"
+          :error="!!form.errors.title"
+          :error-message="form.errors.title"
+          :rules="[
+            (val) => (val && val.length > 0) || 'Judul sesi harus diisi.',
+          ]"
+        />
+        <q-input
+          v-if="!!form.id"
+          v-model.trim="form.notes"
+          type="textarea"
+          label="Catatan"
+          autogrow
+          counter
+          maxlength="1000"
+          lazy-rules
+          :disable="form.processing"
+          :error="!!form.errors.notes"
+          :error-message="form.errors.notes"
+        />
+      </q-card-section>
+      <q-card-actions align="right" class="text-primary">
+        <q-btn label="Batal" v-close-popup icon="cancel" />
+        <q-btn
+          label="Simpan"
+          v-close-popup
+          @click="submitScore"
+          icon="check"
+          color="primary"
+          class="text-bold"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
   <authenticated-layout>
-    <template #title>{{ title }}</template>
+    <template #title>{{ pageTitle }}</template>
     <div class="row justify-center">
       <div class="col col-lg-6 q-pa-md">
         <q-card
@@ -182,13 +324,20 @@ const showDialog = (selectedAyah) => {
           class="col q-pa-sm full-width full-height-card"
         >
           <q-card-section class="q-pa-sm">
-            <div class="text-subtitle1">
-              <span>{{ data.hafiz.name }}</span>
-              <span> - {{ data.title }}</span>
-              <span>
-                -
-                {{ dayjs(data.created_at).format("DD MMMM YYYY HH:mm") }}</span
-              >
+            <div class="flex">
+              <div class="col text-subtitle1">
+                <span>{{ currentHafiz }}</span>
+                <span> - {{ form.title }}</span>
+                <span>
+                  -
+                  {{
+                    dayjs(page.props.data.created_at).format(
+                      "DD MMMM YYYY HH:mm"
+                    )
+                  }}</span
+                >
+              </div>
+              <q-btn icon="edit" flat rounded dense @click="showEditForm" />
             </div>
             <q-select
               label="Surat"
@@ -248,32 +397,32 @@ const showDialog = (selectedAyah) => {
                       <q-btn
                         class="col"
                         :class="
-                          scores[props.row.id]?.score === 90 ? 'text-bold' : ''
+                          scores[props.row.id]?.score === 80 ? 'text-bold' : ''
                         "
                         :color="
-                          scores[props.row.id]?.score === 90
+                          scores[props.row.id]?.score === 80
                             ? 'orange'
                             : 'white'
                         "
                         :text-color="
-                          scores[props.row.id]?.score === 90 ? 'white' : 'black'
+                          scores[props.row.id]?.score === 80 ? 'white' : 'black'
                         "
-                        @click="toggleScore(props.row, 90)"
+                        @click="toggleScore(props.row, 80)"
                         label="B"
                       />
                       <q-btn
                         class="col"
                         :class="
-                          scores[props.row.id]?.score === 80 ? 'text-bold' : ''
+                          scores[props.row.id]?.score === 60 ? 'text-bold' : ''
                         "
                         :text-color="
-                          scores[props.row.id]?.score === 80 ? 'white' : 'black'
+                          scores[props.row.id]?.score === 60 ? 'white' : 'black'
                         "
                         :color="
-                          scores[props.row.id]?.score === 80 ? 'red' : 'white'
+                          scores[props.row.id]?.score === 60 ? 'red' : 'white'
                         "
                         text-color="black"
-                        @click="toggleScore(props.row, 80)"
+                        @click="toggleScore(props.row, 60)"
                         label="C"
                       />
                       <q-btn
@@ -285,7 +434,7 @@ const showDialog = (selectedAyah) => {
                             ? 'edit_note'
                             : 'comment'
                         "
-                        @click="showDialog(props.row.id)"
+                        @click="showNotesDialog(props.row.id)"
                         :text-color="
                           !scores[props.row.id]?.notes ? 'grey' : 'red'
                         "
@@ -301,7 +450,8 @@ const showDialog = (selectedAyah) => {
                         :key="index"
                         class="q-mr-sm"
                       >
-                        <span class="score"
+                        <span
+                          class="score"
                           :title="row.notes"
                           :style="{
                             color: score_to_color(row.score),
@@ -319,7 +469,7 @@ const showDialog = (selectedAyah) => {
             <q-input
               class="q-pt-md"
               label="Catatan (Keseluruhan)"
-              v-model.trim="notes"
+              v-model.trim="form.notes"
               autofocus
               autogrow
               counter
@@ -354,44 +504,40 @@ const showDialog = (selectedAyah) => {
 </template>
 
 <style scoped>
-
 .recent-scores .score:before {
   content: "← ";
 }
 
-/* Style the q-table to look like a list */
 .q-table-list .q-td {
   padding: 0;
 }
 
 .ayah-item {
   padding: 10px;
-  white-space: normal; /* Allow text to wrap */
-  word-wrap: break-word; /* Break long words to avoid overflow */
-  overflow-wrap: break-word; /* Prevent overflow if word is too long */
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .ayah-item {
   display: flex;
-  width: 100%; /* Full width of the container */
-  height: 100%; /* Full height of the card */
+  width: 100%;
+  height: 100%;
 }
 
-/* Style the Ayah number on the left */
 .ayah-number {
   color: #555;
   font-weight: bold;
-  width: auto; /* Auto width for the first column */
+  width: auto;
   font-size: 12px;
 }
 
-/* Style the Ayah text on the right */
 .ayah-text {
   font-size: 20px;
-  flex-grow: 1; /* This makes the column grow to take up remaining space */
+  flex-grow: 1;
   margin-left: 20px;
-  text-align: right; /* Adjust text alignment as needed for Arabic */
-  direction: rtl; /* Right-to-left direction for Arabic text */
+  text-align: right;
+  direction: rtl;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }

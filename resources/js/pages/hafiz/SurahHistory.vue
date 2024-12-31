@@ -13,13 +13,14 @@ const surah = ref(page.props.surah);
 const scores = reactive(page.props.scores);
 const title = "Riwayat Hafalan";
 const chart = ref(null);
+const last_score = scores[Object.keys(scores)[Object.keys(scores).length - 1]].average_score.toFixed(2);
 
 onMounted(() => {
   const xdata = Object.entries(scores).map(([key, value]) =>
     dayjs(value.created_at).format("DD-MM-YY")
   );
   const ydata = Object.entries(scores).map(
-    ([key, value]) => value.average_score
+    ([key, value]) => value.average_score.toFixed(2)
   );
 
   const chartInstance = echarts.init(chart.value);
@@ -46,7 +47,7 @@ onMounted(() => {
     },
     yAxis: {
       type: "value",
-      min: 80, // Minimum value for the y-axis
+      min: 50, // Minimum value for the y-axis
       max: 100, // Maximum value for the y-axis
       axisLabel: {
         rotate: 45, // Rotate the labels 45 degrees
@@ -99,13 +100,12 @@ onMounted(() => {
             </div>
             <div>
               Skor Terakhir:
-              {{
-                scores[
-                  Object.keys(scores)[Object.keys(scores).length - 1]
-                ].average_score.toFixed(2)
-              }}
+              <span class="text-bold text-grey-9">{{ score_to_letter(last_score) }} / {{ last_score }}</span>
             </div>
-            <div>Skor Rata-Rata: {{ hafiz.average_score.toFixed(2) }}</div>
+            <div>
+              Skor Rata-Rata:
+              <span class="text-bold text-grey-9">{{ score_to_letter(hafiz.average_score) }} / {{ hafiz.average_score.toFixed(2) }}</span>
+            </div>
             <p class="q-my-sm text-caption">
               Riwayat hafalan terakhir (dibatasi sampai 10 hasil penilaian)
             </p>

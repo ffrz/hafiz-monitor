@@ -14,6 +14,11 @@ class MemorizationDetailSeeder extends Seeder
     {
         $rows = DB::connection('online_db')->table('memorization_details')->get();
         foreach ($rows as $row) {
+            if ($row->score == 90)
+                $row->score = 80;
+            else if ($row->score == 80)
+                $row->score = 60;
+
             DB::connection()->table('memorization_details')->insert((array)$row);
         }
     }

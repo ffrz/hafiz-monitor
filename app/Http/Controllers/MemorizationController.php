@@ -114,7 +114,11 @@ class MemorizationController extends Controller
             $memorization->status = 'closed';
             $redirect = true;
         }
-        $memorization->notes = $request->notes;
+        $memorization->hafiz_id = $request->hafiz_id ?? $memorization->hafiz_id;
+        $memorization->start_surah_id = $request->start_surah_id ?? $memorization->start_surah_id;
+        $memorization->end_surah_id = $request->end_surah_id ?? $memorization->end_surah_id;
+        $memorization->title = $request->title ?? $memorization->title;
+        $memorization->notes = $request->notes ?? $memorization->notes;
         $memorization->save();
 
         DB::commit();
@@ -188,7 +192,9 @@ class MemorizationController extends Controller
         return inertia('memorization/Run', [
             'data' => $data,
             'surahs' => $surahs,
+            'all_surahs' => Surah::all(),
             'scores' => $scores,
+            'hafizes' => Hafiz::where('user_id', auth()->id())->orderBy('name', 'asc')->get(),
             'recent_scores' => $recent_scores,
         ]);
     }

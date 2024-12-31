@@ -23,10 +23,10 @@ class UserSeeder extends Seeder
         }
 
         // user mentor sudah ada di online_db
-        User::factory()->create([
-            'name' => 'Mentor',
-            'email' => 'mentor@example.com',
-            'active' => 1,
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Mentor',
+        //     'email' => 'mentor@example.com',
+        //     'active' => 1,
+        // ]);
     }
 }

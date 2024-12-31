@@ -2,18 +2,16 @@ import { usePage } from "@inertiajs/vue3";
 
 export function score_to_letter(score) {
   if (score > 90) return "A";
-  if (score > 80) return "B";
-  if (score > 70) return "C";
-  if (score > 60) return "D";
-  return "E";
+  if (score > 70) return "B";
+  if (score > 50) return "C";
+  return "-";
 }
 
 export function score_to_color(score) {
   if (score > 90) return "green";
-  if (score > 80) return "orange";
-  if (score > 70) return "red";
-  if (score > 60) return "red";
-  return "red";
+  if (score > 70) return "orange";
+  if (score > 50) return "red";
+  return "black";
 }
 
 export function create_gender_options() {
