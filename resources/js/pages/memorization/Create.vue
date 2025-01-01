@@ -21,7 +21,7 @@ const surahs = page.props.surahs.map((surah) => {
 const form = useForm({
   id: page.props.data.id,
   hafiz_id: page.props.data.hafiz_id,
-  title: page.props.data.title ?? 'Muraja\'ah',
+  title: page.props.data.title ?? '',
   notes: page.props.data.notes,
   start_surah_id: page.props.data.start_surah_id,
   end_surah_id: page.props.data.end_surah_id,
@@ -39,9 +39,9 @@ const onEndSurahChanged = () => {
 }
 
 const generateTitle = () => {
-  let title = "Muraja'ah";
+  let title = '';
   if (form.start_surah_id) {
-    title += " " + page.props.surahs[form.start_surah_id - 1].name;
+    title = page.props.surahs[form.start_surah_id - 1].name;
   }
 
   if (form.end_surah_id && form.end_surah_id != form.start_surah_id) {

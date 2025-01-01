@@ -14,6 +14,7 @@ const leftDrawerOpen = ref(
 );
 const isDropdownOpen = ref(false);
 const isScrolled = ref(false);
+const tab = ref(null);
 
 const toggleLeftDrawer = () => (leftDrawerOpen.value = !leftDrawerOpen.value);
 
@@ -175,32 +176,6 @@ onUnmounted(() => {
               <q-item-label>Penilaian Hafalan</q-item-label>
             </q-item-section>
           </q-item>
-          <!-- <q-item
-            clickable
-            v-ripple
-            :active="$page.url == '/dashboard'"
-            @click="router.get(route('dashboard'))"
-          >
-            <q-item-section avatar>
-              <q-icon class="material-icons-outlined">dashboard</q-icon>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>Dashboard</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-ripple
-            :active="$page.url == '/reports'"
-            @click="router.get(route('report.index'))"
-          >
-            <q-item-section avatar>
-              <q-icon class="material-symbols-outlined">monitoring</q-icon>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>Laporan</q-item-label>
-            </q-item-section>
-          </q-item> -->
           <q-item
             clickable
             v-ripple
@@ -240,7 +215,16 @@ onUnmounted(() => {
         <slot></slot>
       </q-page>
     </q-page-container>
-    <slot name="footer"></slot>
+    <!-- <slot name="footer"></slot> -->
+
+    <!-- Footer hanya tampil jika di tampilan screen kecil, lihat di bagian style di bawah pada file ini -->
+    <!-- <q-footer>
+      <q-tabs v-model="tab" indicator-color="yellow" class="bg-primary text-white shadow-2">
+        <q-tab name="mails" icon="mail" label="Mails" />
+        <q-tab name="alarms" icon="alarm" label="Alarms" />
+        <q-tab name="movies" icon="account_circle" label="Profil" />
+      </q-tabs>
+    </q-footer> -->
   </q-layout>
 </template>
 
@@ -252,6 +236,12 @@ onUnmounted(() => {
 }
 </style>
 <style scoped>
+@media screen and (min-width: 768px) {
+  .q-footer {
+    display: none;
+  }
+}
+
 .q-toolbar {
   border-bottom: 1px solid transparent;
   /* Optional border line */

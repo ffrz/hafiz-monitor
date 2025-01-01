@@ -98,6 +98,14 @@ const deleteItem = (row) =>
     fetchItemsCallback: fetchItems,
     loading,
   });
+
+const onRowClicked = (row) => {
+  if (row.status == "closed") {
+    router.get(route("memorization.view", { id: row.id }));
+  } else {
+    router.get(route("memorization.run", { id: row.id }));
+  }
+};
 </script>
 
 <template>
@@ -180,6 +188,8 @@ const deleteItem = (row) =>
 
         <template v-slot:body="props">
           <q-tr
+            @click="onRowClicked(props.row)"
+            class="cursor-pointer"
             :props="props"
             :class="props.row.status == 'open' ? 'bg-orange-1' : ''"
           >
@@ -188,15 +198,22 @@ const deleteItem = (row) =>
                 <div class="text-bold">{{ props.row.hafiz.name }}</div>
                 <div>
                   <div class="text-grey-9">{{ props.row.title }}</div>
-                  <div class="text-grey-8 text-caption"><q-icon name="schedule" /> {{ dayjs(props.row.created_at).format("DD-MM-YYYY HH:mm") }}</div>
+                  <div class="text-grey-8 text-caption flex items-center">
+                    <q-icon name="schedule" />
+                    <span class="q-ml-sm">{{
+                      dayjs(props.row.created_at).format("DD-MM-YYYY HH:mm")
+                    }}</span>
+                  </div>
                 </div>
               </div>
             </q-td>
             <q-td key="col_2" :props="props">
-              <span v-if="props.row.status == 'open'">
-                Berlangsung
-              </span>
-              <span v-else class="text-bold" :style="{ color: score_to_color(props.row.score) }">
+              <span v-if="props.row.status == 'open'"> Berlangsung </span>
+              <span
+                v-else
+                class="text-bold"
+                :style="{ color: score_to_color(props.row.score) }"
+              >
                 {{ score_to_letter(props.row.score) }} /
                 {{ props.row.score.toFixed(2) }}
               </span>
@@ -213,32 +230,17 @@ const deleteItem = (row) =>
                 rounded
                 dense
                 flat
-                @click="
-                  router.get(route('memorization.view', { id: props.row.id }))
-                "
-                icon="visibility"
+                icon="edit"
+                @click.stop="router.get(route('memorization.run', {id: props.row.id}))"
               >
-                <q-tooltip>Lihat</q-tooltip>
-              </q-btn>
-              <q-btn
-                rounded
-                dense
-                flat
-                @click="
-                  router.get(route('memorization.run', { id: props.row.id }))
-                "
-                :icon="props.row.status == 'open' ? 'play_circle' : 'edit'"
-              >
-                <q-tooltip>{{
-                  props.row.status == "open" ? "Lanjutkan Sesi" : "Edit Sesi"
-                }}</q-tooltip>
+                <q-tooltip>Edit</q-tooltip>
               </q-btn>
               <q-btn
                 rounded
                 dense
                 flat
                 :icon="props.row.status == 'open' ? 'cancel' : 'delete_forever'"
-                @click="deleteItem(props.row)"
+                @click.stop="deleteItem(props.row)"
               >
                 <q-tooltip>{{
                   props.row.status == "open" ? "Batalkan Sesi" : "Hapus Sesi"

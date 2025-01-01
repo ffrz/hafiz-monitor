@@ -1,10 +1,7 @@
 <script setup>
 import { onMounted, reactive, ref, watch } from "vue";
-import { useQuasar } from "quasar";
 import { router } from "@inertiajs/vue3";
-import { handleFetchItems, handleDelete } from "@/helpers/client-req-handler";
-import dayjs from "dayjs";
-import { format_gender } from "@/helpers/utils";
+import { handleFetchItems } from "@/helpers/client-req-handler";
 
 const statuses = [
   { value: "all", label: "Semua" },
@@ -13,7 +10,6 @@ const statuses = [
 ];
 
 const title = "Hafidz";
-const $q = useQuasar();
 const tableRef = ref(null);
 const rows = ref([]);
 const loading = ref(true);
@@ -37,48 +33,13 @@ const columns = [
     field: "name",
     align: "left",
     sortable: true,
-  },
-  // {
-  //   name: "gender",
-  //   label: "Jenis Kelamin",
-  //   field: "gender",
-  //   align: "left",
-  //   sortable: true,
-  // },
-  // {
-  //   name: "birth_date",
-  //   label: "Tanggal Lahir / Usia",
-  //   field: "birth_date",
-  //   align: "left",
-  //   sortable: true,
-  // },
-  // {
-  //   name: "phone",
-  //   label: "Telepon",
-  //   field: "phone",
-  //   align: "left",
-  //   sortable: true,
-  // },
-  // {
-  //   name: "address",
-  //   label: "Alamat",
-  //   field: "address",
-  //   align: "left",
-  //   sortable: true,
-  // },
-  {
-    name: "action",
-    label: "",
-    align: "right",
-  },
+  }
 ];
 
 onMounted(() => {
   const savedFilter = localStorage.getItem("hafiz-monitor.hafiz.filter");
   if (savedFilter) {
-    // ini akan mentrigger fetchItems
     Object.assign(filter, JSON.parse(savedFilter));
-    // return; // kadang mengakibatkan gagal fetch
   }
   fetchItems();
 });
@@ -96,7 +57,7 @@ watch(
 
 const onFilterChange = () => fetchItems();
 
-const fetchItems = (props = null) =>
+const fetchItems = (props = null) => {
   handleFetchItems({
     pagination,
     props,
@@ -105,7 +66,11 @@ const fetchItems = (props = null) =>
     filter,
     url: route("hafiz.data"),
   });
+}
 
+const onRowClick = (row) => {
+  router.get(route('hafiz.detail', row.id));
+}
 
 </script>
 
@@ -119,7 +84,6 @@ const fetchItems = (props = null) =>
         flat
         bordered
         square
-        :dense="true || $q.screen.lt.md"
         color="primary"
         row-key="id"
         virtual-scroll
@@ -188,25 +152,9 @@ const fetchItems = (props = null) =>
         </template>
 
         <template v-slot:body="props">
-          <q-tr :props="props" :class="!props.row.active ? 'bg-red-1' : ''">
+          <q-tr :props="props" :class="!props.row.active ? 'bg-red-1' : ''"  @click="onRowClick(props.row)" class="cursor-pointer">
             <q-td key="name" :props="props">
               {{ props.row.name }}
-            </q-td>
-            <q-td
-              key="action"
-              class="q-gutter-x-sm"
-              :props="props"
-              align="center"
-            >
-              <q-btn
-                rounded
-                dense
-                flat
-                @click="router.get(route('hafiz.detail', props.row.id))"
-                icon="info"
-              >
-                <q-tooltip>Rincian</q-tooltip>
-              </q-btn>
             </q-td>
           </q-tr>
         </template>
