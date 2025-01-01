@@ -1,7 +1,7 @@
 <script setup>
-import { usePage, useForm } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
-import { ref, reactive, onMounted, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { handleFetchItems } from "@/helpers/client-req-handler";
 import { useApiForm } from "@/helpers/useApiForm.js";
 import { router } from "@inertiajs/vue3";
@@ -183,9 +183,9 @@ const onEndSurahChanged = () => {
 }
 
 const generateTitle = () => {
-  let title = "Muraja'ah";
+  let title = '';
   if (form.start_surah_id) {
-    title += " " + page.props.all_surahs[form.start_surah_id - 1].name;
+    title = page.props.all_surahs[form.start_surah_id - 1].name;
   }
 
   if (form.end_surah_id && form.end_surah_id != form.start_surah_id) {

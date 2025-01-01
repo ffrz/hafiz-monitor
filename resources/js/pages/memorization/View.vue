@@ -1,4 +1,5 @@
 <script setup>
+import BtnLink from "@/components/BtnLink.vue";
 import { score_to_letter, score_to_color } from "@/helpers/utils";
 import { usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
@@ -66,6 +67,9 @@ const data = ref(page.props.data);
               </div>
             </template>
           </q-card-section>
+          <q-card-actions class="q-my-sm">
+            <BtnLink :url="route('memorization.index')" class="full-width" icon="arrow_back" label="Kembali ke Daftar Penilaian" />
+          </q-card-actions>
         </q-card>
       </div>
     </div>

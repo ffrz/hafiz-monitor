@@ -7,18 +7,7 @@ import DatePicker from "@/components/DatePicker.vue";
 const page = usePage();
 const title = !!page.props.data.id ? "Edit Hafidz" : "Tambah Hafidz";
 const genders = create_gender_options();
-const juzs = Array.from({ length: 30 }, (_, i) => i + 1).map((juz) => {
-  return {
-    value: juz,
-    label: `Juz ${juz}`,
-  };
-});
-const surahs = page.props.surahs.map((surah) => {
-  return {
-    value: surah.id,
-    label: `${surah.id} - ${surah.name}`,
-  };
-});
+
 const form = useForm({
   id: page.props.data.id,
   name: page.props.data.name,
