@@ -78,7 +78,6 @@ class MemorizationController extends Controller
 
         return inertia('memorization/Create', [
             'data' => $memorization,
-            'surahs' => Surah::all(),
             'hafizes' => Hafiz::where('user_id', auth()->id())
                 ->orderBy('name', 'asc')->get(),
         ]);
@@ -136,7 +135,7 @@ class MemorizationController extends Controller
         $scores = [];
 
         foreach ($memorization->details as $detail) {
-            $surahs[$detail->surah_id] = 1;
+            // $surahs[$detail->surah_id] = 1;
             if (!isset($scores[$detail->ayah_id])) {
                 $scores[$detail->ayah_id] = [];
             }
@@ -145,9 +144,9 @@ class MemorizationController extends Controller
         }
 
         $surah_ids = range($memorization->start_surah_id, $memorization->end_surah_id);
-        $surahs = DB::table('surahs')
-            ->whereIn('id', $surah_ids)
-            ->get();
+        // $surahs = DB::table('surahs')
+        //     ->whereIn('id', $surah_ids)
+        //     ->get();
 
         $data = $memorization->toArray();
 
@@ -191,8 +190,7 @@ class MemorizationController extends Controller
 
         return inertia('memorization/Run', [
             'data' => $data,
-            'surahs' => $surahs,
-            'all_surahs' => Surah::all(),
+            // 'surahs' => $surahs,
             'scores' => $scores,
             'hafizes' => Hafiz::where('user_id', auth()->id())->orderBy('name', 'asc')->get(),
             'recent_scores' => $recent_scores,
@@ -204,16 +202,14 @@ class MemorizationController extends Controller
         $memorization = Memorization::select('*')
             ->with(['hafiz:id,name', 'details', 'details.ayah'])
             ->findOrFail($request->get('id', null));
-        $juzes = [];
         $surah_ids = [];
         $details_by_surahs = [];
         foreach ($memorization->details as $detail) {
-            $juzes[$detail->ayah->juz] = $detail->ayah->juz;
             $surah_ids[$detail->ayah->surah_id] = $detail->ayah->surah_id;
             $details_by_surahs[$detail->ayah->surah_id][] = [
                 'ayah_id' => $detail->ayah_id,
                 'ayah_number' => $detail->ayah->number,
-                'ayah_text' => $detail->ayah->text,
+                // 'ayah_text' => $detail->ayah->text,
                 'score' => $detail->score,
                 'notes' => $detail->notes,
             ];
@@ -222,7 +218,6 @@ class MemorizationController extends Controller
         $data = $memorization->toArray();
         $data['details'] = $details_by_surahs;
         $surah_ids = array_keys($surah_ids);
-        $juzes = array_keys($juzes);
 
         $surahNames = DB::table('surahs')
             ->whereIn('id', $surah_ids)

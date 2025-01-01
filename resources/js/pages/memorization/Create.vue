@@ -1,27 +1,32 @@
 <script setup>
 import { handleSubmit } from "@/helpers/client-req-handler";
 import { router, useForm, usePage } from "@inertiajs/vue3";
-import { create_options_v2 } from "@/helpers/utils";
-import DatePicker from "@/components/DatePicker.vue";
-
+import { getSurahs } from "@/services/quranDatabase";
+import { onMounted, ref } from "vue";
 
 const page = usePage();
 const title = "Mulai Sesi Penilaian Hafalan";
 const hafizes = page.props.hafizes.map((item) => {
-    return { 'value': item.id, 'label': item.name };
+  return { value: item.id, label: item.name };
 });
 
-const surahs = page.props.surahs.map((surah) => {
-  return {
-    value: surah.id,
-    label: `${surah.id} - ${surah.name} (${surah.total_ayahs} ayat)`,
-  };
+let db_surahs = [];
+const surahs = ref([]);
+
+onMounted(async () => {
+  db_surahs = await getSurahs();
+  surahs.value = db_surahs.map((surah) => {
+    return {
+      value: surah.id,
+      label: `${surah.id} - ${surah.name} (${surah.total_ayahs} ayat)`,
+    };
+  });
 });
 
 const form = useForm({
   id: page.props.data.id,
   hafiz_id: page.props.data.hafiz_id,
-  title: page.props.data.title ?? '',
+  title: page.props.data.title ?? "",
   notes: page.props.data.notes,
   start_surah_id: page.props.data.start_surah_id,
   end_surah_id: page.props.data.end_surah_id,
@@ -36,20 +41,20 @@ const onStartSurahChanged = () => {
 
 const onEndSurahChanged = () => {
   generateTitle();
-}
+};
 
 const generateTitle = () => {
-  let title = '';
+  let title = "";
   if (form.start_surah_id) {
-    title = page.props.surahs[form.start_surah_id - 1].name;
+    title = db_surahs[form.start_surah_id - 1].name;
   }
 
   if (form.end_surah_id && form.end_surah_id != form.start_surah_id) {
-    title += " s.d " + page.props.surahs[form.end_surah_id - 1].name;
+    title += " s.d " + db_surahs[form.end_surah_id - 1].name;
   }
 
   form.title = title;
-}
+};
 </script>
 
 <template>
@@ -90,7 +95,8 @@ const generateTitle = () => {
                 :error="!!form.errors.start_surah_id"
                 :error-message="form.errors.start_surah_id"
               />
-              <q-select v-if="!!form.start_surah_id"
+              <q-select
+                v-if="!!form.start_surah_id"
                 v-model="form.end_surah_id"
                 label="Sampai Surat"
                 :options="surahs"
@@ -115,7 +121,8 @@ const generateTitle = () => {
                   (val) => (val && val.length > 0) || 'Judul sesi harus diisi.',
                 ]"
               />
-              <q-input v-if="!!form.id"
+              <q-input
+                v-if="!!form.id"
                 v-model.trim="form.notes"
                 type="textarea"
                 label="Catatan"

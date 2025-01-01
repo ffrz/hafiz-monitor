@@ -1,13 +1,25 @@
 <script setup>
 import BtnLink from "@/components/BtnLink.vue";
 import { score_to_letter, score_to_color } from "@/helpers/utils";
+import { getAyahs, getSurahs } from "@/services/quranDatabase";
 import { usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const page = usePage();
 const title = "Hasil Penilaian Hafalan";
 const data = ref(page.props.data);
+
+onMounted(async () => {
+  for (let surah_id in data.value.details) {
+    let ayahs = await getAyahs(parseInt(surah_id));
+    for (const id in data.value.details[surah_id].details) {
+      data.value.details[surah_id].details[id].ayah_text = ayahs[id].text;
+    }
+  }
+});
+
+
 </script>
 
 <template>

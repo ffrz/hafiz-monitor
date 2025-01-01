@@ -1,12 +1,13 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, nextTick } from "vue";
 import { handleFetchItems } from "@/helpers/client-req-handler";
 import { useApiForm } from "@/helpers/useApiForm.js";
 import { router } from "@inertiajs/vue3";
 import { Notify, Dialog } from "quasar";
 import { score_to_letter, score_to_color } from "@/helpers/utils";
+import { getAyahs, getSurahs } from "@/services/quranDatabase";
 
 const page = usePage();
 const show_notes_prompt = ref(false);
@@ -19,11 +20,25 @@ const pageTitle = "Sesi Penilaian Hafalan";
 const hafizes = page.props.hafizes.map((item) => {
   return { value: item.id, label: item.name };
 });
-const all_surahs = page.props.all_surahs.map((surah) => {
-  return {
-    value: surah.id,
-    label: `${surah.id} - ${surah.name} (${surah.total_ayahs} ayat)`,
-  };
+
+let all_surahs = ref([]);
+let surah_options = ref([]);
+
+onMounted(async () => {
+  all_surahs.value = await getSurahs();
+  surah_options.value = all_surahs.value.map((surah) => {
+    return {
+      value: surah.id,
+      label: `${surah.id} - ${surah.name} (${surah.total_ayahs} ayat)`,
+    };
+  });
+
+  nextTick(() => {
+    if (surahs.value.length > 0) {
+      selectedSurah.value = surahs.value[0];
+      handleSurahChanged();
+    }
+  });
 });
 
 const currentHafiz = computed(
@@ -33,7 +48,8 @@ const currentHafiz = computed(
 const surahs = computed(() => {
   const surah_ids = [];
   for (let i = form.start_surah_id; i <= form.end_surah_id; i++) {
-    const surah = page.props.all_surahs.find((surah) => surah.id == i);
+    const surah = all_surahs.value.find((surah) => surah.id == i);
+    if (!surah) break;
     const surahName = surah.name;
     const totalAyahs = surah.total_ayahs;
     surah_ids.push({
@@ -60,7 +76,7 @@ const selectedSurah = ref(null);
 const loading = ref(true);
 const pagination = ref({
   page: 1,
-  rowsPerPage: 10,
+  rowsPerPage: null,
   rowsNumber: 10,
   sortBy: "id",
   descending: false,
@@ -76,27 +92,15 @@ const columns = [
   },
 ];
 
-onMounted(() => {
-  if (surahs.value.length > 0) {
-    selectedSurah.value = surahs.value[0];
-    handleSurahChanged();
-  }
-});
-
 const handleSurahChanged = () => {
-  pagination.value.page = 1;
-  fetchItems({ pagination });
+  // pagination.value.page = 1;
+  fetchItems();
 };
 
-const fetchItems = (props = null) => {
-  handleFetchItems({
-    pagination,
-    props,
-    rows,
-    loading,
-    url: route("ayah.data"),
-    filter: { surah_id: selectedSurah.value.value },
-  });
+const fetchItems = async (props = null) => {
+  rows.value = await getAyahs(selectedSurah.value.value);
+  console.log(rows.value);
+  loading.value = false;
   scrollTo(window, 0, 300);
 };
 
@@ -129,11 +133,10 @@ const submitScore = async () => {
     {
       scores: filteredScores(),
       closeSession: false,
-      ...data
+      ...data,
     }
   );
   Notify.create({ message: response.data.message });
-
 };
 
 const closeSession = async () => {
@@ -149,7 +152,7 @@ const closeSession = async () => {
     router.post(route("memorization.save", { id: data.id }), {
       scores: filteredScores(),
       closeSession: true,
-      ...data
+      ...data,
     });
   });
 };
@@ -180,20 +183,20 @@ const onStartSurahChanged = () => {
 
 const onEndSurahChanged = () => {
   generateTitle();
-}
+};
 
 const generateTitle = () => {
-  let title = '';
+  let title = "";
   if (form.start_surah_id) {
-    title = page.props.all_surahs[form.start_surah_id - 1].name;
+    title = all_surahs.value[form.start_surah_id - 1].name;
   }
 
   if (form.end_surah_id && form.end_surah_id != form.start_surah_id) {
-    title += " s.d " + page.props.all_surahs[form.end_surah_id - 1].name;
+    title += " s.d " + all_surahs.value[form.end_surah_id - 1].name;
   }
 
   form.title = title;
-}
+};
 </script>
 
 <template>
@@ -249,7 +252,7 @@ const generateTitle = () => {
         <q-select
           v-model="form.start_surah_id"
           label="Mulai Surat"
-          :options="all_surahs"
+          :options="surah_options"
           map-options
           emit-value
           lazy-rules
@@ -264,7 +267,7 @@ const generateTitle = () => {
           v-if="!!form.start_surah_id"
           v-model="form.end_surah_id"
           label="Sampai Surat"
-          :options="all_surahs"
+          :options="surah_options"
           map-options
           emit-value
           lazy-rules
@@ -315,9 +318,7 @@ const generateTitle = () => {
   </q-dialog>
   <authenticated-layout>
     <template #title>{{ pageTitle }}</template>
-    <template #sticky_header>
-      Tes
-    </template>
+    <template #sticky_header> Tes </template>
     <div class="row justify-center">
       <div class="col col-lg-6 q-pa-md">
         <q-card
@@ -358,12 +359,14 @@ const generateTitle = () => {
               square
               color="primary"
               row-key="id"
-              v-model:pagination="pagination"
               :loading="loading"
               :columns="columns"
               :rows="rows"
               :hide-header="true"
-              :rows-per-page-options="[10]"
+              :virtual-scroll="true"
+              :virtual-scroll-item-size="50"
+              :rows-per-page="null"
+              :pagination="pagination"
               @request="fetchItems"
             >
               <template v-slot:loading>
