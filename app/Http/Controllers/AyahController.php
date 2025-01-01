@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ayah;
-use App\Models\Hafiz;
-use App\Models\Memorization;
-use App\Models\Surah;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AyahController extends Controller
 {
+    public function index(Request $request, $surah_id = null)
+    {
+        return response()->json($surah_id ? Ayah::where('surah_id', $surah_id)->get() : Ayah::all());
+    }
+
     public function data(Request $request)
     {
         $filter = $request->get('filter', []);

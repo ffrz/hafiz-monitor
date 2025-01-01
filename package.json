@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "dayjs": "^1.11.13",
+        "dexie": "^4.0.10",
         "echarts": "^5.6.0",
         "material-design-icons-iconfont": "^6.7.0",
         "vue-echarts": "^7.0.3"

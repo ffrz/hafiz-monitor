@@ -315,6 +315,9 @@ const generateTitle = () => {
   </q-dialog>
   <authenticated-layout>
     <template #title>{{ pageTitle }}</template>
+    <template #sticky_header>
+      Tes
+    </template>
     <div class="row justify-center">
       <div class="col col-lg-6 q-pa-md">
         <q-card

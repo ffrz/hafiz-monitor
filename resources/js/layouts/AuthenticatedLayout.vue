@@ -66,6 +66,9 @@ onUnmounted(() => {
           <slot name="title">{{ $config.APP_NAME }}</slot>
         </q-toolbar-title>
       </q-toolbar>
+      <q-toolbar v-if="true" class="bg-grey-1">
+        <slot name="sticky_header"></slot>
+      </q-toolbar>
     </q-header>
     <q-drawer
       v-model="leftDrawerOpen"
