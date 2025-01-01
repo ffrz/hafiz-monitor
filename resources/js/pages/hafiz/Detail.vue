@@ -115,14 +115,14 @@ const onDeleteBtnClicked = () => {
                     class="detail-ayah-score q-mr-xs"
                     :style="{ 'background-color': score_to_color(80) }"
                   ></div>
-                  B [70 - 90]
+                  B [80 - 89]
                 </div>
                 <div class="flex">
                   <div
                     class="detail-ayah-score q-mr-xs"
                     :style="{ 'background-color': score_to_color(60) }"
                   ></div>
-                  C [50 - 69]
+                  C [< 80]
                 </div>
               </div>
             </div>
