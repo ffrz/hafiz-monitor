@@ -66,9 +66,6 @@ onUnmounted(() => {
           <slot name="title">{{ $config.APP_NAME }}</slot>
         </q-toolbar-title>
       </q-toolbar>
-      <q-toolbar v-if="true" class="bg-grey-1">
-        <slot name="sticky_header"></slot>
-      </q-toolbar>
     </q-header>
     <q-drawer
       v-model="leftDrawerOpen"
@@ -218,16 +215,14 @@ onUnmounted(() => {
         <slot></slot>
       </q-page>
     </q-page-container>
-    <!-- <slot name="footer"></slot> -->
-
     <!-- Footer hanya tampil jika di tampilan screen kecil, lihat di bagian style di bawah pada file ini -->
-    <!-- <q-footer>
-      <q-tabs v-model="tab" indicator-color="yellow" class="bg-primary text-white shadow-2">
+    <!-- <q-footer> -->
+      <!-- <q-tabs v-model="tab" indicator-color="yellow" class="bg-primary text-white shadow-2">
         <q-tab name="mails" icon="mail" label="Mails" />
         <q-tab name="alarms" icon="alarm" label="Alarms" />
         <q-tab name="movies" icon="account_circle" label="Profil" />
-      </q-tabs>
-    </q-footer> -->
+      </q-tabs> -->
+    <!-- </q-footer> -->
   </q-layout>
 </template>
 
