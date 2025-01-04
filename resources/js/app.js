@@ -6,9 +6,9 @@ import { Dialog, Loading, Notify, Quasar, scroll } from "quasar";
 import AuthenticatedLayout from "./layouts/AuthenticatedLayout.vue";
 import GuestLayout from "./layouts/GuestLayout.vue";
 import "@quasar/extras/material-icons/material-icons.css";
-import "@quasar/extras/material-icons-outlined/material-icons-outlined.css";
-import "@quasar/extras/material-symbols-outlined/material-symbols-outlined.css";
-import "@quasar/extras/fontawesome-v6/fontawesome-v6.css";
+// import "@quasar/extras/material-icons-outlined/material-icons-outlined.css";
+// import "@quasar/extras/material-symbols-outlined/material-symbols-outlined.css";
+// import "@quasar/extras/fontawesome-v6/fontawesome-v6.css";
 import "quasar/src/css/index.sass";
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { router } from "@inertiajs/vue3";
@@ -34,7 +34,7 @@ createInertiaApp({
       .use(Quasar, {
         plugins: { Notify, Loading, Dialog, scroll },
         config: {
-          iconSet: 'material-symbols-outlined',
+          // iconSet: 'material-symbols-outlined',
         }
       })
       .component('i-head', Head)

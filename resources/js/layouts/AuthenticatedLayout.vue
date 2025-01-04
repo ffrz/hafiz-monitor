@@ -14,7 +14,7 @@ const leftDrawerOpen = ref(
 );
 const isDropdownOpen = ref(false);
 const isScrolled = ref(false);
-const tab = ref(null);
+const activeTab = ref(null);
 
 const toggleLeftDrawer = () => (leftDrawerOpen.value = !leftDrawerOpen.value);
 
@@ -51,7 +51,7 @@ onUnmounted(() => {
         :class="{ 'toolbar-scrolled': isScrolled }"
       >
         <q-btn
-          v-if="!leftDrawerOpen"
+          v-if="!$q.screen.lt.sm && !leftDrawerOpen"
           flat
           dense
           aria-label="Menu"
@@ -68,6 +68,7 @@ onUnmounted(() => {
       </q-toolbar>
     </q-header>
     <q-drawer
+      v-if="!$q.screen.lt.sm"
       v-model="leftDrawerOpen"
       bordered
       class="bg-grey-2"
@@ -216,17 +217,84 @@ onUnmounted(() => {
       </q-page>
     </q-page-container>
     <!-- Footer hanya tampil jika di tampilan screen kecil, lihat di bagian style di bawah pada file ini -->
-    <!-- <q-footer> -->
-      <!-- <q-tabs v-model="tab" indicator-color="yellow" class="bg-primary text-white shadow-2">
-        <q-tab name="mails" icon="mail" label="Mails" />
-        <q-tab name="alarms" icon="alarm" label="Alarms" />
-        <q-tab name="movies" icon="account_circle" label="Profil" />
-      </q-tabs> -->
-    <!-- </q-footer> -->
+    <q-footer>
+      <q-tabs
+        v-model="activeTab"
+        indicator-color="yellow"
+        class="bg-primary text-white shadow-2"
+        align="justify"
+        dense
+      >
+        <q-tab
+          name="memorization"
+          icon="checklist_rtl"
+          label="Penilaian"
+          @click="router.get(route('memorization.index'))"
+          :class="$page.url.startsWith('/memorizations') ? 'active' : ''"
+        />
+        <q-tab
+          name="hafiz"
+          icon="groups_2"
+          label="Hafidz"
+          @click="router.get(route('hafiz.index'))"
+          :class="$page.url.startsWith('/hafizes') ? 'active' : ''"
+        />
+        <q-tab
+          name="settings"
+          icon="settings"
+          label="Pengaturan"
+          @click="router.get(route('profile.edit'))"
+          :class="$page.url.startsWith('/settings') ? 'active' : ''"
+        />
+      </q-tabs>
+    </q-footer>
   </q-layout>
 </template>
 
 <style>
+.q-tabs .q-tab {
+  width: 33.33%;
+}
+
+.q-tabs .q-tab__label {
+  font-weight: normal;
+  text-transform: none;
+  font-size: 12px;
+}
+.q-tabs .q-tab__icon {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.q-tabs .q-tab__icon,
+.q-tabs .q-tab__label {
+  opacity: 80%;
+}
+
+.q-tabs .active .q-tab__icon,
+.q-tabs .active .q-tab__label,
+.q-tabs .active .q-tab__indicator {
+  opacity: 100%;
+  color: white;
+}
+
+.q-tabs .active .q-tab__icon {
+  font-size: 22px;
+}
+
+.q-tabs .active .q-tab__label {
+  font-size: 13px;
+}
+
+.q-tabs .active * {
+  color: white !important;
+}
+
+.q-tab {
+  flex: 1 1 auto; /* Ensures all tabs take equal space */
+  text-align: center;
+}
+
 .profile-btn span.block {
   text-align: left !important;
   width: 100% !important;
