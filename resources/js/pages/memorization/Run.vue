@@ -8,6 +8,7 @@ import { router } from "@inertiajs/vue3";
 import { Notify, Dialog } from "quasar";
 import { score_to_letter, score_to_color } from "@/helpers/utils";
 import { getAyahs, getSurahs } from "@/services/quranDatabase";
+import { debounce } from "lodash";
 
 const page = usePage();
 const show_notes_prompt = ref(false);
@@ -21,8 +22,8 @@ const hafizes = page.props.hafizes.map((item) => {
   return { value: item.id, label: item.name };
 });
 
-let all_surahs = ref([]);
-let surah_options = ref([]);
+const all_surahs = ref([]);
+const surah_options = ref([]);
 
 onMounted(async () => {
   all_surahs.value = await getSurahs();
@@ -99,7 +100,6 @@ const handleSurahChanged = () => {
 
 const fetchItems = async (props = null) => {
   rows.value = await getAyahs(selectedSurah.value.value);
-  console.log(rows.value);
   loading.value = false;
   scrollTo(window, 0, 300);
 };
@@ -111,10 +111,13 @@ const toggleScore = (row, score) => {
 
   if (scores[row.id].score == score) {
     delete scores[row.id];
-    return;
+  } else {
+    scores[row.id].score = score;
   }
 
-  scores[row.id].score = score;
+  debounce(function () {
+    submitScore();
+  }, 2000)();
 };
 
 const filteredScores = () => {
@@ -136,7 +139,14 @@ const submitScore = async () => {
       ...data,
     }
   );
-  Notify.create({ message: response.data.message });
+
+  // sementara kita pakai notifikasi ini dulu
+  Notify.create({
+    message: response.data.message,
+    position: "top-right",
+    classes:'custom-notify',
+    timeout: 1000,
+  });
 };
 
 const closeSession = async () => {
@@ -165,6 +175,8 @@ const addNotes = () => {
 
   current_notes.value = "";
   current_ayah.value = null;
+
+  submitScore();
 };
 
 const showNotesDialog = (selectedAyah) => {
@@ -184,6 +196,26 @@ const onStartSurahChanged = () => {
 const onEndSurahChanged = () => {
   generateTitle();
 };
+
+const prevSurah = () => {
+  const selectedSurahId = selectedSurah.value.value;
+  if (selectedSurahId == surahs.value[0].value) {
+    return;
+  }
+  const currentIndex = surahs.value.findIndex((option) => option.value === selectedSurah.value.value);
+  selectedSurah.value = surahs.value[currentIndex - 1];
+  handleSurahChanged();
+}
+
+const nextSurah = () => {
+  const selectedSurahId = selectedSurah.value.value;
+  if (selectedSurahId == surahs.value[surahs.value.length - 1].value) {
+    return;
+  }
+  const currentIndex = surahs.value.findIndex((option) => option.value === selectedSurah.value.value);
+  selectedSurah.value = surahs.value[currentIndex + 1];
+  handleSurahChanged();
+}
 
 const generateTitle = () => {
   let title = "";
@@ -342,12 +374,16 @@ const generateTitle = () => {
               </div>
               <q-btn icon="edit" flat rounded dense @click="showEditForm" />
             </div>
-            <q-select
-              label="Surat"
-              v-model="selectedSurah"
-              :options="surahs"
-              @update:model-value="handleSurahChanged"
-            />
+            <div class="flex flex-center align-middle q-gutter-sm items-center">
+              <q-btn icon="arrow_left" flat dense rounded @click="prevSurah()" :disable="selectedSurah && surahs.length && selectedSurah.value === surahs[0].value"/>
+              <q-select class="col"
+                label="Surat"
+                v-model="selectedSurah"
+                :options="surahs"
+                @update:model-value="handleSurahChanged"
+              />
+              <q-btn icon="arrow_right" flat dense rounded  @click="nextSurah()" :disable="selectedSurah && surahs.length && selectedSurah.value === surahs[surahs.length - 1].value"/>
+            </div>
           </q-card-section>
           <q-card-section v-show="!!selectedSurah" class="q-pa-sm">
             <q-table
@@ -471,27 +507,10 @@ const generateTitle = () => {
                 </q-tr>
               </template>
             </q-table>
-            <q-input
-              class="q-pt-md"
-              label="Catatan (Keseluruhan)"
-              v-model.trim="form.notes"
-              autofocus
-              autogrow
-              counter
-              maxlength="1000"
-              clearable
-            />
           </q-card-section>
-          <q-card-section>
+          <q-footer class="bg-grey-1 q-pa-sm">
             <div class="full-width q-py-sm">
-              <div class="row q-gutter-sm">
-                <q-btn
-                  icon="save"
-                  label="SIMPAN"
-                  color="grey"
-                  class="col q-mt-sm text-bold"
-                  @click="submitScore"
-                />
+              <div class="row">
                 <q-btn
                   icon="check"
                   label="SELESAI"
@@ -501,11 +520,10 @@ const generateTitle = () => {
                 />
               </div>
             </div>
-          </q-card-section>
+          </q-footer>
         </q-card>
       </div>
     </div>
-    <template #footer> Tes </template>
   </authenticated-layout>
 </template>
 
@@ -539,13 +557,18 @@ const generateTitle = () => {
 }
 
 .ayah-text {
-  font-size: 20px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: normal;
+  font-size: 30px;
   flex-grow: 1;
   margin-left: 20px;
   text-align: right;
   direction: rtl;
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+.q-table__bottom {
+  display: none !important;
 }
 </style>
 
@@ -555,5 +578,15 @@ const generateTitle = () => {
 }
 .q-table-list .q-table__bottom {
   justify-content: center;
+}
+
+.custom-notify {
+  background-color: #ddd !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.custom-notify .q-notification__message {
+  color: #555 !important;
 }
 </style>
