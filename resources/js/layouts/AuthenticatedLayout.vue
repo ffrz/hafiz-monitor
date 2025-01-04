@@ -1,5 +1,12 @@
 <script setup>
-import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+} from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { useQuasar } from "quasar";
 
@@ -36,11 +43,18 @@ onMounted(() => {
     leftDrawerOpen.value = false;
   }
   window.addEventListener("scroll", handleScroll);
+  console.log(hasSubpath);
 });
 
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 });
+
+const hasSubpath = computed(() => {
+  const segments = page.url.split("/").filter(Boolean); // Split the path and filter out empty segments
+  return segments.length > 1; // More than one segment indicates a subpath
+});
+
 </script>
 
 <template>
@@ -217,7 +231,7 @@ onUnmounted(() => {
       </q-page>
     </q-page-container>
     <!-- Footer hanya tampil jika di tampilan screen kecil, lihat di bagian style di bawah pada file ini -->
-    <q-footer>
+    <q-footer v-if="!hasSubpath">
       <q-tabs
         v-model="activeTab"
         indicator-color="yellow"
