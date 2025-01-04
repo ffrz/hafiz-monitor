@@ -43,7 +43,6 @@ onMounted(() => {
     leftDrawerOpen.value = false;
   }
   window.addEventListener("scroll", handleScroll);
-  console.log(hasSubpath);
 });
 
 onUnmounted(() => {
@@ -185,10 +184,10 @@ const hasSubpath = computed(() => {
             @click="router.get(route('memorization.index'))"
           >
             <q-item-section avatar>
-              <q-icon class="material-icons-outlined">checklist_rtl</q-icon>
+              <q-icon class="material-symbols-outlined">checklist_rtl</q-icon>
             </q-item-section>
             <q-item-section>
-              <q-item-label>Penilaian Hafalan</q-item-label>
+              <q-item-label>Penilaian</q-item-label>
             </q-item-section>
           </q-item>
           <q-item

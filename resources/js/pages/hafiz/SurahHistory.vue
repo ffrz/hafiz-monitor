@@ -13,14 +13,17 @@ const surah = ref(page.props.surah);
 const scores = reactive(page.props.scores);
 const title = "Riwayat Hafalan";
 const chart = ref(null);
-const last_score = scores[Object.keys(scores)[Object.keys(scores).length - 1]].average_score.toFixed(2);
+const last_score =
+  scores[
+    Object.keys(scores)[Object.keys(scores).length - 1]
+  ].average_score.toFixed(2);
 
 onMounted(() => {
   const xdata = Object.entries(scores).map(([key, value]) =>
     dayjs(value.created_at).format("DD-MM-YY")
   );
-  const ydata = Object.entries(scores).map(
-    ([key, value]) => value.average_score.toFixed(2)
+  const ydata = Object.entries(scores).map(([key, value]) =>
+    value.average_score.toFixed(2)
   );
 
   const chartInstance = echarts.init(chart.value);
@@ -93,18 +96,25 @@ onMounted(() => {
         <q-card square flat bordered class="full-width">
           <q-card-section>
             <div class="text-subtitle1 text-bold text-grey-9">
-              {{ hafiz.name }}
+              <my-link :href="route('hafiz.detail', { id: hafiz.id })">{{
+                hafiz.name
+              }}</my-link>
             </div>
             <div class="text-subtitle2 text-bold text-grey-9">
               {{ surah.name }} ({{ surah.total_ayahs }} ayat)
             </div>
             <div>
               Skor Terakhir:
-              <span class="text-bold text-grey-9">{{ score_to_letter(last_score) }} / {{ last_score }}</span>
+              <span class="text-bold text-grey-9"
+                >{{ score_to_letter(last_score) }} / {{ last_score }}</span
+              >
             </div>
             <div>
               Skor Rata-Rata:
-              <span class="text-bold text-grey-9">{{ score_to_letter(hafiz.average_score) }} / {{ hafiz.average_score.toFixed(2) }}</span>
+              <span class="text-bold text-grey-9"
+                >{{ score_to_letter(hafiz.average_score) }} /
+                {{ hafiz.average_score.toFixed(2) }}</span
+              >
             </div>
             <p class="q-my-sm text-caption">
               Riwayat hafalan terakhir (dibatasi sampai 10 hasil penilaian)
@@ -125,9 +135,15 @@ onMounted(() => {
                       :key="j"
                       :title="scores[j].created_at"
                     >
-                      <span class="text-vertical">{{
-                        dayjs(scores[j].created_at).format("DD-MM-YY")
-                      }}</span>
+                      <span class="text-vertical">
+                        <my-link
+                          :href="
+                            route('memorization.view', { id: scores[j].id })
+                          "
+                        >
+                          {{ dayjs(scores[j].created_at).format("DD-MM-YY") }}
+                        </my-link>
+                      </span>
                     </th>
                   </tr>
                 </thead>
