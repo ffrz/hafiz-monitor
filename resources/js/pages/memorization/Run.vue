@@ -387,7 +387,7 @@ const generateTitle = () => {
           </q-card-section>
           <q-card-section v-show="!!selectedSurah" class="q-pa-sm">
             <q-table
-              class="q-table-list"
+              class="q-table-list table-without-pagination"
               style="margin: 0; padding: 0"
               flat
               bordered
@@ -528,9 +528,15 @@ const generateTitle = () => {
 </template>
 
 <style scoped>
+.recent-scores {
+  word-wrap: break-word;
+  white-space: normal;
+}
 .recent-scores .score:before {
   content: "← ";
 }
+
+
 
 .q-table-list .q-td {
   padding: 0;
