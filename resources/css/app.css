@@ -72,3 +72,9 @@ a:hover {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.custom-select-popup {
+  max-width: 90vw;
+  max-height: 50vh;
+  overflow-y: auto;
+}

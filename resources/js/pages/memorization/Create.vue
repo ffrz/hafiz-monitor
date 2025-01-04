@@ -68,6 +68,7 @@ const generateTitle = () => {
             <q-card-section class="q-pt-none">
               <input type="hidden" name="id" v-model="form.id" />
               <q-select
+                popup-content-class="custom-select-popup"
                 autofocus
                 v-model="form.hafiz_id"
                 label="Hafidz"
@@ -82,6 +83,7 @@ const generateTitle = () => {
                 :error-message="form.errors.hafiz_id"
               />
               <q-select
+                popup-content-class="custom-select-popup"
                 v-model="form.start_surah_id"
                 label="Mulai Surat"
                 :options="surahs"
@@ -96,6 +98,7 @@ const generateTitle = () => {
                 :error-message="form.errors.start_surah_id"
               />
               <q-select
+                popup-content-class="custom-select-popup"
                 v-if="!!form.start_surah_id"
                 v-model="form.end_surah_id"
                 label="Sampai Surat"

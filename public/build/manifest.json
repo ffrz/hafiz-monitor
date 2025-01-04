@@ -56,12 +56,12 @@
     "src": "node_modules/@quasar/extras/material-symbols-outlined/web-font/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzaxHMPdY43zj-jCxv3fzvRNU22ZXGJpEpjC_1p-p_4MrImHCIJIZrDCvHeel.woff"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CKbqqeLw.css",
+    "file": "assets/app-CT8f0pJP.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BboLGAsD.js",
+    "file": "assets/app-DCd3-IIZ.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
