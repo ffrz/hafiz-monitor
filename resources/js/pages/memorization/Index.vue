@@ -16,7 +16,8 @@ const hafizes = [
   { value: "all", label: "Semua" },
   ...create_options_v2(page.props.hafizes, "id", "name"),
 ];
-
+const hasHafizes = ref(page.props.hafizes.length > 0);
+console.log(hasHafizes.value);
 const title = "Penilaian";
 const $q = useQuasar();
 const tableRef = ref(null);
@@ -50,29 +51,12 @@ const columns = [
 ];
 
 onMounted(() => {
-  const savedFilter = localStorage.getItem("hafiz-monitor.memorization.filter");
-  if (savedFilter) {
-    // ini akan mentrigger fetchItems
-    Object.assign(filter, JSON.parse(savedFilter));
-    // return; // kadang mengakibatkan gagal fetch
-  }
   fetchItems();
 });
 
-watch(
-  filter,
-  (newValue) => {
-    localStorage.setItem(
-      "hafiz-monitor.memorization.filter",
-      JSON.stringify(newValue)
-    );
-  },
-  { deep: true }
-);
-
 const onFilterChange = () => fetchItems();
 
-const fetchItems = (props = null) =>
+const fetchItems = (props = null) => {
   handleFetchItems({
     pagination,
     props,
@@ -81,6 +65,8 @@ const fetchItems = (props = null) =>
     filter,
     url: route("memorization.data"),
   });
+  scrollTo(window, 0, 300);
+}
 
 const deleteItem = (row) =>
   handleDelete({
@@ -100,20 +86,29 @@ const onRowClicked = (row) => {
     router.get(route("memorization.run", { id: row.id }));
   }
 };
+
+const showFilter = ref(false);
 </script>
 
 <template>
   <i-head :title="title" />
   <authenticated-layout>
-    <template #right-button>
+    <template #right-button v-if="hasHafizes">
       <q-btn
         icon="add"
         dense
         color="primary"
         @click="router.get(route('memorization.create'))"
       />
+      <q-btn
+        :icon="!showFilter ? 'filter_alt' : 'filter_alt_off'"
+        dense
+        class="q-ml-sm"
+        @click="showFilter = !showFilter"
+      />
     </template>
     <q-header
+      v-if="showFilter"
       style="
         top: 49px;
         background: #fff;
@@ -151,8 +146,8 @@ const onRowClicked = (row) => {
       </div>
     </q-header>
     <template #title>{{ title }}</template>
-    <div class="q-pa-md mobile-no-padding" style="margin-top: 50px">
-      <q-table
+    <div class="q-pa-md mobile-no-padding" :style="showFilter ? 'margin-top: 50px' : ''">
+      <q-table v-if="hasHafizes || rows.length > 0"
         ref="tableRef"
         flat
         bordered
@@ -169,6 +164,7 @@ const onRowClicked = (row) => {
         :rows-per-page-options="[10, 25, 50]"
         @request="fetchItems"
         binary-state-sort
+        hide-header
       >
         <template v-slot:loading>
           <q-inner-loading showing color="red" />
@@ -232,8 +228,8 @@ const onRowClicked = (row) => {
                   <q-menu
                     anchor="bottom right"
                     self="top right"
-                    transition-show="flip-right"
-                    transition-hide="flip-left"
+                    transition-show="scale"
+                    transition-hide="scale"
                   >
                     <q-list style="width: 200px">
                       <q-item
@@ -256,6 +252,7 @@ const onRowClicked = (row) => {
                         @click.stop="deleteItem(props.row)"
                         clickable
                         v-ripple
+                        v-close-popup
                       >
                         <q-item-section avatar>
                           <q-icon
@@ -280,6 +277,10 @@ const onRowClicked = (row) => {
           </q-tr>
         </template>
       </q-table>
+      <div v-else class="q-pa-md text-center">
+        <p class="q-my-sm">Belum ada Hafidz / Hafidzah, tambahkan terlebih dahulu.</p>
+        <q-btn label="Tambah Hafiz" color="primary" @click="router.get(route('hafiz.add'))"/>
+      </div>
     </div>
   </authenticated-layout>
 </template>

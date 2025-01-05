@@ -37,23 +37,8 @@ const columns = [
 ];
 
 onMounted(() => {
-  const savedFilter = localStorage.getItem("hafiz-monitor.hafiz.filter");
-  if (savedFilter) {
-    Object.assign(filter, JSON.parse(savedFilter));
-  }
   fetchItems();
 });
-
-watch(
-  filter,
-  (newValue) => {
-    localStorage.setItem(
-      "hafiz-monitor.hafiz.filter",
-      JSON.stringify(newValue)
-    );
-  },
-  { deep: true }
-);
 
 const onFilterChange = () => fetchItems();
 
@@ -66,11 +51,14 @@ const fetchItems = (props = null) => {
     filter,
     url: route("hafiz.data"),
   });
+  scrollTo(window, 0, 300);
 };
 
 const onRowClick = (row) => {
   router.get(route("hafiz.detail", row.id));
 };
+
+const showFilter = ref(false);
 </script>
 
 <template>
@@ -84,8 +72,15 @@ const onRowClick = (row) => {
         color="primary"
         @click="router.get(route('hafiz.add'))"
       />
+      <q-btn
+        class="q-ml-sm"
+        icon="filter_alt"
+        dense
+        @click="showFilter = !showFilter"
+      />
     </template>
     <q-header
+      v-if="showFilter"
       style="
         top: 49px;
         background: #fff;
@@ -122,9 +117,10 @@ const onRowClick = (row) => {
         </q-input>
       </div>
     </q-header>
-    <div class="q-pa-md mobile-no-padding" style="margin-top: 50px">
+    <div class="q-pa-md mobile-no-padding" :style="showFilter ? 'margin-top: 50px' : ''">
       <q-table
         ref="tableRef"
+        hide-header
         flat
         bordered
         square

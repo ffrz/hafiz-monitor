@@ -35,5 +35,5 @@ export default function processFlashMessage() {
     return;
   }
 
-  Notify.create(options);
+  Notify.create({...options, position: 'top'});
 }
