@@ -17,7 +17,7 @@ const hafizes = [
   ...create_options_v2(page.props.hafizes, "id", "name"),
 ];
 
-const title = "Penilaian Hafalan";
+const title = "Penilaian";
 const $q = useQuasar();
 const tableRef = ref(null);
 const rows = ref([]);
@@ -41,12 +41,6 @@ const columns = [
     label: "Rincian",
     field: "col_1",
     align: "left",
-  },
-  {
-    name: "col_2",
-    label: "Skor",
-    field: "col_2",
-    align: "center",
   },
   {
     name: "action",
@@ -111,8 +105,53 @@ const onRowClicked = (row) => {
 <template>
   <i-head :title="title" />
   <authenticated-layout>
+    <template #right-button>
+      <q-btn
+        icon="add"
+        dense
+        color="primary"
+        @click="router.get(route('memorization.create'))"
+      />
+    </template>
+    <q-header
+      style="
+        top: 49px;
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+      "
+    >
+      <div class="row q-col-gutter-xs items-center q-pa-sm">
+        <q-select
+          v-model="filter.hafiz_id"
+          class="custom-select col-12 col-sm-2"
+          :options="hafizes"
+          label="Hafidz"
+          dense
+          map-options
+          emit-value
+          outlined
+          flat
+          style="min-width: 150px"
+          @update:model-value="onFilterChange"
+        />
+        <q-input
+          class="col-12 col-sm-2"
+          dense
+          debounce="300"
+          v-model="filter.search"
+          placeholder="Cari"
+          clearable
+          outlined
+        >
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </div>
+    </q-header>
     <template #title>{{ title }}</template>
-    <div class="q-pa-md">
+    <div class="q-pa-md mobile-no-padding" style="margin-top: 50px">
       <q-table
         ref="tableRef"
         flat
@@ -122,7 +161,6 @@ const onRowClicked = (row) => {
         color="primary"
         row-key="id"
         virtual-scroll
-        title="Hafidz"
         v-model:pagination="pagination"
         :filter="filter.search"
         :loading="loading"
@@ -134,50 +172,6 @@ const onRowClicked = (row) => {
       >
         <template v-slot:loading>
           <q-inner-loading showing color="red" />
-        </template>
-
-        <template #top>
-          <div class="col">
-            <div class="row q-mt-xs q-mb-md q-col-gutter-xs items-center">
-              <div class="col-auto">
-                <q-btn
-                  color="primary"
-                  icon="play_arrow"
-                  @click="router.get(route('memorization.create'))"
-                  label="Penilaian Baru"
-                >
-                  <q-tooltip>Penilaian Baru</q-tooltip>
-                </q-btn>
-              </div>
-              <q-space class="col-auto" />
-              <q-select
-                v-model="filter.hafiz_id"
-                class="custom-select col-12 col-sm-2"
-                :options="hafizes"
-                label="Hafidz"
-                dense
-                map-options
-                emit-value
-                outlined
-                flat
-                style="min-width: 150px"
-                @update:model-value="onFilterChange"
-              />
-              <q-input
-                class="col-12 col-sm-2"
-                dense
-                debounce="300"
-                v-model="filter.search"
-                placeholder="Cari"
-                clearable
-                outlined
-              >
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
-            </div>
-          </div>
         </template>
 
         <template v-slot:no-data="{ icon, message, term }">
@@ -197,6 +191,19 @@ const onRowClicked = (row) => {
               <div>
                 <div class="text-bold">{{ props.row.hafiz.name }}</div>
                 <div>
+                  <span v-if="props.row.status == 'open'"
+                    >( Sedang Dinilai )</span
+                  >
+                  <span
+                    v-else
+                    class="text-bold text-subtitle2"
+                    :style="{ color: score_to_color(props.row.score) }"
+                  >
+                    {{ score_to_letter(props.row.score) }} /
+                    {{ props.row.score.toFixed(2) }}
+                  </span>
+                </div>
+                <div>
                   <div class="text-grey-9">{{ props.row.title }}</div>
                   <div class="text-grey-8 text-caption flex items-center">
                     <q-icon name="schedule" />
@@ -207,45 +214,68 @@ const onRowClicked = (row) => {
                 </div>
               </div>
             </q-td>
-            <q-td key="col_2" :props="props">
-              <span v-if="props.row.status == 'open'"> Berlangsung </span>
-              <span
-                v-else
-                class="text-bold"
-                :style="{ color: score_to_color(props.row.score) }"
-              >
-                {{ score_to_letter(props.row.score) }} /
-                {{ props.row.score.toFixed(2) }}
-              </span>
-            </q-td>
             <q-td
               key="action"
               class="q-gutter-x-sm"
               :props="props"
-              align="center"
+              align="right"
               style="color: #555"
             >
-              <q-btn
-                v-if="props.row.status == 'closed'"
-                rounded
-                dense
-                flat
-                icon="edit"
-                @click.stop="router.get(route('memorization.run', {id: props.row.id}))"
-              >
-                <q-tooltip>Edit</q-tooltip>
-              </q-btn>
-              <q-btn
-                rounded
-                dense
-                flat
-                :icon="props.row.status == 'open' ? 'cancel' : 'delete_forever'"
-                @click.stop="deleteItem(props.row)"
-              >
-                <q-tooltip>{{
-                  props.row.status == "open" ? "Batalkan Sesi" : "Hapus Sesi"
-                }}</q-tooltip>
-              </q-btn>
+              <div class="full-width">
+                <q-btn
+                  icon="more_vert"
+                  dense
+                  flat
+                  style="height: 40px; width: 30px"
+                  @click.stop
+                >
+                  <q-menu
+                    anchor="bottom right"
+                    self="top right"
+                    transition-show="flip-right"
+                    transition-hide="flip-left"
+                  >
+                    <q-list style="width: 200px">
+                      <q-item
+                        clickable
+                        v-ripple
+                        v-close-popup
+                        v-if="props.row.status == 'closed'"
+                        @click.stop="
+                          router.get(
+                            route('memorization.run', { id: props.row.id })
+                          )
+                        "
+                      >
+                        <q-item-section avatar>
+                          <q-icon name="edit" />
+                        </q-item-section>
+                        <q-item-section icon="edit"> Edit </q-item-section>
+                      </q-item>
+                      <q-item
+                        @click.stop="deleteItem(props.row)"
+                        clickable
+                        v-ripple
+                      >
+                        <q-item-section avatar>
+                          <q-icon
+                            :name="
+                              props.row.status == 'open'
+                                ? 'cancel'
+                                : 'delete_forever'
+                            "
+                          />
+                        </q-item-section>
+                        <q-item-section>
+                          {{
+                            props.row.status == "open" ? "Batalkan" : "Hapus"
+                          }}
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-btn>
+              </div>
             </q-td>
           </q-tr>
         </template>

@@ -5,7 +5,7 @@ import { getSurahs } from "@/services/quranDatabase";
 import { onMounted, ref } from "vue";
 
 const page = usePage();
-const title = "Mulai Sesi Penilaian Hafalan";
+const title = "Penilaian Hafalan";
 const hafizes = page.props.hafizes.map((item) => {
   return { value: item.id, label: item.name };
 });
@@ -15,6 +15,7 @@ const surahs = ref([]);
 
 onMounted(async () => {
   db_surahs = await getSurahs();
+  db_surahs.reverse();
   surahs.value = db_surahs.map((surah) => {
     return {
       value: surah.id,
@@ -46,11 +47,12 @@ const onEndSurahChanged = () => {
 const generateTitle = () => {
   let title = "";
   if (form.start_surah_id) {
-    title = db_surahs[form.start_surah_id - 1].name;
+    console.log(form.start_surah_id);
+    title = db_surahs.find((surah) => surah.id == form.start_surah_id).name;
   }
 
   if (form.end_surah_id && form.end_surah_id != form.start_surah_id) {
-    title += " s.d " + db_surahs[form.end_surah_id - 1].name;
+    title += " s.d " + db_surahs.find((surah) => surah.id == form.end_surah_id).name;
   }
 
   form.title = title;
@@ -60,6 +62,9 @@ const generateTitle = () => {
 <template>
   <i-head :title="title" />
   <authenticated-layout>
+    <template #left-button>
+      <q-btn icon="arrow_back" dense flat @click="router.get(route('memorization.index'))"/>
+    </template>
     <template #title>{{ title }}</template>
     <div class="row justify-center">
       <div class="col col-lg-6 q-pa-md">
@@ -138,8 +143,9 @@ const generateTitle = () => {
                 :error-message="form.errors.notes"
               />
             </q-card-section>
-            <q-card-actions>
+            <q-card-actions class="row">
               <q-btn
+                class="col"
                 icon="play_arrow"
                 type="submit"
                 label="Mulai"
@@ -150,7 +156,7 @@ const generateTitle = () => {
               <q-btn
                 icon="cancel"
                 label="Batal"
-                class="text-black"
+                class="text-black col"
                 :disable="form.processing"
                 @click="router.get(route('memorization.index'))"
               />

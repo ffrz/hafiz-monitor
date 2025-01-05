@@ -1,13 +1,13 @@
 <script setup>
 import BtnLink from "@/components/BtnLink.vue";
 import { score_to_letter, score_to_color } from "@/helpers/utils";
-import { getAyahs, getSurahs } from "@/services/quranDatabase";
-import { usePage } from "@inertiajs/vue3";
+import { getAyahs } from "@/services/quranDatabase";
+import { usePage, router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import { onMounted, ref } from "vue";
 
 const page = usePage();
-const title = "Hasil Penilaian Hafalan";
+const title = "Hasil Penilaian";
 const data = ref(page.props.data);
 
 onMounted(async () => {
@@ -23,7 +23,18 @@ onMounted(async () => {
 <template>
   <i-head :title="title" />
   <authenticated-layout>
+    <template #left-button>
+      <q-btn
+        icon="arrow_back"
+        dense
+        flat
+        @click="router.get(route('memorization.index'))"
+      />
+    </template>
     <template #title>{{ title }}</template>
+    <template #right-button>
+      <q-btn icon="add" color="primary" dense @click="router.get(route('memorization.create'))"/>
+    </template>
     <div class="row justify-center">
       <div class="col col-lg-6 q-pa-md">
         <q-card
@@ -66,7 +77,13 @@ onMounted(async () => {
           <q-card-section class="q-pa-sm">
             <template v-for="surah in data.details" :key="surah.id">
               <div class="detail-surah">
-                <my-link :href="route('hafiz.surah-history', { hafiz_id: data.hafiz.id, surah_id: surah.id})"
+                <my-link
+                  :href="
+                    route('hafiz.surah-history', {
+                      hafiz_id: data.hafiz.id,
+                      surah_id: surah.id,
+                    })
+                  "
                   >{{ surah.id }}: {{ surah.name }} (<span
                     :style="{ color: score_to_color(surah.score) }"
                     >{{ score_to_letter(surah.score) }} /
@@ -102,14 +119,6 @@ onMounted(async () => {
               </div>
             </template>
           </q-card-section>
-          <q-card-actions class="q-my-sm">
-            <BtnLink
-              :url="route('memorization.index')"
-              class="full-width"
-              icon="arrow_back"
-              label="Kembali ke Daftar Penilaian"
-            />
-          </q-card-actions>
         </q-card>
       </div>
     </div>

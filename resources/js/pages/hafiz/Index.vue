@@ -33,7 +33,7 @@ const columns = [
     field: "name",
     align: "left",
     sortable: true,
-  }
+  },
 ];
 
 onMounted(() => {
@@ -66,19 +66,63 @@ const fetchItems = (props = null) => {
     filter,
     url: route("hafiz.data"),
   });
-}
+};
 
 const onRowClick = (row) => {
-  router.get(route('hafiz.detail', row.id));
-}
-
+  router.get(route("hafiz.detail", row.id));
+};
 </script>
 
 <template>
   <i-head :title="title" />
   <authenticated-layout>
     <template #title>{{ title }}</template>
-    <div class="q-pa-md">
+    <template #right-button>
+      <q-btn
+        icon="add"
+        dense
+        color="primary"
+        @click="router.get(route('hafiz.add'))"
+      />
+    </template>
+    <q-header
+      style="
+        top: 49px;
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+      "
+    >
+      <div class="row q-col-gutter-xs items-center q-pa-sm">
+        <q-select
+          v-model="filter.status"
+          class="custom-select col-12 col-sm-2"
+          :options="statuses"
+          label="Status"
+          dense
+          map-options
+          emit-value
+          outlined
+          flat
+          style="min-width: 150px"
+          @update:model-value="onFilterChange"
+        />
+        <q-input
+          class="col-12 col-sm-2"
+          dense
+          debounce="300"
+          v-model="filter.search"
+          placeholder="Cari"
+          clearable
+          outlined
+        >
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </div>
+    </q-header>
+    <div class="q-pa-md mobile-no-padding" style="margin-top: 50px">
       <q-table
         ref="tableRef"
         flat
@@ -87,7 +131,6 @@ const onRowClick = (row) => {
         color="primary"
         row-key="id"
         virtual-scroll
-        title="Hafidz"
         v-model:pagination="pagination"
         :filter="filter.search"
         :loading="loading"
@@ -100,51 +143,6 @@ const onRowClick = (row) => {
         <template v-slot:loading>
           <q-inner-loading showing color="red" />
         </template>
-
-        <template #top>
-          <div class="col">
-            <div class="row q-mt-xs q-mb-md q-col-gutter-xs items-center">
-              <div class="col-auto">
-                <q-btn
-                  color="primary"
-                  icon="add"
-                  @click="router.get(route('hafiz.add'))"
-                  label="Baru"
-                >
-                  <q-tooltip>Hafiz Baru</q-tooltip>
-                </q-btn>
-              </div>
-              <q-space class="col-auto" />
-              <q-select
-                v-model="filter.status"
-                class="custom-select col-12 col-sm-2"
-                :options="statuses"
-                label="Status"
-                dense
-                map-options
-                emit-value
-                outlined
-                flat
-                style="min-width: 150px"
-                @update:model-value="onFilterChange"
-              />
-              <q-input
-                class="col-12 col-sm-2"
-                dense
-                debounce="300"
-                v-model="filter.search"
-                placeholder="Cari"
-                clearable
-                outlined
-              >
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
-            </div>
-          </div>
-        </template>
-
         <template v-slot:no-data="{ icon, message, term }">
           <div class="full-width row flex-center text-grey-8 q-gutter-sm">
             <span>{{ message }} {{ term ? " with term " + term : "" }}</span>
@@ -152,7 +150,12 @@ const onRowClick = (row) => {
         </template>
 
         <template v-slot:body="props">
-          <q-tr :props="props" :class="!props.row.active ? 'bg-red-1' : ''"  @click="onRowClick(props.row)" class="cursor-pointer">
+          <q-tr
+            :props="props"
+            :class="!props.row.active ? 'bg-red-1' : ''"
+            @click="onRowClick(props.row)"
+            class="cursor-pointer"
+          >
             <q-td key="name" :props="props">
               {{ props.row.name }}
             </q-td>

@@ -78,3 +78,9 @@ a:hover {
 .table-without-pagination .q-table__bottom {
   display: none;
 }
+
+@media (max-width: 599px) {
+  .mobile-no-padding {
+    padding: 0 !important; /* No padding for screens smaller than 600px */
+  }
+}

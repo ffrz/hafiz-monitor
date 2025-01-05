@@ -72,12 +72,14 @@ const hasSubpath = computed(() => {
         >
           <q-icon class="material-symbols-outlined">dock_to_right</q-icon>
         </q-btn>
+        <slot name="left-button"></slot>
         <q-toolbar-title
           :class="{ 'q-ml-sm': leftDrawerOpen }"
           style="font-size: 18px"
         >
           <slot name="title">{{ $config.APP_NAME }}</slot>
         </q-toolbar-title>
+        <slot name="right-button"></slot>
       </q-toolbar>
     </q-header>
     <q-drawer

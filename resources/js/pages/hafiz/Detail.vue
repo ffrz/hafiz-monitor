@@ -41,6 +41,9 @@ const onDeleteBtnClicked = () => {
 <template>
   <i-head :title="title" />
   <authenticated-layout>
+    <template #left-button>
+      <q-btn icon="arrow_back" dense flat @click="router.get(route('hafiz.index'))"/>
+    </template>
     <template #title>{{ title }}</template>
     <div class="row justify-center">
       <div class="col col-lg-6 q-pa-md">
