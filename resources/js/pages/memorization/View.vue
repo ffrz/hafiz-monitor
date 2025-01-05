@@ -1,5 +1,4 @@
 <script setup>
-import BtnLink from "@/components/BtnLink.vue";
 import { score_to_letter, score_to_color } from "@/helpers/utils";
 import { getAyahs } from "@/services/quranDatabase";
 import { usePage, router } from "@inertiajs/vue3";
@@ -23,7 +22,7 @@ onMounted(async () => {
 <template>
   <i-head :title="title" />
   <authenticated-layout>
-    <template #left-button>
+    <template #left-button v-if="$q.screen.lt.md">
       <q-btn
         icon="arrow_back"
         dense

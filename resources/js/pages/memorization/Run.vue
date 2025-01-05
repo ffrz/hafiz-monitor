@@ -354,7 +354,7 @@ const generateTitle = () => {
     </q-card>
   </q-dialog>
   <authenticated-layout>
-    <template #left-button>
+    <template #left-button  v-if="$q.screen.lt.md">
       <q-btn
         icon="arrow_back"
         dense
