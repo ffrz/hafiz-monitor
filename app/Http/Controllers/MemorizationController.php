@@ -26,17 +26,18 @@ class MemorizationController extends Controller
         $orderType = $request->get('order_type', 'desc');
         $filter = $request->get('filter', []);
 
-        $q = Memorization::with('hafiz');
-        $q->where('user_id', auth()->id());
+        $q = Memorization::with('hafiz')
+            ->where('user_id', auth()->id());
 
         if (!empty($filter['hafiz_id']) && $filter['hafiz_id'] != 'all') {
             $q->where('hafiz_id', '=', $filter['hafiz_id']);
         }
 
         if (!empty($filter['search'])) {
-            $q->where(function ($query) use ($filter) {
-                $query->where('hafizes.name', 'like', '%' . $filter['search'] . '%');
+            $q->whereHas('hafiz', function ($query) use ($filter) {
+                $query->where('name', 'like', '%' . $filter['search'] . '%');
             });
+            $q->orWhere('title', 'like', '%' . $filter['search'] . '%');
         }
 
         $q->orderBy($orderBy, $orderType);
