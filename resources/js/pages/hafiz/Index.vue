@@ -91,7 +91,7 @@ const showFilter = ref(false);
         <div class="row q-col-gutter-xs items-center q-pa-sm">
         <q-select
           v-model="filter.status"
-          class="custom-select col-12 col-sm-2"
+          class="custom-select col"
           :options="statuses"
           label="Status"
           dense
@@ -103,7 +103,7 @@ const showFilter = ref(false);
           @update:model-value="onFilterChange"
         />
         <q-input
-          class="col-12 col-sm-2"
+          class="col"
           dense
           debounce="300"
           v-model="filter.search"
@@ -118,10 +118,7 @@ const showFilter = ref(false);
       </div>
     </q-toolbar>
     </template>
-    <div
-      class="q-pa-md mobile-no-padding"
-      :style="showFilter ? 'margin-top: 50px' : ''"
-    >
+    <div class="q-pa-md mobile-no-padding">
       <q-table
         ref="tableRef"
         hide-header
