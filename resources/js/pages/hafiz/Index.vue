@@ -117,7 +117,10 @@ const showFilter = ref(false);
         </q-input>
       </div>
     </q-header>
-    <div class="q-pa-md mobile-no-padding" :style="showFilter ? 'margin-top: 50px' : ''">
+    <div
+      class="q-pa-md mobile-no-padding"
+      :style="showFilter ? 'margin-top: 50px' : ''"
+    >
       <q-table
         ref="tableRef"
         hide-header
@@ -154,6 +157,12 @@ const showFilter = ref(false);
           >
             <q-td key="name" :props="props">
               {{ props.row.name }}
+              <template v-if="props.row.gender != ''">
+                <q-icon
+                  :name="props.row.gender == 'male' ? 'male' : 'female'"
+                  :color="props.row.gender == 'male' ? 'blue' : 'pink'"
+                />
+              </template>
             </q-td>
           </q-tr>
         </template>

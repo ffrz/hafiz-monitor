@@ -55,11 +55,12 @@ const onDeleteBtnClicked = () => {
               </div>
               <BtnLink
                 :url="route('hafiz.edit', { id: data.id })"
+                style="font-size:10px;"
                 icon="edit"
                 dense
                 flat
                 rounded
-                class="text-bold"
+                class="text-bold text-grey-8"
                 title="Edit Profil"
               />
             </div>
@@ -158,7 +159,7 @@ const onDeleteBtnClicked = () => {
                     {{ surah.average_score.toFixed(2) }}</span
                   >
                 </div>
-                <BtnLink dense flat icon="history" rounded :url="route('hafiz.surah-history', { surah_id: surah.surah_id, hafiz_id: data.id })" />
+                <BtnLink style="font-size:10px;" dense flat icon="history" rounded :url="route('hafiz.surah-history', { surah_id: surah.surah_id, hafiz_id: data.id })" />
               </div>
               <div class="flex">
                 <div
