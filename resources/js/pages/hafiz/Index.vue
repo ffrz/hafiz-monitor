@@ -20,7 +20,7 @@ const filter = reactive({
 
 const pagination = ref({
   page: 1,
-  rowsPerPage: 10,
+  rowsPerPage: 25,
   rowsNumber: 10,
   sortBy: "name",
   descending: false,
@@ -79,16 +79,16 @@ const showFilter = ref(false);
         @click="showFilter = !showFilter"
       />
     </template>
-    <q-header
-      v-if="showFilter"
-      style="
-        top: 49px;
-        background: #fff;
-        border-bottom: 1px solid #ddd;
-        border-top: 1px solid #ddd;
-      "
-    >
-      <div class="row q-col-gutter-xs items-center q-pa-sm">
+    <template #header v-if="showFilter">
+      <q-toolbar
+        style="
+          background: #fff;
+          border-bottom: 1px solid #ddd;
+          border-top: 1px solid #ddd;
+          padding: 0;
+        "
+      >
+        <div class="row q-col-gutter-xs items-center q-pa-sm">
         <q-select
           v-model="filter.status"
           class="custom-select col-12 col-sm-2"
@@ -116,7 +116,8 @@ const showFilter = ref(false);
           </template>
         </q-input>
       </div>
-    </q-header>
+    </q-toolbar>
+    </template>
     <div
       class="q-pa-md mobile-no-padding"
       :style="showFilter ? 'margin-top: 50px' : ''"

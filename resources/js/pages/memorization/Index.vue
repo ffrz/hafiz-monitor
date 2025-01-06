@@ -20,7 +20,6 @@ const hasHafizes = ref(page.props.hafizes.length > 0);
 console.log(hasHafizes.value);
 const title = "Penilaian";
 const $q = useQuasar();
-const tableRef = ref(null);
 const rows = ref([]);
 const loading = ref(true);
 const filter = reactive({
@@ -66,7 +65,7 @@ const fetchItems = (props = null) => {
     url: route("memorization.data"),
   });
   scrollTo(window, 0, 300);
-}
+};
 
 const deleteItem = (row) =>
   handleDelete({
@@ -107,48 +106,50 @@ const showFilter = ref(false);
         @click="showFilter = !showFilter"
       />
     </template>
-    <q-header
-      v-if="showFilter"
-      style="
-        top: 49px;
-        background: #fff;
-        border-bottom: 1px solid #ddd;
-        border-top: 1px solid #ddd;
-      "
-    >
-      <div class="row q-col-gutter-xs items-center q-pa-sm">
-        <q-select
-          v-model="filter.hafiz_id"
-          class="custom-select col-12 col-sm-2"
-          :options="hafizes"
-          label="Hafidz"
-          dense
-          map-options
-          emit-value
-          outlined
-          flat
-          style="min-width: 150px"
-          @update:model-value="onFilterChange"
-        />
-        <q-input
-          class="col-12 col-sm-2"
-          dense
-          debounce="300"
-          v-model="filter.search"
-          placeholder="Cari"
-          clearable
-          outlined
-        >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-      </div>
-    </q-header>
     <template #title>{{ title }}</template>
-    <div class="q-pa-md mobile-no-padding" :style="showFilter ? 'margin-top: 50px' : ''">
-      <q-table v-if="hasHafizes || rows.length > 0"
-        ref="tableRef"
+    <template #header v-if="showFilter">
+      <q-toolbar
+        style="
+          background: #fff;
+          border-bottom: 1px solid #ddd;
+          border-top: 1px solid #ddd;
+          padding: 0;
+        "
+      >
+        <div class="row q-col-gutter-xs items-center q-pa-sm">
+          <q-select
+            v-model="filter.hafiz_id"
+            class="custom-select col"
+            :options="hafizes"
+            label="Hafidz"
+            dense
+            map-options
+            emit-value
+            outlined
+            flat
+            style="min-width: 150px;"
+            @update:model-value="onFilterChange"
+          />
+          <q-input
+            class="col"
+            dense
+            debounce="300"
+            v-model="filter.search"
+            placeholder="Cari"
+            clearable
+            outlined
+            style="min-width: 150px;"
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </div>
+      </q-toolbar>
+    </template>
+    <div class="q-pa-md mobile-no-padding">
+      <q-table
+        v-if="hasHafizes || rows.length > 0"
         flat
         bordered
         square
@@ -278,8 +279,14 @@ const showFilter = ref(false);
         </template>
       </q-table>
       <div v-else class="q-pa-md text-center">
-        <p class="q-my-sm">Belum ada Hafidz / Hafidzah, tambahkan terlebih dahulu.</p>
-        <q-btn label="Tambah Hafiz" color="primary" @click="router.get(route('hafiz.add'))"/>
+        <p class="q-my-sm">
+          Belum ada Hafidz / Hafidzah, tambahkan terlebih dahulu.
+        </p>
+        <q-btn
+          label="Tambah Hafiz"
+          color="primary"
+          @click="router.get(route('hafiz.add'))"
+        />
       </div>
     </div>
   </authenticated-layout>

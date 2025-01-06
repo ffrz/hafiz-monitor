@@ -20,14 +20,14 @@ const leftDrawerOpen = ref(
   JSON.parse(localStorage.getItem("hourshub.layout.left-drawer-open"))
 );
 const isDropdownOpen = ref(false);
-const isScrolled = ref(false);
+// const isScrolled = ref(false);
 const activeTab = ref(null);
 
 const toggleLeftDrawer = () => (leftDrawerOpen.value = !leftDrawerOpen.value);
 
-function handleScroll() {
-  isScrolled.value = window.scrollY > 0;
-}
+// function handleScroll() {
+//   isScrolled.value = window.scrollY > 0;
+// }
 
 watch(leftDrawerOpen, (newValue) => {
   localStorage.setItem("hourshub.layout.left-drawer-open", newValue);
@@ -42,45 +42,46 @@ onMounted(() => {
   if ($q.screen.lt.md) {
     leftDrawerOpen.value = false;
   }
-  window.addEventListener("scroll", handleScroll);
+
+  // window.addEventListener("scroll", handleScroll);
 });
 
-onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
+// onUnmounted(() => {
+//   window.removeEventListener("scroll", handleScroll);
+// });
 
 const hasSubpath = computed(() => {
   const segments = page.url.split("/").filter(Boolean); // Split the path and filter out empty segments
   return segments.length > 1; // More than one segment indicates a subpath
 });
-
 </script>
 
 <template>
   <q-layout view="lHh LpR lFf">
     <q-header>
       <q-toolbar
-        class="bg-grey-1 text-black"
-        :class="{ 'toolbar-scrolled': isScrolled }"
+        class="bg-grey-1 text-black toolbar-scrolled"
+
       >
-        <q-btn
-          v-if="!$q.screen.lt.sm && !leftDrawerOpen"
-          flat
-          dense
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        >
-          <q-icon class="material-symbols-outlined">dock_to_right</q-icon>
-        </q-btn>
-        <slot name="left-button"></slot>
-        <q-toolbar-title
-          :class="{ 'q-ml-sm': leftDrawerOpen }"
-          style="font-size: 18px"
-        >
-          <slot name="title">{{ $config.APP_NAME }}</slot>
-        </q-toolbar-title>
-        <slot name="right-button"></slot>
+          <q-btn
+            v-if="!$q.screen.lt.sm && !leftDrawerOpen"
+            flat
+            dense
+            aria-label="Menu"
+            @click="toggleLeftDrawer"
+          >
+            <q-icon class="material-symbols-outlined">dock_to_right</q-icon>
+          </q-btn>
+          <slot name="left-button"></slot>
+          <q-toolbar-title
+            :class="{ 'q-ml-sm': leftDrawerOpen }"
+            style="font-size: 18px"
+          >
+            <slot name="title">{{ $config.APP_NAME }}</slot>
+          </q-toolbar-title>
+          <slot name="right-button"></slot>
       </q-toolbar>
+      <slot name="header"></slot>
     </q-header>
     <q-drawer
       v-if="!$q.screen.lt.sm"
@@ -323,16 +324,13 @@ const hasSubpath = computed(() => {
   }
 }
 
-.q-toolbar {
+/* .q-toolbar {
   border-bottom: 1px solid transparent;
-  /* Optional border line */
-}
+} */
 
 .toolbar-scrolled {
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
-  /* Add shadow */
+  /*box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05); */
   border-bottom: 1px solid #ddd;
-  /* Optional border line */
 }
 
 .profile-btn-active {
