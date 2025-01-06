@@ -74,20 +74,14 @@ const showFilter = ref(false);
       />
       <q-btn
         class="q-ml-sm"
-        icon="filter_alt"
+        :icon="!showFilter ? 'filter_alt' : 'filter_alt_off'"
+        color="grey"
         dense
         @click="showFilter = !showFilter"
       />
     </template>
     <template #header v-if="showFilter">
-      <q-toolbar
-        style="
-          background: #fff;
-          border-bottom: 1px solid #ddd;
-          border-top: 1px solid #ddd;
-          padding: 0;
-        "
-      >
+      <q-toolbar class="filter-bar">
         <div class="row q-col-gutter-xs items-center q-pa-sm">
         <q-select
           v-model="filter.status"

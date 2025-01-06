@@ -8,18 +8,18 @@ import BtnLink from "@/components/BtnLink.vue";
       <div class="row">
         <q-card class="col q-ma-sm q-mt-md" square flat bordered>
           <q-card-section>
-            <div class="text-h4 text-center text-bold">Hafiz Monitor</div>
+            <div class="text-h4 text-center text-bold">Hafidz Monitor</div>
             <p class="text-subtitle1 text-center q-my-md">
-              <b>Hafiz Monitor</b> adalah aplikasi inovatif yang dirancang untuk
+              <b>Hafidz Monitor</b> adalah aplikasi inovatif yang dirancang untuk
               memantau dan mendukung perkembangan hafalan Al-Qur'an secara
               efektif. Dengan fitur unggulan seperti penilaian setiap ayat,
               histori perkembangan dalam bentuk grafik interaktif,
-              <b>Hafiz Monitor</b> menjadi solusi modern untuk para penghafal
+              <b>Hafidz Monitor</b> menjadi solusi modern untuk para penghafal
               dan pembimbing. Dikembangkan menggunakan teknologi mutakhir,
               aplikasi ini tidak hanya mempermudah proses pencatatan hafalan,
               tetapi juga memberikan analisis mendalam untuk meningkatkan
               kualitas hafalan. Cocok untuk individu, lembaga tahfiz, dan
-              komunitas. <b>Hafiz Monitor</b> hadir untuk membantu Anda
+              komunitas. <b>Hafidz Monitor</b> hadir untuk membantu Anda
               menggapai hafalan yang lebih terstruktur dan terukur.
             </p>
           </q-card-section>
@@ -45,7 +45,7 @@ import BtnLink from "@/components/BtnLink.vue";
           </q-card-section>
           <q-card-section>
             <div class="text-subtitle1 text-bold text-grey-9">
-              Fitur-fitur Kunci <b>Hafiz Monitor</b>:
+              Fitur-fitur Kunci <b>Hafidz Monitor</b>:
             </div>
             <div>
               <ul style="padding: 0 0 0 20px; margin: 0">
@@ -60,7 +60,7 @@ import BtnLink from "@/components/BtnLink.vue";
                   dari waktu ke waktu.
                 </li>
                 <li>
-                  <b>Manajemen Profil Hafiz</b>: Mendukung pengelolaan data
+                  <b>Manajemen Profil Hafidz</b>: Mendukung pengelolaan data
                   personal para penghafal, seperti nama, target hafalan, dan
                   catatan kemajuan.
                 </li>
@@ -81,7 +81,7 @@ import BtnLink from "@/components/BtnLink.vue";
                 </li>
                 <li>
                   <b>Pengelolaan Grup atau Kelas (Coming Soon)</b>: Memungkinkan
-                  pembimbing untuk mengelola kelompok hafiz dengan mudah,
+                  pembimbing untuk mengelola kelompok hafidz dengan mudah,
                   termasuk laporan perkembangan setiap anggota.
                 </li>
                 <li>
@@ -107,7 +107,7 @@ import BtnLink from "@/components/BtnLink.vue";
           </q-card-section>
           <q-card-section>
             <div class="text-subtitle1 text-bold text-grey-9">Hubungi Kami</div>
-            <p>Email: support.hafiz.monitor@shiftech.my.id</p>
+            <p>Email: info@hafidz-monitor.my.id</p>
           </q-card-section>
         </q-card>
       </div>

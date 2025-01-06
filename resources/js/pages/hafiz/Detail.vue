@@ -196,7 +196,7 @@ const onDeleteBtnClicked = () => {
               color="red"
               class="text-bold"
               @click="onDeleteBtnClicked"
-              >Hapus Hafiz</q-btn
+              >Hapus Hafidz</q-btn
             >
           </q-card-actions>
         </q-card>

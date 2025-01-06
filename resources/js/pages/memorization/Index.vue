@@ -101,6 +101,7 @@ const showFilter = ref(false);
       />
       <q-btn
         :icon="!showFilter ? 'filter_alt' : 'filter_alt_off'"
+        color="grey"
         dense
         class="q-ml-sm"
         @click="showFilter = !showFilter"
@@ -108,14 +109,7 @@ const showFilter = ref(false);
     </template>
     <template #title>{{ title }}</template>
     <template #header v-if="showFilter">
-      <q-toolbar
-        style="
-          background: #fff;
-          border-bottom: 1px solid #ddd;
-          border-top: 1px solid #ddd;
-          padding: 0;
-        "
-      >
+      <q-toolbar class="filter-bar">
         <div class="row q-col-gutter-xs items-center q-pa-sm">
           <q-select
             v-model="filter.hafiz_id"
@@ -283,7 +277,7 @@ const showFilter = ref(false);
           Belum ada Hafidz / Hafidzah, tambahkan terlebih dahulu.
         </p>
         <q-btn
-          label="Tambah Hafiz"
+          label="Tambah Hafidz"
           color="primary"
           @click="router.get(route('hafiz.add'))"
         />

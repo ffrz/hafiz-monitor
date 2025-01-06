@@ -143,7 +143,7 @@ const submitScore = async () => {
       ...data,
     }
   );
-
+  // todo: show error
   // sementara kita pakai notifikasi ini dulu
   // Notify.create({
   //   message: response.data.message,
@@ -382,7 +382,7 @@ const generateTitle = () => {
     </template>
     <q-header
       class="bg-grey-1"
-      style="top: 49px; border: 1px solid #ddd; border-style: solid none"
+      style="top: 49px; border-bottom: 1px solid #eee"
     >
       <q-card-section class="q-pa-sm text-black">
         <div class="col text-subtitle1 text-center">
@@ -445,13 +445,8 @@ const generateTitle = () => {
     </q-header>
     <template #title>{{ pageTitle }}</template>
     <div class="q-pa-md mobile-no-padding" style="margin-top: 50px">
-      <q-card
-        square
-        flat
-        bordered
-        class="col q-pa-sm full-width full-height-card"
-      >
-        <q-card-section v-show="!!selectedSurah" class="q-pa-sm">
+      <q-card square flat bordered class="col full-width full-height-card">
+        <q-card-section v-show="!!selectedSurah" class="q-pa-none">
           <div
             v-if="
               selectedSurah &&
@@ -459,15 +454,12 @@ const generateTitle = () => {
               selectedSurah.value != 9
             "
           >
-            <p style="direction: rtl; text-align: center; font-size: 20px">
-              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-            </p>
+            <p class="basmalah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
           </div>
           <q-table
             class="q-table-list table-without-pagination"
             style="margin: 0; padding: 0"
             flat
-            bordered
             square
             color="primary"
             row-key="id"
@@ -602,16 +594,21 @@ const generateTitle = () => {
   </authenticated-layout>
 </template>
 
-<style>
+<style scoped>
 .score-btn:before {
   box-shadow: none !important;
 }
 .score-btn {
   border: 1px solid #ddd !important;
 }
-
-</style>
-<style scoped>
+.basmalah {
+  direction: rtl;
+  text-align: center;
+  font-size: 20px;
+  border-bottom: 1px dashed #ddd;
+  padding-top: none;
+  padding: 8px;
+}
 .recent-scores {
   word-wrap: break-word;
   white-space: normal;
@@ -620,9 +617,12 @@ const generateTitle = () => {
   content: "← ";
 }
 
+.q-table--horizontal-separator tbody tr:not(:last-child) > td {
+  border-style: dashed;
+}
+
 .q-table-list .q-td {
-  padding: 0;
-  border: none ip !important;
+  padding: 5px;
 }
 
 .ayah-item {
@@ -649,7 +649,7 @@ const generateTitle = () => {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   font-weight: normal;
-  font-size: 30px;
+  font-size: 24px;
   flex-grow: 1;
   margin-left: 20px;
   text-align: right;
