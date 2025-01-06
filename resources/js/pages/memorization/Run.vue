@@ -245,7 +245,9 @@ const generateTitle = () => {
     <q-card style="min-width: 350px" class="q-pa-sm">
       <q-card-section>
         <div class="text-subtitle1 text-grey-9">
-          <b>Catatan Ayat</b> (ayat ke-{{ rows.find((row) => row.id === current_ayah).number }})
+          <b>Catatan Ayat</b> (ayat ke-{{
+            rows.find((row) => row.id === current_ayah).number
+          }})
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none">
@@ -369,7 +371,14 @@ const generateTitle = () => {
       />
     </template>
     <template #right-button>
-      <q-btn icon="help" dense flat rounded @click="show_help_dialog = true" />
+      <q-btn
+        icon="help"
+        color="grey"
+        dense
+        flat
+        rounded
+        @click="show_help_dialog = true"
+      />
     </template>
     <q-header
       class="bg-grey-1"
@@ -400,10 +409,10 @@ const generateTitle = () => {
         </div>
         <div class="row flex flex-center align-middle q-gutter-sm items-center">
           <q-btn
-            icon="arrow_left"
-            flat
+            icon="keyboard_arrow_left"
             dense
             rounded
+            flat
             @click="prevSurah()"
             :disable="
               selectedSurah &&
@@ -416,12 +425,13 @@ const generateTitle = () => {
             label="Surat"
             v-model="selectedSurah"
             :options="surahs"
+            outlined
             @update:model-value="handleSurahChanged"
           />
           <q-btn
-            icon="arrow_right"
-            flat
+            icon="keyboard_arrow_right"
             dense
+            flat
             rounded
             @click="nextSurah()"
             :disable="
@@ -442,8 +452,16 @@ const generateTitle = () => {
         class="col q-pa-sm full-width full-height-card"
       >
         <q-card-section v-show="!!selectedSurah" class="q-pa-sm">
-          <div v-if="selectedSurah && selectedSurah.value != 1 && selectedSurah.value != 9">
-            <p style="direction:rtl;text-align:center;font-size:20px;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+          <div
+            v-if="
+              selectedSurah &&
+              selectedSurah.value != 1 &&
+              selectedSurah.value != 9
+            "
+          >
+            <p style="direction: rtl; text-align: center; font-size: 20px">
+              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+            </p>
           </div>
           <q-table
             class="q-table-list table-without-pagination"
@@ -477,7 +495,8 @@ const generateTitle = () => {
                   </div>
                   <div class="score row q-pa-xs q-gutter-sm">
                     <q-btn
-                      class="col"
+                      dense
+                      class="col score-btn"
                       :class="
                         scores[props.row.id]?.score === 100 ? 'text-bold' : ''
                       "
@@ -491,7 +510,8 @@ const generateTitle = () => {
                       label="A"
                     />
                     <q-btn
-                      class="col"
+                      dense
+                      class="col score-btn"
                       :class="
                         scores[props.row.id]?.score === 80 ? 'text-bold' : ''
                       "
@@ -505,7 +525,8 @@ const generateTitle = () => {
                       label="B"
                     />
                     <q-btn
-                      class="col"
+                      dense
+                      class="col score-btn"
                       :class="
                         scores[props.row.id]?.score === 60 ? 'text-bold' : ''
                       "
@@ -520,7 +541,8 @@ const generateTitle = () => {
                       label="C"
                     />
                     <q-btn
-                      class="col"
+                      dense
+                      class="col score-btn"
                       :icon="
                         !scores[props.row.id]?.score
                           ? 'edit_off'
@@ -569,6 +591,7 @@ const generateTitle = () => {
                 label="SELESAI"
                 color="primary"
                 class="col q-mt-sm text-bold"
+                style="height: 40px"
                 @click="closeSession"
               />
             </div>
@@ -579,6 +602,15 @@ const generateTitle = () => {
   </authenticated-layout>
 </template>
 
+<style>
+.score-btn:before {
+  box-shadow: none !important;
+}
+.score-btn {
+  border: 1px solid #ddd !important;
+}
+
+</style>
 <style scoped>
 .recent-scores {
   word-wrap: break-word;

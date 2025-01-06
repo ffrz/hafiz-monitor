@@ -69,7 +69,7 @@ const generateTitle = () => {
     <div class="row justify-center">
       <div class="col col-lg-6 q-pa-md">
         <q-form class="row" @submit.prevent="submit">
-          <q-card square flat bordered class="col q-pa-sm">
+          <q-card square flat bordered class="col">
             <q-card-section class="q-pt-none">
               <input type="hidden" name="id" v-model="form.id" />
               <q-select
