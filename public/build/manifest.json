@@ -1,4 +1,32 @@
 {
+  "_vendor1-!~{003}~.js": {
+    "file": "assets/vendor1-B66eveH2.css",
+    "src": "_vendor1-!~{003}~.js"
+  },
+  "_vendor1-CuLCIdSH.js": {
+    "file": "assets/vendor1-CuLCIdSH.js",
+    "name": "vendor1",
+    "css": [
+      "assets/vendor1-B66eveH2.css"
+    ],
+    "assets": [
+      "assets/MaterialIcons-Regular-BjXOXp5c.eot",
+      "assets/MaterialIcons-Regular-DOtZ65Va.woff2",
+      "assets/MaterialIcons-Regular-FsbMSDLx.woff",
+      "assets/MaterialIcons-Regular-DEUTIz1o.ttf"
+    ]
+  },
+  "_vendor2-DsLUZngE.js": {
+    "file": "assets/vendor2-DsLUZngE.js",
+    "name": "vendor2"
+  },
+  "_vendor3-CCQTNOqH.js": {
+    "file": "assets/vendor3-CCQTNOqH.js",
+    "name": "vendor3",
+    "imports": [
+      "_vendor2-DsLUZngE.js"
+    ]
+  },
   "node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff": {
     "file": "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNa-Dr0goTwe.woff",
     "src": "node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff"
@@ -7,18 +35,39 @@
     "file": "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ-D-x-0Q06.woff2",
     "src": "node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
   },
+  "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.eot": {
+    "file": "assets/MaterialIcons-Regular-BjXOXp5c.eot",
+    "src": "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.eot"
+  },
+  "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.ttf": {
+    "file": "assets/MaterialIcons-Regular-DEUTIz1o.ttf",
+    "src": "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.ttf"
+  },
+  "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.woff": {
+    "file": "assets/MaterialIcons-Regular-FsbMSDLx.woff",
+    "src": "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.woff"
+  },
+  "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.woff2": {
+    "file": "assets/MaterialIcons-Regular-DOtZ65Va.woff2",
+    "src": "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.woff2"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-Bc0dm97B.css",
+    "file": "assets/app-yt8QHB08.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BnSuQZ4e.js",
+    "file": "assets/app-Dkc9h6S_.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
+    "imports": [
+      "_vendor1-CuLCIdSH.js",
+      "_vendor3-CCQTNOqH.js",
+      "_vendor2-DsLUZngE.js"
+    ],
     "css": [
-      "assets/app-DmbFLYRW.css"
+      "assets/app-BoO0-05g.css"
     ],
     "assets": [
       "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ-D-x-0Q06.woff2",

@@ -274,7 +274,7 @@ const showFilter = ref(false);
       </q-table>
       <div v-else class="q-pa-md text-center">
         <p class="q-my-sm">
-          Belum ada Hafidz / Hafidzah, tambahkan terlebih dahulu.
+          Belum ada Hafidz, tambahkan terlebih dahulu.
         </p>
         <q-btn
           label="Tambah Hafidz"

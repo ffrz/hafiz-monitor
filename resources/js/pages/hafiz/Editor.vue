@@ -40,7 +40,7 @@ const submit = () => handleSubmit({ form, url: route("hafiz.save") });
               <q-input
                 autofocus
                 v-model.trim="form.name"
-                label="Nama Hafidz / Hafidzah"
+                label="Nama Hafidz"
                 lazy-rules
                 :error="!!form.errors.name"
                 :disable="form.processing"

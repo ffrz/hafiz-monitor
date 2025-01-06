@@ -8,7 +8,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // vendor: ['vue', 'quasar', 'dayjs', 'echarts', 'vue-echarts'],
+          vendor1: ['vue', 'quasar', 'lodash', 'dayjs', 'material-design-icons-iconfont', 'dexie'],
+          vendor2: ['vue-echarts'],
+          vendor3: ['echarts'],
           // components: [
           //   '/resources/js/pages/admin/auth/Login.vue',
           //   '/resources/js/pages/admin/auth/Register.vue',
