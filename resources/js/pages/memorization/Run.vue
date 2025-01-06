@@ -4,14 +4,17 @@ import dayjs from "dayjs";
 import { ref, onMounted, computed, nextTick } from "vue";
 import { useApiForm } from "@/helpers/useApiForm.js";
 import { router } from "@inertiajs/vue3";
-import { Notify, Dialog } from "quasar";
+import { Dialog } from "quasar";
 import { score_to_letter, score_to_color } from "@/helpers/utils";
 import { getAyahs, getSurahs } from "@/services/quranDatabase";
 import { debounce } from "lodash";
+import ScoringHelpDialog from "./partials/ScoringHelpDialog.vue";
 
 const page = usePage();
 const show_notes_prompt = ref(false);
 const show_edit_dialog = ref(false);
+const show_help_dialog = ref(false);
+
 const current_notes = ref("");
 const current_ayah = ref(null);
 const scores = page.props.scores;
@@ -353,8 +356,11 @@ const generateTitle = () => {
       </q-card-actions>
     </q-card>
   </q-dialog>
+
+  <scoring-help-dialog v-model="show_help_dialog" />
+
   <authenticated-layout>
-    <template #left-button  v-if="$q.screen.lt.md">
+    <template #left-button v-if="$q.screen.lt.md">
       <q-btn
         icon="arrow_back"
         dense
@@ -362,28 +368,35 @@ const generateTitle = () => {
         @click="router.get(route('memorization.index'))"
       />
     </template>
+    <template #right-button>
+      <q-btn icon="help" dense flat rounded @click="show_help_dialog = true"/>
+    </template>
     <q-header
       class="bg-grey-1"
       style="top: 49px; border: 1px solid #ddd; border-style: solid none"
     >
       <q-card-section class="q-pa-sm text-black">
         <div class="col text-subtitle1 text-center">
-          <span>{{ currentHafiz }}</span>
-          <span> - {{ form.title }}</span>
-          <span>
-            -
-            {{
-              dayjs(page.props.data.created_at).format("DD/MM/YYYY HH:mm")
-            }}</span
-          >
-          <q-btn
-            icon="edit"
-            class="q-mx-sm"
-            flat
-            rounded
-            dense
-            @click="showEditForm"
-          />
+          <div>
+            <span>{{ currentHafiz }}</span>
+            <span> - {{ form.title }}</span>
+          </div>
+          <div class="text-grey-8 text-caption">
+            <span>
+              {{
+                dayjs(page.props.data.created_at).format("DD/MM/YYYY HH:mm")
+              }}</span
+            >
+            <q-btn
+              icon="edit"
+              class="q-mx-sm"
+              style="font-size:8px;"
+              flat
+              rounded
+              dense
+              @click="showEditForm"
+            />
+          </div>
         </div>
         <div class="row flex flex-center align-middle q-gutter-sm items-center">
           <q-btn
