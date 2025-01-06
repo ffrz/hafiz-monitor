@@ -245,7 +245,7 @@ const generateTitle = () => {
     <q-card style="min-width: 350px" class="q-pa-sm">
       <q-card-section>
         <div class="text-subtitle1 text-grey-9">
-          <b>Catatan Ayat</b> (ayat ke-{{ current_ayah }})
+          <b>Catatan Ayat</b> (ayat ke-{{ rows.find((row) => row.id === current_ayah).number }})
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none">
@@ -369,7 +369,7 @@ const generateTitle = () => {
       />
     </template>
     <template #right-button>
-      <q-btn icon="help" dense flat rounded @click="show_help_dialog = true"/>
+      <q-btn icon="help" dense flat rounded @click="show_help_dialog = true" />
     </template>
     <q-header
       class="bg-grey-1"
@@ -390,7 +390,7 @@ const generateTitle = () => {
             <q-btn
               icon="edit"
               class="q-mx-sm"
-              style="font-size:8px;"
+              style="font-size: 8px"
               flat
               rounded
               dense
@@ -442,6 +442,9 @@ const generateTitle = () => {
         class="col q-pa-sm full-width full-height-card"
       >
         <q-card-section v-show="!!selectedSurah" class="q-pa-sm">
+          <div v-if="selectedSurah && selectedSurah.value != 1 && selectedSurah.value != 9">
+            <p style="direction:rtl;text-align:center;font-size:20px;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+          </div>
           <q-table
             class="q-table-list table-without-pagination"
             style="margin: 0; padding: 0"
@@ -587,6 +590,7 @@ const generateTitle = () => {
 
 .q-table-list .q-td {
   padding: 0;
+  border: none ip !important;
 }
 
 .ayah-item {
