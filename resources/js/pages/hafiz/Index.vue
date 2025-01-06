@@ -158,7 +158,7 @@ const showFilter = ref(false);
           >
             <q-td key="name" :props="props">
               {{ props.row.name }}
-              <template v-if="props.row.gender != ''">
+              <template v-if="props.row.gender !== null">
                 <q-icon
                   :name="props.row.gender == 'male' ? 'male' : 'female'"
                   :color="props.row.gender == 'male' ? 'blue' : 'pink'"
