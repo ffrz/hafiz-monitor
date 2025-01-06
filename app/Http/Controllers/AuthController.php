@@ -80,7 +80,13 @@ class AuthController extends Controller
         $user->active = true;
         $user->save();
 
-        return redirect(route('login'))->with('success', __('messages.registration-success'));
+        // AUTO LOGIN SETELAH REGISTER
+        Auth::attempt([
+            'email' => $user->email,
+            'password' => $request->post('password'),
+        ], true);
+
+        return redirect(route('memorization.index'))->with('success', 'Anda telah terdaftar dan sudah login.');
     }
 
     public function forgotPassword(Request $request)
