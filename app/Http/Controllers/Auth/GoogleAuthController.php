@@ -39,6 +39,8 @@ class GoogleAuthController extends Controller
         }
 
         Auth::login($user);
-        return redirect(route('memorization.index'))->with('success', __('messages.login-success'));
+
+        return redirect(route('memorization.index'))
+            ->with('success', __('messages.registration-logged-in-success'));
     }
 }
