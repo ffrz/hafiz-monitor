@@ -3,6 +3,7 @@
 return [
     'welcome' => 'Welcome to our application!',
     'greeting' => 'Hello, :name!',
+    'login-success' => 'Anda telah login.',
     'logout-success' => 'Anda telah logout, sampai jumpa kembali.',
     'registration-success' => 'Pendaftaran berhasil, silahkan login.',
     'login-failed_invalid-email-or-password' => 'Email atau kata sandi salah!',
