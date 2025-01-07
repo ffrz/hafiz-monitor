@@ -3,8 +3,8 @@
     "file": "assets/vendor1-B66eveH2.css",
     "src": "_vendor1-!~{003}~.js"
   },
-  "_vendor1-CuLCIdSH.js": {
-    "file": "assets/vendor1-CuLCIdSH.js",
+  "_vendor1-HPqs04Mx.js": {
+    "file": "assets/vendor1-HPqs04Mx.js",
     "name": "vendor1",
     "css": [
       "assets/vendor1-B66eveH2.css"
@@ -57,17 +57,17 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-Dkc9h6S_.js",
+    "file": "assets/app-Cxk7u1P1.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_vendor1-CuLCIdSH.js",
+      "_vendor1-HPqs04Mx.js",
       "_vendor3-CCQTNOqH.js",
       "_vendor2-DsLUZngE.js"
     ],
     "css": [
-      "assets/app-BoO0-05g.css"
+      "assets/app-Cvq-2Iuj.css"
     ],
     "assets": [
       "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ-D-x-0Q06.woff2",

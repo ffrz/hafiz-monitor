@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import * as echarts from "echarts";
 
 const title = "Dashboard";
@@ -53,8 +53,6 @@ onMounted(() => {
   // Resize the chart when the window is resized
   window.addEventListener("resize", chartInstance.resize);
 });
-
-
 
 // Cleanup on unmount
 onUnmounted(() => {

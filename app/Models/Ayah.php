@@ -10,6 +10,8 @@ class Ayah extends Model
 
     protected $fillable = [];
 
+    public $timestamps = false;
+
     public function surah()
     {
         return $this->belongsTo(Surah::class);
