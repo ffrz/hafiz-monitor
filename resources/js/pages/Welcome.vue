@@ -1,4 +1,5 @@
 <script setup>
+import BtnLink from '@/components/BtnLink.vue';
 </script>
 <template>
   <i-head title="Welcome" />
@@ -24,21 +25,21 @@
           </q-card-section>
           <q-card-section>
             <div class="text-center q-gutter-md">
-              <q-btn
+              <BtnLink
                 class=""
                 size="lg"
                 color="pink"
                 icon="app_registration"
                 label="Buat Akun Gratis"
-                :href="route('register')"
+                :url="route('register-options')"
               />
-              <q-btn
+              <BtnLink
                 class=""
                 size="lg"
                 icon="login"
                 color="primary"
                 label="Login Aplikasi"
-                :href="route('login')"
+                :url="route('login')"
               />
             </div>
           </q-card-section>

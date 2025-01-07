@@ -14,12 +14,16 @@ use App\Http\Middleware\Auth;
 use App\Http\Middleware\NonAuthenticated;
 use Illuminate\Support\Facades\Route;
 
-
 // google oauth
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 
 Route::middleware(NonAuthenticated::class)->group(function () {
+
+    Route::get('/auth/register-options', function () {
+        return inertia('auth/RegisterOptions');
+    })->name('register-options');
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 

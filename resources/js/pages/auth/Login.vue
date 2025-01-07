@@ -91,7 +91,7 @@ const submit = () => handleSubmit({ form, url: route("login") });
               <q-card-section class="text-center q-pa-none q-mt-md">
                 <p class="q-my-xs text-grey-7">
                   Belum punya akun?
-                  <i-link :href="route('register')">Daftar</i-link>
+                  <i-link :href="route('register-options')">Daftar</i-link>
                 </p>
                 <p class="q-my-xs text-grey-7">
                   Lupa kata sandi?

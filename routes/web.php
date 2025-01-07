@@ -9,7 +9,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Middleware\Auth;
-use App\Http\Middleware\NonAuthenticated;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
