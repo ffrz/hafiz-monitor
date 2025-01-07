@@ -1,5 +1,5 @@
 <script setup>
-import BtnLink from '@/components/BtnLink.vue';
+import BtnLink from "@/components/BtnLink.vue";
 </script>
 
 <template>
@@ -28,6 +28,15 @@ import BtnLink from '@/components/BtnLink.vue';
                   :url="route('register')"
                 />
               </div>
+            </q-card-actions>
+            <q-card-section
+                class="flex justify-center items-center q-px-sm q-py-xs"
+              >
+                <hr class="col line" />
+                <span class="col-auto q-mx-sm">Atau</span>
+                <hr class="col line" />
+              </q-card-section>
+            <q-card-actions>
               <div class="full-width q-my-md">
                 <q-btn
                   icon="arrow_right"
@@ -45,3 +54,10 @@ import BtnLink from '@/components/BtnLink.vue';
     </q-page>
   </guest-layout>
 </template>
+
+<style scoped>
+.line {
+  border: none;
+  border-top: 1px solid #ddd;
+}
+</style>
