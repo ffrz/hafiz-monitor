@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ayah;
 use App\Models\Hafiz;
 use App\Models\Memorization;
 use App\Models\MemorizationDetail;
@@ -88,28 +89,40 @@ class MemorizationController extends Controller
     {
         $memorization = Memorization::findOrFail($request->id);
         $scores = $request->post('scores', []);
+
+        // TODO: untuk optimasi, ayat bisa di cache di file php langsung
+        // TODO: array ini berisi seluruh data ayat alquran yang dibutuhkan untuk menghitung skor rata-rata
+        // untuk optimasi nanti perlu dimuat dan digunakan untuk menghitung skor
+        // hanya jika status sesi nya closed, karena saat ini app menggunakan fitur auto save
+        // sehingga otomatis beban server akan menjadi berat karena harus memuat semua data ayat setiap
+        // akan menyimpan skor
+        $ayahs = Ayah::all()->keyBy('id');
+
         DB::beginTransaction();
         MemorizationDetail::where('memorization_id', $memorization->id)->delete();
         $totalScore = 0;
-        $count = 0;
+        $totalWeight = 0;
         foreach ($scores as $ayah_id => $score) {
             if (!isset($score['score'])) {
                 continue;
             }
-            $totalScore += $score['score'];
-            $count++;
 
             $detail = new MemorizationDetail([
                 'memorization_id' => $memorization->id,
                 'ayah_id' => $ayah_id,
                 'score' => $score['score'] ?? 0,
                 'notes' => trim($score['notes'] ?? ''),
+                'weighted_score' => $ayahs[$ayah_id]->score_weight * $score['score'],
             ]);
             $detail->save();
+
+            $totalWeight += $ayahs[$ayah_id]->score_weight;
+            $totalScore += $detail->weighted_score;
         }
 
-        $memorization->score = $totalScore > 0 && $count > 0 ? $totalScore / $count : 0;
+        $memorization->score = $totalScore > 0 && $totalWeight > 0 ? $totalScore / $totalWeight : 0;
         $redirect = false;
+
         if ($request->closeSession) {
             $memorization->status = 'closed';
             $redirect = true;
@@ -210,7 +223,7 @@ class MemorizationController extends Controller
             $details_by_surahs[$detail->ayah->surah_id][] = [
                 'ayah_id' => $detail->ayah_id,
                 'ayah_number' => $detail->ayah->number,
-                // 'ayah_text' => $detail->ayah->text,
+                'weighted_score' => $detail->weighted_score,
                 'score' => $detail->score,
                 'notes' => $detail->notes,
             ];
@@ -224,6 +237,10 @@ class MemorizationController extends Controller
             ->whereIn('id', $surah_ids)
             ->pluck('name', 'id');
 
+        $ayahScores = DB::table('ayahs')
+            ->whereIn('surah_id', $surah_ids)
+            ->pluck('score_weight', 'id');
+        //
         foreach ($surah_ids as $surah_id) {
             $data['details'][$surah_id] = [
                 'id' => $surah_id,
@@ -233,13 +250,14 @@ class MemorizationController extends Controller
             ];
 
             $total = 0;
+            $totalWeight = 0;
             foreach ($details_by_surahs[$surah_id] as $detail) {
-                $total += $detail['score'];
+                $total += $detail['weighted_score'];
+                $totalWeight += $ayahScores[$detail['ayah_id']];
             }
 
-            $count = count($details_by_surahs[$surah_id]);
-            if ($count > 0) {
-                $data['details'][$surah_id]['score'] = $total / $count;
+            if ($totalWeight > 0) {
+                $data['details'][$surah_id]['score'] = $total / $totalWeight;
             }
         }
 

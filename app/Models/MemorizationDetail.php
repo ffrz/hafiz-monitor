@@ -13,6 +13,7 @@ class MemorizationDetail extends Model
         'ayah_id',
         'score',
         'notes',
+        'weighted_score',
     ];
 
     public function memorization()

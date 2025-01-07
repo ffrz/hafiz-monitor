@@ -47,7 +47,6 @@ const onEndSurahChanged = () => {
 const generateTitle = () => {
   let title = "";
   if (form.start_surah_id) {
-    console.log(form.start_surah_id);
     title = db_surahs.find((surah) => surah.id == form.start_surah_id).name;
   }
 

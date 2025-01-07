@@ -17,7 +17,6 @@ const hafizes = [
   ...create_options_v2(page.props.hafizes, "id", "name"),
 ];
 const hasHafizes = ref(page.props.hafizes.length > 0);
-console.log(hasHafizes.value);
 const title = "Penilaian";
 const $q = useQuasar();
 const rows = ref([]);
@@ -191,7 +190,7 @@ const showFilter = ref(false);
                     :style="{ color: score_to_color(props.row.score) }"
                   >
                     {{ score_to_letter(props.row.score) }} /
-                    {{ props.row.score.toFixed(2) }}
+                    {{ props.row.score.toFixed(0) }}
                   </span>
                 </div>
                 <div>

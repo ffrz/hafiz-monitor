@@ -15,6 +15,7 @@ return new class extends Migration
             $table->foreignId('memorization_id')->constrained()->onDelete('cascade');
             $table->foreignId('ayah_id')->constrained()->onDelete('restrict');
             $table->unsignedTinyInteger('score')->nullable()->defaut(null);
+            $table->float('weighted_score', 2)->nullable();
             $table->text('notes')->nullable()->default(null);
         });
     }

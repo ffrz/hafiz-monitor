@@ -18,7 +18,7 @@ class HafizSeeder extends Seeder
             DB::connection()->table('hafizes')->insert((array)$row);
         }
 
-        Hafiz::factory(1000)->create([
+        Hafiz::factory(10)->create([
             'user_id' => 1,
             'active' => 1,
         ]);

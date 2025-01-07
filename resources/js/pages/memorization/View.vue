@@ -63,9 +63,9 @@ onMounted(async () => {
                 <span
                   class="text-bold"
                   :style="{ color: score_to_color(data.score) }"
-                  >{{ score_to_letter(data.score) }} ({{
-                    data.score.toFixed(2)
-                  }})</span
+                  >{{ score_to_letter(data.score) }} / {{
+                    data.score.toFixed(0)
+                  }}</span
                 >
               </span>
             </div>
