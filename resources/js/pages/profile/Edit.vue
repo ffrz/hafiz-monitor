@@ -13,7 +13,7 @@ const title = 'Profil Saya';
     </template>
     <template #title>{{ title }}</template>
     <template #right-button v-if="$q.screen.lt.md">
-      <q-btn icon="logout" color="grey" label="Logout" dense  @click="router.get(route('logout'))"/>
+      <q-btn icon="logout" color="grey" label="Logout" dense  @click="router.post(route('logout'))"/>
     </template>
     <div class="row justify-center">
       <div class="col col-lg-6 q-py-md q-px-sm q-gutter-md">

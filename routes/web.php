@@ -16,17 +16,7 @@ Route::get('/', function () {
     return inertia('Welcome');
 })->name('home');
 
-Route::middleware(NonAuthenticated::class)->group(function () {
-    Route::prefix('auth')->group(function () {
-        Route::match(['get', 'post'], 'login', [AuthController::class, 'login'])->name('login');
-        Route::match(['get', 'post'], 'register', [AuthController::class, 'register'])->name('register');
-        Route::match(['get', 'post'], 'forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password');
-    });
-});
-
 Route::middleware([Auth::class])->group(function () {
-    Route::match(['get', 'post'], 'auth/logout', [AuthController::class, 'logout'])->name('logout');
-
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
 
@@ -78,3 +68,4 @@ Route::middleware([Auth::class])->group(function () {
 });
 
 require_once __DIR__ . '/api.php';
+require_once __DIR__ . '/auth.php';

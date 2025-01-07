@@ -19,9 +19,13 @@ const submit = () => handleSubmit({ form, url: route("login") });
       <div class="column">
         <div class="row">
           <q-form class="q-gutter-md" @submit.prevent="submit">
-            <q-card square bordered class="q-pa-md shadow-1">
+            <q-card square bordered class="q-pt-sm q-pb-md q-px-md shadow-1">
               <q-card-section>
-                <h5 class="q-my-sm text-center">Masuk</h5>
+                <h6
+                  class="q-my-none text-center text-subtitle1 text-bold text-grey-8"
+                >
+                  Selamat Datang Kembali
+                </h6>
               </q-card-section>
               <q-card-section>
                 <q-input
@@ -55,7 +59,13 @@ const submit = () => handleSubmit({ form, url: route("login") });
                   ]"
                 >
                   <template v-slot:append>
-                    <q-btn dense flat round @click="showPassword = !showPassword"><q-icon :name="showPassword ? 'key_off' : 'key'" /></q-btn>
+                    <q-btn
+                      dense
+                      flat
+                      round
+                      @click="showPassword = !showPassword"
+                      ><q-icon :name="showPassword ? 'key_off' : 'key'"
+                    /></q-btn>
                   </template>
                 </q-input>
                 <q-checkbox
@@ -67,14 +77,16 @@ const submit = () => handleSubmit({ form, url: route("login") });
                 />
               </q-card-section>
               <q-card-actions>
-                <q-btn
-                  icon="login"
-                  type="submit"
-                  color="primary"
-                  class="full-width"
-                  label="Login"
-                  :disable="form.processing"
-                />
+                <div class="full-width">
+                  <q-btn
+                    icon="login"
+                    type="submit"
+                    color="primary"
+                    class="full-width"
+                    label="Login"
+                    :disable="form.processing"
+                  />
+                </div>
               </q-card-actions>
               <q-card-section class="text-center q-pa-none q-mt-md">
                 <p class="q-my-xs text-grey-7">
@@ -82,12 +94,29 @@ const submit = () => handleSubmit({ form, url: route("login") });
                   <i-link :href="route('register')">Daftar</i-link>
                 </p>
                 <p class="q-my-xs text-grey-7">
-                  Lupa sandi?
-                  <i-link :href="route('forgot-password')"
-                    >Atur ulang kata sandi</i-link
-                  >
+                  Lupa kata sandi?
+                  <i-link :href="route('password.request')">Atur ulang</i-link>
                 </p>
               </q-card-section>
+              <q-card-section
+                class="flex justify-center items-center q-px-sm q-py-xs"
+              >
+                <hr class="col line" />
+                <span class="col-auto q-mx-sm">Atau</span>
+                <hr class="col line" />
+              </q-card-section>
+              <q-card-actions>
+                <div class="full-width">
+                  <q-btn
+                    icon="login"
+                    href="/auth/google/redirect"
+                    color="accent"
+                    class="full-width"
+                    label="Gunakan akun Google"
+                    :disable="form.processing"
+                  />
+                </div>
+              </q-card-actions>
             </q-card>
           </q-form>
         </div>
@@ -96,8 +125,13 @@ const submit = () => handleSubmit({ form, url: route("login") });
   </guest-layout>
 </template>
 
-<style>
+<style scoped>
 .q-card {
   width: 360px;
+}
+
+.line {
+  border: none;
+  border-top: 1px solid #ddd;
 }
 </style>
