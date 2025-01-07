@@ -23,4 +23,5 @@ return [
         'phone' => 'No Telepon',
         'address' => 'Alamat',
     ],
+
 ];

@@ -1,7 +1,6 @@
 <script setup>
 import { useForm, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
-import { useQuasar } from 'quasar';
 import { validateEmail } from "@/helpers/validations";
 
 defineProps({
@@ -17,7 +16,7 @@ const form = useForm({
 
 const submit = () => {
   form.clearErrors();
-  form.post(route('password.email'), {
+  form.post(route('password.request'), {
     preserveScroll: true,
     onError: () => {
       emailInput.value.focus();
@@ -61,7 +60,7 @@ const submit = () => {
             </q-card-actions>
             <q-card-section class="text-center q-pa-none q-mt-md">
               <p class="q-my-xs text-grey-7">
-                <i-link :href="route('admin.auth.login')">Kembali ke halaman login</i-link>
+                <i-link :href="route('login')">Kembali ke halaman login</i-link>
               </p>
             </q-card-section>
           </q-card>
