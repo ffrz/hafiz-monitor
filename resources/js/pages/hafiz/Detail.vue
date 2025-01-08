@@ -42,7 +42,12 @@ const onDeleteBtnClicked = () => {
   <i-head :title="title" />
   <authenticated-layout>
     <template #left-button v-if="$q.screen.lt.md">
-      <q-btn icon="arrow_back" dense flat @click="router.get(route('hafiz.index'))"/>
+      <q-btn
+        icon="arrow_back"
+        dense
+        flat
+        @click="router.get(route('hafiz.index'))"
+      />
     </template>
     <template #title>{{ title }}</template>
     <div class="row justify-center">
@@ -55,7 +60,7 @@ const onDeleteBtnClicked = () => {
               </div>
               <BtnLink
                 :url="route('hafiz.edit', { id: data.id })"
-                style="font-size:10px;"
+                style="font-size: 10px"
                 icon="edit"
                 dense
                 flat
@@ -140,7 +145,7 @@ const onDeleteBtnClicked = () => {
               :key="surah.surah_id"
               class="hafiz-surah-item"
             >
-              <div class="text-bold text-grey-8 text-caption flex" >
+              <div class="text-bold text-grey-8 text-caption flex">
                 <div class="col">
                   {{ surah.surah_id }}: {{ surah.surah_name }} ({{
                     surah.memorized_ayah_count != surah.ayah_count
@@ -159,7 +164,19 @@ const onDeleteBtnClicked = () => {
                     {{ surah.average_score.toFixed(2) }}</span
                   >
                 </div>
-                <BtnLink style="font-size:10px;" dense flat icon="history" rounded :url="route('hafiz.surah-history', { surah_id: surah.surah_id, hafiz_id: data.id })" />
+                <BtnLink
+                  style="font-size: 10px"
+                  dense
+                  flat
+                  icon="history"
+                  rounded
+                  :url="
+                    route('hafiz.surah-history', {
+                      surah_id: surah.surah_id,
+                      hafiz_id: data.id,
+                    })
+                  "
+                />
               </div>
               <div class="flex">
                 <div
@@ -179,26 +196,32 @@ const onDeleteBtnClicked = () => {
         </q-card>
         <q-card class="q-my-md full-width" square flat bordered>
           <q-card-section>
-            <div class="text-subtitle2 text-bold text-grey-8">Aksi Lainnya</div>
+            <div class="text-subtitle2 text-bold text-grey-8 q-mb-md">
+              Aksi Lainnya
+            </div>
+            <div class="row q-col-gutter-sm">
+              <div class="col-12 col-sm-6">
+                <q-btn
+                  :url="route('hafiz.edit', { id: data.id })"
+                  icon="delete_forever"
+                  color="red"
+                  class="text-bold full-width"
+                  @click="onDeleteMemorizationClicked"
+                  >Hapus Riwayat Hafalan</q-btn
+                >
+              </div>
+              <div class="col-12 col-sm-6">
+                <q-btn
+                  :url="route('hafiz.edit', { id: data.id })"
+                  icon="delete_forever"
+                  color="red"
+                  class="text-bold full-width"
+                  @click="onDeleteBtnClicked"
+                  >Hapus Hafidz</q-btn
+                >
+              </div>
+            </div>
           </q-card-section>
-          <q-card-actions>
-            <q-btn
-              :url="route('hafiz.edit', { id: data.id })"
-              icon="delete_forever"
-              color="red"
-              class="text-bold"
-              @click="onDeleteMemorizationClicked"
-              >Hapus Riwayat Hafalan</q-btn
-            >
-            <q-btn
-              :url="route('hafiz.edit', { id: data.id })"
-              icon="delete_forever"
-              color="red"
-              class="text-bold"
-              @click="onDeleteBtnClicked"
-              >Hapus Hafidz</q-btn
-            >
-          </q-card-actions>
         </q-card>
       </div>
     </div>
