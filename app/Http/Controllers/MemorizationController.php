@@ -127,6 +127,7 @@ class MemorizationController extends Controller
             $memorization->status = 'closed';
             $redirect = true;
         }
+
         $memorization->hafiz_id = $request->hafiz_id ?? $memorization->hafiz_id;
         $memorization->start_surah_id = $request->start_surah_id ?? $memorization->start_surah_id;
         $memorization->end_surah_id = $request->end_surah_id ?? $memorization->end_surah_id;
@@ -174,33 +175,33 @@ class MemorizationController extends Controller
         ');
 
         $recent_scores = DB::table('memorization_details')
-        ->join('memorizations', 'memorization_details.memorization_id', '=', 'memorizations.id')
-        ->join('ayahs', 'memorization_details.ayah_id', '=', 'ayahs.id')
-        ->join('surahs', 'ayahs.surah_id', '=', 'surahs.id')
-        ->where('memorizations.hafiz_id', $memorization->hafiz_id)
-        ->where('memorizations.status', 'closed')
-        ->whereIn('surahs.id', $surah_ids)
-        ->select(
-            'ayahs.id as ayah_id',
-            'memorization_details.score',
-            'memorization_details.notes',
-            'memorizations.created_at'
-        )
-        ->orderBy('ayahs.id')
-        ->orderBy('memorizations.created_at', 'desc')
-        ->get()
-        ->groupBy('ayah_id')
-        ->mapWithKeys(function ($scores, $ayahId) {
-            return [
-                $ayahId => $scores->take(3)->map(function ($scoreDetail) {
-                    return [
-                        'score' => $scoreDetail->score,
-                        'notes' => $scoreDetail->notes,
-                    ];
-                })->toArray(), // Include the top 3 scores with details
-            ];
-        })
-        ->toArray();
+            ->join('memorizations', 'memorization_details.memorization_id', '=', 'memorizations.id')
+            ->join('ayahs', 'memorization_details.ayah_id', '=', 'ayahs.id')
+            ->join('surahs', 'ayahs.surah_id', '=', 'surahs.id')
+            ->where('memorizations.hafiz_id', $memorization->hafiz_id)
+            ->where('memorizations.status', 'closed')
+            ->whereIn('surahs.id', $surah_ids)
+            ->select(
+                'ayahs.id as ayah_id',
+                'memorization_details.score',
+                'memorization_details.notes',
+                'memorizations.created_at'
+            )
+            ->orderBy('ayahs.id')
+            ->orderBy('memorizations.created_at', 'desc')
+            ->get()
+            ->groupBy('ayah_id')
+            ->mapWithKeys(function ($scores, $ayahId) {
+                return [
+                    $ayahId => $scores->take(3)->map(function ($scoreDetail) {
+                        return [
+                            'score' => $scoreDetail->score,
+                            'notes' => $scoreDetail->notes,
+                        ];
+                    })->toArray(), // Include the top 3 scores with details
+                ];
+            })
+            ->toArray();
 
         return inertia('memorization/Run', [
             'data' => $data,
@@ -240,7 +241,9 @@ class MemorizationController extends Controller
         $ayahScores = DB::table('ayahs')
             ->whereIn('surah_id', $surah_ids)
             ->pluck('score_weight', 'id');
-        //
+
+        // TODO: OPTIMASI: di sini skor untuk surat bisa tidak dihitung ulang asalkan disimpan di database,
+        // penghitungan dilakukan ketika closing session
         foreach ($surah_ids as $surah_id) {
             $data['details'][$surah_id] = [
                 'id' => $surah_id,

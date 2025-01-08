@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MemorizationDetail extends Model
 {
+    public $primaryKeys = ['ayah_id', 'memorization_id'];
     public $timestamps = false;
 
     protected $fillable = [

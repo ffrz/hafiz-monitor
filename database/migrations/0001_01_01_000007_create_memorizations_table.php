@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('start_surah_id')->nullable();
             $table->unsignedTinyInteger('end_surah_id')->nullable();
             $table->string('title')->nullable()->default('');
-            $table->unsignedTinyInteger('score')->default(0);
+            $table->float('score')->default(0.0);
             $table->text('notes')->nullable()->default(null);
             $table->enum('status', ['open', 'closed']);
             $table->timestamps();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppUtilsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AyahController;
 use App\Http\Controllers\DashboardController;
@@ -10,6 +11,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Middleware\Auth;
 use Illuminate\Support\Facades\Route;
+
+// utilities for upgrading
+Route::get('/cmd/run', [AppUtilsController::class, 'run']);
 
 Route::get('/', function () {
     return inertia('Welcome');
