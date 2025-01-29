@@ -3,7 +3,6 @@ import {
   computed,
   defineComponent,
   onMounted,
-  onUnmounted,
   ref,
   watch,
 } from "vue";
@@ -14,41 +13,31 @@ defineComponent({
   name: "AuthenticatedLayout",
 });
 
+const LEFT_DRAWER_STORAGE_KEY = "hafizmonitor.layout.left-drawer-open";
 const $q = useQuasar();
 const page = usePage();
 const leftDrawerOpen = ref(
-  JSON.parse(localStorage.getItem("hourshub.layout.left-drawer-open"))
+  JSON.parse(localStorage.getItem(LEFT_DRAWER_STORAGE_KEY))
 );
 const isDropdownOpen = ref(false);
-// const isScrolled = ref(false);
 const activeTab = ref(null);
 
 const toggleLeftDrawer = () => (leftDrawerOpen.value = !leftDrawerOpen.value);
 
-// function handleScroll() {
-//   isScrolled.value = window.scrollY > 0;
-// }
-
 watch(leftDrawerOpen, (newValue) => {
-  localStorage.setItem("hourshub.layout.left-drawer-open", newValue);
+  localStorage.setItem(LEFT_DRAWER_STORAGE_KEY, newValue);
 });
 
 onMounted(() => {
   leftDrawerOpen.value = JSON.parse(
-    localStorage.getItem("hourshub.layout.left-drawer-open")
+    localStorage.getItem(LEFT_DRAWER_STORAGE_KEY)
   );
 
-  // tutup aja drawernya, kan layar kecil kasian user
   if ($q.screen.lt.md) {
     leftDrawerOpen.value = false;
   }
 
-  // window.addEventListener("scroll", handleScroll);
 });
-
-// onUnmounted(() => {
-//   window.removeEventListener("scroll", handleScroll);
-// });
 
 const hasSubpath = computed(() => {
   const segments = page.url.split("/").filter(Boolean); // Split the path and filter out empty segments

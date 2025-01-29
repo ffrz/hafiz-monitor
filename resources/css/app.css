@@ -1,3 +1,4 @@
+/* General link styling */
 a, a:visited {
   color: #07d;
   text-decoration: none;
@@ -5,6 +6,11 @@ a, a:visited {
 
 a:hover {
   color: #09f;
+}
+
+/* Navigation styles */
+#main-nav .q-item {
+  min-height: 40px;
 }
 
 #main-nav .q-item__section--avatar {
@@ -21,24 +27,22 @@ a:hover {
   color: #555;
 }
 
+#main-nav .q-item--active {
+  background: rgb(220, 186, 255);
+  color: rgb(129, 32, 240);
+  font-weight: bold;
+}
+
 #main-nav .q-item--active .q-icon {
   color: rgb(129, 32, 240);
 }
 
-#main-nav .q-item--active {
-  background: rgb(220, 186, 255);
-  color:rgb(129, 32, 240);
-  font-weight: bold;
-}
-
-#main-nav .q-item {
-  min-height: 40px;
-}
-
+/* Subnavigation styles */
 #main-nav .subnav {
   padding-left: 35px;
   box-shadow: inset 2px 0 0 #888;
 }
+
 #main-nav .subnav .subnav {
   box-shadow: inset 4px 0 0 #666;
 }
@@ -47,6 +51,7 @@ a:hover {
   box-shadow: inset 8px 0 0 #444;
 }
 
+/* Custom select and button styles */
 .q-btn {
   text-transform: none !important;
 }
@@ -56,7 +61,7 @@ a:hover {
 }
 
 .q-select .q-field__native {
-  position:absolute;
+  position: absolute;
   bottom: -1px;
   display: inline-block;
   max-width: 100%;
@@ -65,28 +70,138 @@ a:hover {
   text-overflow: ellipsis;
 }
 
+.custom-select .q-field__control-container,
+.custom-select .q-field__control-container * {
+  white-space: nowrap;
+  max-width: 133%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Cursor pointer */
 .cursor-pointer {
   cursor: pointer;
 }
 
+/* Custom select popup */
 .custom-select-popup {
   max-width: 90vw;
   max-height: 50vh;
   overflow-y: auto;
 }
 
+/* Table styles */
 .table-without-pagination .q-table__bottom {
   display: none;
 }
 
+/* Pagination centering */
+.q-table__card {
+  width: 100%;
+  display: flex !important;
+  flex-wrap: inherit !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.q-table__card > * {
+  width: 100%;
+}
+
+.q-table__bottom {
+  justify-content: center !important;
+}
+
+.q-table__bottom .q-table__separator {
+  display: none !important;
+}
+
+/* Mobile adjustments */
 @media (max-width: 599px) {
   .mobile-no-padding {
     padding: 0 !important; /* No padding for screens smaller than 600px */
   }
 }
 
+/* Filter bar styling */
 .filter-bar {
   background: #fff;
   border-bottom: 1px solid #eee;
   padding: 0 !important;
+}
+
+/* Table detail view */
+table.detail {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.detail td {
+  vertical-align: top;
+  padding: 2px 5px;
+}
+
+table.detail tr:nth-child(even) td {
+  background-color: #fafafa;
+}
+
+/* Full-height table */
+.full-height-table {
+  height: calc(100vh - 67px);
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.full-height-table th,
+.full-height-table td {
+  padding: 10px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.full-height-table tbody tr:last-child td {
+  border-bottom: 1px solid #eee;
+}
+
+/* Sticky header */
+.full-height-table thead tr:first-child th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #fff;
+}
+
+.full-height-table tbody {
+  scroll-margin-top: 48px;
+}
+
+/* Wrap column for text overflow */
+.full-height-table .wrap-column {
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Miscellaneous classes */
+.elipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-wrap {
+  text-wrap-mode: nowrap;
+}
+
+.q-table th {
+  font-weight: bold !important;
+  color: #666;
+}
+
+.q-table td .q-btn,
+.q-table__bottom * {
+  color: #555;
 }
