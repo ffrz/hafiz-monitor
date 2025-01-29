@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/cmd/run', [AppUtilsController::class, 'run']);
 
 Route::get('/', function () {
-    return inertia('Welcome');
+    return view('home');
 })->name('home');
+
 
 Route::middleware([Auth::class])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
