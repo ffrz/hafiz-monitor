@@ -15,10 +15,10 @@ const title = 'Profil Saya';
     <template #right-button v-if="$q.screen.lt.md">
       <q-btn icon="logout" color="grey" label="Logout" dense  @click="router.post(route('logout'))"/>
     </template>
-    <div class="row justify-center">
-      <div class="col col-lg-6 q-py-md q-px-sm q-gutter-md">
+    <div class="row justify-center q-pa-sm">
+      <div class="col col-md-6">
         <UpdateProfileInformationForm />
-        <UpdatePasswordForm />
+        <UpdatePasswordForm class="q-py-sm"/>
       </div>
     </div>
   </authenticated-layout>

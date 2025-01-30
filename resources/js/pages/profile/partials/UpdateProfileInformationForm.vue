@@ -21,7 +21,7 @@ const submit = () => handleSubmit({ form, url: route("profile.update") });
     @submit.prevent="submit"
     @validation-error="scrollToFirstErrorField"
   >
-    <q-card square flat bordered class="col q-pa-sm">
+    <q-card square flat bordered class="col">
       <q-card-section>
         <div class="text-h6 q-my-xs text-subtitle1">Profil Saya</div>
         <p class="text-caption text-grey-9">Perbarui profil saya.</p>

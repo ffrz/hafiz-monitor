@@ -140,7 +140,7 @@ const showFilter = ref(false);
         </div>
       </q-toolbar>
     </template>
-    <div class="q-pa-md mobile-no-padding">
+    <div class="q-pa-sm mobile-no-padding">
       <q-table
         v-if="hasHafizes || rows.length > 0"
         flat

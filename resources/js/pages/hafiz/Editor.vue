@@ -23,7 +23,7 @@ const form = useForm({
 });
 
 const submit = () => handleSubmit({ form, url: route("hafiz.save") });
-const showDetails = ref(true);
+const showDetails = ref(false);
 </script>
 
 <template>
@@ -39,7 +39,7 @@ const showDetails = ref(true);
     </template>
     <template #title>{{ title }}</template>
     <div class="row justify-center">
-      <div class="col col-lg-6 q-pa-sm">
+      <div class="col col-md-6 q-pa-sm">
         <q-form class="row" @submit.prevent="submit">
           <q-card square flat bordered class="col">
             <q-card-section class="q-pt-none">
