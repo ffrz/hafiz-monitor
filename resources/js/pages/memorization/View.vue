@@ -10,19 +10,8 @@ const page = usePage();
 const title = "Hasil Penilaian";
 const data = ref(page.props.data);
 
-// onMounted(async () => {
-//   for (let surah_id in data.value.details) {
-//     let ayahs = await getAyahs(parseInt(surah_id));
-
-//     for (const id in data.value.details[surah_id].details) {
-//       const ayahNumber = parseInt(id);
-//       const ayah = ayahs.find((a) => a.number === ayahNumber);
-//       data.value.details[surah_id].details[id].ayah_text = ayah?.text ?? '[Tidak ditemukan]';
-//     }
-//   }
-// });
-
 onMounted(async () => {
+  console.log(data.value);
   for (const surah_id in data.value.details) {
     const surahDetail = data.value.details[surah_id];
     if (!surahDetail || !surahDetail.details) continue;
@@ -30,17 +19,17 @@ onMounted(async () => {
     const ayahs = await getAyahs(parseInt(surah_id));
     console.log("Fetched ayahs for surah", surah_id, ayahs);
 
-    for (const detailKey in surahDetail.details) {
-      const detail = surahDetail.details[detailKey];
-      const ayahNumber = parseInt(detail.ayah_number);
-      const ayah = ayahs.find((a) => parseInt(a.number) === ayahNumber);
+    // for (const detailKey in surahDetail.details) {
+    //   const detail = surahDetail.details[detailKey];
+    //   const ayahNumber = parseInt(detail.ayah_number);
+    //   const ayah = ayahs.find((a) => parseInt(a.number) === ayahNumber);
 
-      if (!ayah) {
-        console.warn(`Ayah not found: Surah ${surah_id}, Ayah ${ayahNumber}`);
-      }
+    //   if (!ayah) {
+    //     console.warn(`Ayah not found: Surah ${surah_id}, Ayah ${ayahNumber}`);
+    //   }
 
-      detail.ayah_text = ayah?.text ?? '[Tidak ditemukan]';
-    }
+    //   detail.ayah_text = ayah?.text ?? '[Tidak ditemukan]';
+    // }
   }
 });
 </script>
