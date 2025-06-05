@@ -10,7 +10,7 @@ import * as echarts from "echarts";
 const page = usePage();
 const hafiz = ref(page.props.hafiz);
 const surah = ref(page.props.surah);
-const scores = reactive(page.props.scores);
+const scores = ref(page.props.scores);
 const title = "Riwayat Hafalan";
 const chart = ref(null);
 const last_score =
@@ -19,6 +19,9 @@ const last_score =
   ].average_score);
 
 onMounted(() => {
+  console.log(scores.value, Object.keys(scores.value))
+  console.log(surah.value.total_ayahs)
+
   const xdata = Object.entries(scores).map(([key, value]) =>
     dayjs(value.created_at).format("DD-MM-YY")
   );
