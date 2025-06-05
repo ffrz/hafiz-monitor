@@ -10,14 +10,34 @@ const page = usePage();
 const title = "Hasil Penilaian";
 const data = ref(page.props.data);
 
-onMounted(async () => {
-  for (let surah_id in data.value.details) {
-    let ayahs = await getAyahs(parseInt(surah_id));
+// onMounted(async () => {
+//   for (let surah_id in data.value.details) {
+//     let ayahs = await getAyahs(parseInt(surah_id));
 
-    for (const id in data.value.details[surah_id].details) {
-      const ayahNumber = parseInt(id);
-      const ayah = ayahs.find((a) => a.number === ayahNumber);
-      data.value.details[surah_id].details[id].ayah_text = ayah?.text ?? '[Tidak ditemukan]';
+//     for (const id in data.value.details[surah_id].details) {
+//       const ayahNumber = parseInt(id);
+//       const ayah = ayahs.find((a) => a.number === ayahNumber);
+//       data.value.details[surah_id].details[id].ayah_text = ayah?.text ?? '[Tidak ditemukan]';
+//     }
+//   }
+// });
+
+onMounted(async () => {
+  for (const surah_id in data.value.details) {
+    const surahDetail = data.value.details[surah_id];
+    if (!surahDetail || !surahDetail.details) continue;
+
+    const ayahs = await getAyahs(parseInt(surah_id));
+
+    for (const detailKey in surahDetail.details) {
+      const detail = surahDetail.details[detailKey];
+
+      // Gunakan ayah_number dari detail, bukan dari key
+      const ayahNumber = detail.ayah_number;
+
+      const ayah = ayahs.find((a) => parseInt(a.number) === parseInt(ayahNumber));
+
+      detail.ayah_text = ayah?.text ?? '[Tidak ditemukan]';
     }
   }
 });
