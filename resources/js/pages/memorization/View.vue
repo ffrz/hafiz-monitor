@@ -28,14 +28,16 @@ onMounted(async () => {
     if (!surahDetail || !surahDetail.details) continue;
 
     const ayahs = await getAyahs(parseInt(surah_id));
+    console.log("Fetched ayahs for surah", surah_id, ayahs);
 
     for (const detailKey in surahDetail.details) {
       const detail = surahDetail.details[detailKey];
+      const ayahNumber = parseInt(detail.ayah_number);
+      const ayah = ayahs.find((a) => parseInt(a.number) === ayahNumber);
 
-      // Gunakan ayah_number dari detail, bukan dari key
-      const ayahNumber = detail.ayah_number;
-
-      const ayah = ayahs.find((a) => parseInt(a.number) === parseInt(ayahNumber));
+      if (!ayah) {
+        console.warn(`Ayah not found: Surah ${surah_id}, Ayah ${ayahNumber}`);
+      }
 
       detail.ayah_text = ayah?.text ?? '[Tidak ditemukan]';
     }
