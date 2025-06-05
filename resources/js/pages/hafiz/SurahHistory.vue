@@ -19,9 +19,6 @@ const last_score =
   ].average_score);
 
 onMounted(() => {
-  console.log(scores.value, Object.keys(scores.value))
-  console.log(surah.value.total_ayahs)
-
   const xdata = Object.entries(scores).map(([key, value]) =>
     dayjs(value.created_at).format("DD-MM-YY")
   );
@@ -155,7 +152,6 @@ onMounted(() => {
                 </thead>
                 <tbody>
                   <tr v-for="i in Array.from({ length: surah.total_ayahs }, (_, index) => index + 1)" :key="i">
-                    {{ console.log('rendering ayah:', i) }}
                     <th>{{ i }}</th>
                     <template v-for="j in Object.keys(scores)">
                       <td>
