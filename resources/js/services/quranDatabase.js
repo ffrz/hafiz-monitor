@@ -26,11 +26,13 @@ export async function getSurahs() {
 }
 
 export async function getAyahs(surah_id) {
+  console.log('fetching ayahs', surah_id);
   let ayahs = await db.ayahs.where('surah_id').equals(surah_id).toArray();
   if (ayahs.length == 0) {
     await fetchAyahsBySurahId(surah_id);
     ayahs = await db.ayahs.where('surah_id').equals(surah_id).toArray();
   }
+  console.log('fetched', ayahs);
   return ayahs;
 }
 
@@ -51,7 +53,7 @@ async function fetchAyahsBySurahId(surah_id) {
     const cached = await db.ayahs.where('surah_id').equals(String(surah_id)).toArray();
 
     if (cached.length > 0) {
-      console.log("Data loaded from IndexedDB.");
+      console.log("Data loaded from IndexedDB.", cached);
       return cached;
     }
 
