@@ -26,13 +26,11 @@ export async function getSurahs() {
 }
 
 export async function getAyahs(surah_id) {
-  console.log('fetching ayahs', surah_id);
   let ayahs = await db.ayahs.where('surah_id').equals(String(surah_id)).toArray();
   if (ayahs.length == 0) {
     await fetchAyahsBySurahId(surah_id);
     ayahs = await db.ayahs.where('surah_id').equals(String(surah_id)).toArray();
   }
-  console.log('fetched', ayahs);
   return ayahs;
 }
 
@@ -41,7 +39,6 @@ async function fetchSurahs() {
     const surahsResponse = await fetch('/api/v1/surahs');
     const surahsData = await surahsResponse.json();
     await db.surahs.bulkPut(surahsData);
-    console.log("Quran data fetched and stored in IndexedDB.");
   } catch (error) {
     console.error("Error fetching or storing Quran data:", error);
     alert('Gagal mengunduh data surat, silahkan coba refresh halaman!');
@@ -51,12 +48,9 @@ async function fetchSurahs() {
 async function fetchAyahsBySurahId(surah_id) {
   try {
     const cached = await db.ayahs.where('surah_id').equals(String(surah_id)).toArray();
-
     if (cached.length > 0) {
-      console.log("Data loaded from IndexedDB.", cached);
       return cached;
     }
-
     const ayahsResponse = await fetch(`/api/v1/surahs/${surah_id}/ayahs`);
     const ayahsData = await ayahsResponse.json();
 
@@ -71,7 +65,6 @@ async function fetchAyahsBySurahId(surah_id) {
     }));
 
     await db.ayahs.bulkPut(cleaned);
-    console.log("Ayahs fetched and stored in IndexedDB.");
     return cleaned;
   } catch (error) {
     console.error("Error fetching or storing Quran data:", error);
