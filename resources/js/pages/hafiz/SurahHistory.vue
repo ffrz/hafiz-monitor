@@ -158,12 +158,12 @@ onMounted(() => {
                         <span
                           class="text-bold"
                           :style="{
-                            color: score_to_color(scores[j].details[i]),
+                            color: score_to_color(scores[String(j)].details[String(i)]),
                           }"
                         >
                           {{
-                            scores[j].details[i]
-                              ? score_to_letter(scores[j].details[i])
+                            scores[String(j)].details[String(i)]
+                              ? score_to_letter(scores[String(j)].details[String(i)])
                               : "-"
                           }}
                         </span>
