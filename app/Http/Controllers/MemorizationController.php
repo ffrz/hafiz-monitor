@@ -17,6 +17,7 @@ class MemorizationController extends Controller
     {
         return inertia('memorization/Index', [
             'hafizes' => Hafiz::where('user_id', auth()->id())
+                ->select(['id', 'name'])
                 ->orderBy('name', 'asc')->get(),
         ]);
     }
@@ -27,7 +28,7 @@ class MemorizationController extends Controller
         $orderType = $request->get('order_type', 'desc');
         $filter = $request->get('filter', []);
 
-        $q = Memorization::with('hafiz')
+        $q = Memorization::with('hafiz:id,name')
             ->where('user_id', auth()->id());
 
         if (!empty($filter['hafiz_id']) && $filter['hafiz_id'] != 'all') {
@@ -43,7 +44,18 @@ class MemorizationController extends Controller
 
         $q->orderBy($orderBy, $orderType);
 
-        $data = $q->paginate($request->get('per_page', 10))->withQueryString();
+        $data = $q->select([
+                'id',
+                'hafiz_id',
+                'start_surah_id',
+                'end_surah_id',
+                'title',
+                'score',
+                'status',
+                'created_at',
+                'updated_at',
+            ])
+            ->paginate($request->get('per_page', 10))->withQueryString();
         return response()->json($data);
     }
 

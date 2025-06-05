@@ -40,7 +40,9 @@ class HafizController extends Controller
             });
         }
 
-        $hafizes = $q->paginate($request->get('per_page', 10))->withQueryString();
+        $hafizes = $q->select([
+            'id', 'name', 'active', 'gender'
+        ])->paginate($request->get('per_page', 10))->withQueryString();
         return response()->json($hafizes);
     }
 
