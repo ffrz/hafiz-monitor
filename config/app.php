@@ -13,7 +13,10 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name'           => 'Hafiz Monitor',
+    'version'        => 0x010001,
+    'version_str'    => '1.0.1',
+    'copyright_year' => '2025',
 
     /*
     |--------------------------------------------------------------------------

@@ -19,6 +19,7 @@
     window.CONFIG.APP_NAME = "{{ config('app.name', 'Laravel') }}";
     window.CONFIG.APP_VERSION = {{ config('app.version', 0x010000) }};
     window.CONFIG.APP_VERSION_STR = "{{ config('app.version_str', '1.0.0') }}";
+    window.CONFIG.APP_COPYRIGHT_YEAR = "{{ config('app.copyright_year', date('Y')) }}";
     window.CONSTANTS = <?= json_encode([
     ]); ?>;
   </script>

@@ -123,7 +123,7 @@ const hasSubpath = computed(() => {
               </q-item>
               <q-separator />
               <q-item
-                dense
+                
                 v-close-popup
                 class="subnav"
                 clickable
@@ -140,12 +140,12 @@ const hasSubpath = computed(() => {
                   </q-item-label>
                 </q-item-section>
               </q-item>
-              <q-item
-                dense
+              <q-item class="text-grey-9"
+                
                 clickable
                 v-close-popup
                 v-ripple
-                @click="router.post(route('logout'))"
+                :href="route('logout')"
               >
                 <q-item-section>
                   <q-item-label
@@ -210,7 +210,7 @@ const hasSubpath = computed(() => {
           </q-item>
 
           <div class="absolute-bottom text-grey-6 q-pa-md">
-            &copy; 2024 -
+            &copy; {{ $config.APP_COPYRIGHT_YEAR }} -
             {{ $config.APP_NAME + " v" + $config.APP_VERSION_STR }}
           </div>
         </q-list>

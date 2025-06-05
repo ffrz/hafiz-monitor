@@ -37,7 +37,7 @@ defineComponent({
     <q-footer class="transparent">
       <div class="q-mt-lg q-mb-md justify-center items-center flex text-grey-6">
         <span
-          >&copy; 2024 - {{ $config.APP_NAME }} v{{
+          >&copy; {{ $config.APP_COPYRIGHT_YEAR }} - {{ $config.APP_NAME }} v{{
             $config.APP_VERSION_STR
           }}</span
         >
