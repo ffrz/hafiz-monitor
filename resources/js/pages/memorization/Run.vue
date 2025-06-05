@@ -66,12 +66,12 @@ const surahs = computed(() => {
 });
 
 const form = useApiForm({
-  id: page.props.data.id,
-  hafiz_id: page.props.data.hafiz_id,
+  id: parseInt(page.props.data.id),
+  hafiz_id: parseInt(page.props.data.hafiz_id),
   title: page.props.data.title ?? "Muraja'ah",
   notes: page.props.data.notes,
-  start_surah_id: page.props.data.start_surah_id,
-  end_surah_id: page.props.data.end_surah_id,
+  start_surah_id: parseInt(page.props.data.start_surah_id),
+  end_surah_id: parseInt(page.props.data.end_surah_id),
   close_session: false,
 });
 
