@@ -1,6 +1,6 @@
 <script setup>
 import BtnLink from "@/components/BtnLink.vue";
-import { score_to_color, score_to_letter } from "@/helpers/utils";
+import { score_to_color, score_to_letter, format_score } from "@/helpers/utils";
 import { router, usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import { Dialog } from "quasar";
@@ -73,7 +73,7 @@ const onDeleteBtnClicked = () => {
               Total Nilai:
               <span class="text-bold" v-if="data.average_score"
                 >{{ score_to_letter(data.average_score) }} /
-                {{ data.average_score.toFixed(2) }}</span
+                {{ format_score(data.average_score) }}</span
               >
               <span v-else class="text-grey-8">-</span>
             </div>
@@ -161,7 +161,7 @@ const onDeleteBtnClicked = () => {
                   }}%) -
                   <span :style="{ color: score_to_color(surah.average_score) }"
                     >{{ score_to_letter(surah.average_score) }} /
-                    {{ surah.average_score.toFixed(2) }}</span
+                    {{ format_score(surah.average_score) }}</span
                   >
                 </div>
                 <BtnLink

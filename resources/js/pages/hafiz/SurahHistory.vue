@@ -1,6 +1,6 @@
 <script setup>
 import BtnLink from "@/components/BtnLink.vue";
-import { score_to_color, score_to_letter } from "@/helpers/utils";
+import { score_to_color, score_to_letter, format_score } from "@/helpers/utils";
 import { router, usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import { Dialog } from "quasar";
@@ -14,16 +14,16 @@ const scores = reactive(page.props.scores);
 const title = "Riwayat Hafalan";
 const chart = ref(null);
 const last_score =
-  scores[
+  format_score(scores[
     Object.keys(scores)[Object.keys(scores).length - 1]
-  ].average_score.toFixed(2);
+  ].average_score);
 
 onMounted(() => {
   const xdata = Object.entries(scores).map(([key, value]) =>
     dayjs(value.created_at).format("DD-MM-YY")
   );
   const ydata = Object.entries(scores).map(([key, value]) =>
-    value.average_score.toFixed(2)
+    format_score(value.average_score)
   );
 
   const chartInstance = echarts.init(chart.value);
@@ -116,7 +116,7 @@ onMounted(() => {
               Skor Rata-Rata:
               <span class="text-bold text-grey-9"
                 >{{ score_to_letter(hafiz.average_score) }} /
-                {{ hafiz.average_score.toFixed(2) }}</span
+                {{ format_score(hafiz.average_score) }}</span
               >
             </div>
             <p class="q-my-sm text-caption">

@@ -14,13 +14,10 @@ export function score_to_color(score) {
   return "black";
 }
 
-export function create_gender_options() {
-  return [
-    { value: null, label: 'Tidak ditentukan' },
-    { value: 'male', label: 'Laki-laki' },
-    { value: 'female', label: 'Perempuan' },
-  ];
-}
+export function format_score(score) {
+  const num = parseFloat(score);
+  return isNaN(num) ? '0.00' : num.toFixed(2);
+};
 
 export function format_duration(duration) {
   const durationInt = parseInt(duration);
@@ -58,6 +55,13 @@ export function create_options_v2(items, valueProp, labelProp) {
   });
 }
 
+export function create_gender_options() {
+  return [
+    { value: null, label: 'Tidak Disebutkan' },
+    { value: 'male', label: 'Laki-laki' },
+    { value: 'female', label: 'Perempuan' },
+  ]
+}
 
 export function create_options_from_users(items) {
   return items.map((user) => {

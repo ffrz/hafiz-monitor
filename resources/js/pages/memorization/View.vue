@@ -4,6 +4,7 @@ import { getAyahs } from "@/services/quranDatabase";
 import { usePage, router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import { onMounted, ref } from "vue";
+import { format_score } from "@/helpers/utils";
 
 const page = usePage();
 const title = "Hasil Penilaian";
@@ -64,7 +65,7 @@ onMounted(async () => {
                   class="text-bold"
                   :style="{ color: score_to_color(data.score) }"
                   >{{ score_to_letter(data.score) }} / {{
-                    data.score.toFixed(0)
+                    format_score(data.score)
                   }}</span
                 >
               </span>
@@ -86,7 +87,7 @@ onMounted(async () => {
                   >{{ surah.id }}: {{ surah.name }} (<span
                     :style="{ color: score_to_color(surah.score) }"
                     >{{ score_to_letter(surah.score) }} /
-                    {{ surah.score.toFixed(2) }}</span
+                    {{ format_score(surah.score) }}</span
                   >)
                 </my-link>
               </div>

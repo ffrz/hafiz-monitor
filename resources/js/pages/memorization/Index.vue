@@ -8,6 +8,7 @@ import {
   create_options_v2,
   score_to_letter,
   score_to_color,
+  format_score,
 } from "@/helpers/utils";
 
 const page = usePage();
@@ -190,7 +191,7 @@ const showFilter = ref(false);
                     :style="{ color: score_to_color(props.row.score) }"
                   >
                     {{ score_to_letter(props.row.score) }} /
-                    {{ props.row.score.toFixed(0) }}
+                    {{ format_score(props.row.score) }}
                   </span>
                 </div>
                 <div>
