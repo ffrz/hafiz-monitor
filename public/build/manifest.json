@@ -1,10 +1,10 @@
 {
-  "_vendor1-!~{003}~.js": {
+  "_vendor1-B66eveH2.css": {
     "file": "assets/vendor1-B66eveH2.css",
-    "src": "_vendor1-!~{003}~.js"
+    "src": "_vendor1-B66eveH2.css"
   },
-  "_vendor1-BXmzhchr.js": {
-    "file": "assets/vendor1-BXmzhchr.js",
+  "_vendor1-ChNlaUzr.js": {
+    "file": "assets/vendor1-ChNlaUzr.js",
     "name": "vendor1",
     "css": [
       "assets/vendor1-B66eveH2.css"
@@ -16,15 +16,15 @@
       "assets/MaterialIcons-Regular-DEUTIz1o.ttf"
     ]
   },
-  "_vendor2-DsLUZngE.js": {
-    "file": "assets/vendor2-DsLUZngE.js",
+  "_vendor2-pVXibYnn.js": {
+    "file": "assets/vendor2-pVXibYnn.js",
     "name": "vendor2"
   },
-  "_vendor3-CCQTNOqH.js": {
-    "file": "assets/vendor3-CCQTNOqH.js",
+  "_vendor3-L02gDKH0.js": {
+    "file": "assets/vendor3-L02gDKH0.js",
     "name": "vendor3",
     "imports": [
-      "_vendor2-DsLUZngE.js"
+      "_vendor2-pVXibYnn.js"
     ]
   },
   "node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff": {
@@ -57,14 +57,14 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-r2S2Pomv.js",
+    "file": "assets/app-LHMdi5AC.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_vendor1-BXmzhchr.js",
-      "_vendor3-CCQTNOqH.js",
-      "_vendor2-DsLUZngE.js"
+      "_vendor1-ChNlaUzr.js",
+      "_vendor3-L02gDKH0.js",
+      "_vendor2-pVXibYnn.js"
     ],
     "css": [
       "assets/app-C32pqUtm.css"
