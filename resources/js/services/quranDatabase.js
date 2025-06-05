@@ -12,11 +12,8 @@ async function isSurahsStored() {
 }
 
 async function isAyahsStored(surah_id) {
-  const exist = db.ayahs.count() > 0;
-  if (exists) {
-
-  }
-  return await exist;
+  const count = await db.ayahs.where('surah_id').equals(surah_id).count();
+  return count > 0;
 }
 
 export async function getSurahs() {
