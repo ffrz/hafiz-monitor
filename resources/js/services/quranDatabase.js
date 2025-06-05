@@ -27,10 +27,10 @@ export async function getSurahs() {
 
 export async function getAyahs(surah_id) {
   console.log('fetching ayahs', surah_id);
-  let ayahs = await db.ayahs.where('surah_id').equals(surah_id).toArray();
+  let ayahs = await db.ayahs.where('surah_id').equals(String(surah_id)).toArray();
   if (ayahs.length == 0) {
     await fetchAyahsBySurahId(surah_id);
-    ayahs = await db.ayahs.where('surah_id').equals(surah_id).toArray();
+    ayahs = await db.ayahs.where('surah_id').equals(String(surah_id)).toArray();
   }
   console.log('fetched', ayahs);
   return ayahs;
