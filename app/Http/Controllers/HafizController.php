@@ -166,7 +166,7 @@ class HafizController extends Controller
                 ];
             }
 
-            $scores[$key]['details'][$detail->ayah_number] = $detail->score;
+            $scores[$key]['details'][$detail->ayah_number] = intVal($detail->score);
         }
 
         // buat rata rata, dipisah supaya tidak terlalu rumit
