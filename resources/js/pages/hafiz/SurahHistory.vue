@@ -155,6 +155,7 @@ onMounted(() => {
                 </thead>
                 <tbody>
                   <tr v-for="i in surah.total_ayahs" :key="i">
+                    {{ console.log('rendering ayah:', i) }}
                     <th>{{ i }}</th>
                     <template v-for="j in Object.keys(scores)">
                       <td>
