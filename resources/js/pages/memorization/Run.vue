@@ -444,7 +444,7 @@ const generateTitle = () => {
       </q-card-section>
     </q-header>
     <template #title>{{ pageTitle }}</template>
-    <div class="q-pa-md mobile-no-padding" style="margin-top: 50px">
+    <div class="q-pa-sm mobile-no-padding" style="margin-top: 50px">
       <q-card square flat bordered class="col full-width full-height-card">
         <q-card-section v-show="!!selectedSurah" class="q-pa-none">
           <div
@@ -490,13 +490,13 @@ const generateTitle = () => {
                       dense
                       class="col score-btn"
                       :class="
-                        scores[props.row.id]?.score === 100 ? 'text-bold' : ''
+                        scores[props.row.id]?.score == 100 ? 'text-bold' : ''
                       "
                       :color="
-                        scores[props.row.id]?.score === 100 ? 'green' : 'white'
+                        scores[props.row.id]?.score == 100 ? 'green' : 'white'
                       "
                       :text-color="
-                        scores[props.row.id]?.score === 100 ? 'white' : 'black'
+                        scores[props.row.id]?.score == 100 ? 'white' : 'black'
                       "
                       @click="toggleScore(props.row, 100)"
                       label="A"
@@ -505,13 +505,13 @@ const generateTitle = () => {
                       dense
                       class="col score-btn"
                       :class="
-                        scores[props.row.id]?.score === 80 ? 'text-bold' : ''
+                        scores[props.row.id]?.score == 80 ? 'text-bold' : ''
                       "
                       :color="
-                        scores[props.row.id]?.score === 80 ? 'orange' : 'white'
+                        scores[props.row.id]?.score == 80 ? 'orange' : 'white'
                       "
                       :text-color="
-                        scores[props.row.id]?.score === 80 ? 'white' : 'black'
+                        scores[props.row.id]?.score == 80 ? 'white' : 'black'
                       "
                       @click="toggleScore(props.row, 80)"
                       label="B"
@@ -520,13 +520,13 @@ const generateTitle = () => {
                       dense
                       class="col score-btn"
                       :class="
-                        scores[props.row.id]?.score === 60 ? 'text-bold' : ''
+                        scores[props.row.id]?.score == 60 ? 'text-bold' : ''
                       "
                       :text-color="
-                        scores[props.row.id]?.score === 60 ? 'white' : 'black'
+                        scores[props.row.id]?.score == 60 ? 'white' : 'black'
                       "
                       :color="
-                        scores[props.row.id]?.score === 60 ? 'red' : 'white'
+                        scores[props.row.id]?.score == 60 ? 'red' : 'white'
                       "
                       text-color="black"
                       @click="toggleScore(props.row, 60)"

@@ -46,7 +46,7 @@ onMounted(async () => {
       <q-btn icon="add" color="primary" dense @click="router.get(route('memorization.create'))" />
     </template>
     <div class="row justify-center">
-      <div class="col col-lg-6 q-pa-md">
+      <div class="col col-md-6 q-pa-sm">
         <q-card square flat bordered class="col q-pa-sm full-width full-height-card">
           <q-card-section class="q-pa-sm text-center">
             <div class="text-h6">
