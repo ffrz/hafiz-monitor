@@ -25,7 +25,10 @@ const rows = ref([]);
 const loading = ref(true);
 const tableRef = ref(null);
 const filterToolbarRef = ref(null);
-const tableHeight = useTableHeight(filterToolbarRef);
+const tableHeight = useTableHeight(
+  filterToolbarRef,
+  $q.screen.lt.md ? 67 + 55 : 67
+);
 const filter = reactive({
   hafiz_id: "all",
   search: "",

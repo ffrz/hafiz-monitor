@@ -3,13 +3,18 @@ import { onMounted, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { handleFetchItems } from "@/helpers/client-req-handler";
 import useTableHeight from "@/composables/useTableHeight";
+import { useQuasar } from "quasar";
 
+const $q = useQuasar();
 const title = "Hafidz";
 const rows = ref([]);
 const loading = ref(true);
 const tableRef = ref(null);
 const filterToolbarRef = ref(null);
-const tableHeight = useTableHeight(filterToolbarRef);
+const tableHeight = useTableHeight(
+  filterToolbarRef,
+  $q.screen.lt.md ? 67 + 55 : 67
+);
 
 const statuses = [
   { value: "all", label: "Semua" },
