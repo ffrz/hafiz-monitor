@@ -52,12 +52,12 @@
     "src": "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-D7CaEt04.css",
+    "file": "assets/app-1bQYZoNZ.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-DThFoqp4.js",
+    "file": "assets/app-BaIphPtm.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

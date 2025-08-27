@@ -177,6 +177,12 @@ table.detail tr:nth-child(even) td {
   background-color: #fff;
 }
 
+.full-height-table thead tr th {
+  position: sticky;
+  z-index: 1;
+  background-color: #fff;
+}
+
 .full-height-table tbody {
   scroll-margin-top: 48px;
 }
