@@ -78,28 +78,23 @@ export function handleDelete(data) {
   });
 }
 
-export function handleFetchItems(options, extraParams) {
-  const { pagination, props, rows, url, loading, filter } = options;
+export function handleFetchItems(options) {
+  const { pagination, props, rows, url, loading, filter, tableRef } = options;
+
+  let source = props ? props.pagination : pagination.value;
 
   let params = {
-    page: pagination.value.page,
-    per_page: pagination.value.rowsPerPage,
-    order_by: pagination.value.sortBy,
-    order_type: pagination.value.descending ? "desc" : "asc",
+    page: source.page,
+    per_page: source.rowsPerPage,
+    order_by: source.sortBy,
+    order_type: source.descending ? "desc" : "asc",
     filter: filter,
   };
-
-  if (props != null) {
-    params.page = props.pagination.page;
-    params.per_page = props.pagination.rowsPerPage;
-    params.order_by = props.pagination.sortBy;
-    params.order_type = props.pagination.descending ? "desc" : "asc";
-  }
 
   loading.value = true;
 
   axios
-    .get(url, { params: params, ...extraParams })
+    .get(url, { params: params })
     .then((response) => {
       rows.value = response.data.data;
       pagination.value.page = response.data.current_page;
@@ -112,5 +107,11 @@ export function handleFetchItems(options, extraParams) {
     })
     .finally(() => {
       loading.value = false;
+      nextTick(() => {
+        if (!tableRef || !tableRef.value) return;
+        const scrollableElement = tableRef.value.$el.querySelector('.q-table__middle');
+        if (!scrollableElement) return;
+        scrollableElement.scrollTop = 0;
+      });
     });
 }

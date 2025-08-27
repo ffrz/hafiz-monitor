@@ -2,6 +2,14 @@
 import { onMounted, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { handleFetchItems } from "@/helpers/client-req-handler";
+import useTableHeight from "@/composables/useTableHeight";
+
+const title = "Hafidz";
+const rows = ref([]);
+const loading = ref(true);
+const tableRef = ref(null);
+const filterToolbarRef = ref(null);
+const tableHeight = useTableHeight(filterToolbarRef);
 
 const statuses = [
   { value: "all", label: "Semua" },
@@ -9,10 +17,6 @@ const statuses = [
   { value: "inactive", label: "Tidak Aktif" },
 ];
 
-const title = "Hafidz";
-const tableRef = ref(null);
-const rows = ref([]);
-const loading = ref(true);
 const filter = reactive({
   status: "all",
   search: "",
@@ -50,6 +54,7 @@ const fetchItems = (props = null) => {
     loading,
     filter,
     url: route("hafiz.data"),
+    tableRef,
   });
   scrollTo(window, 0, 300);
 };
@@ -81,40 +86,42 @@ const showFilter = ref(false);
       />
     </template>
     <template #header v-if="showFilter">
-      <q-toolbar class="filter-bar">
+      <q-toolbar class="filter-bar" ref="filterToolbarRef">
         <div class="row q-col-gutter-xs items-center q-pa-sm">
-        <q-select
-          v-model="filter.status"
-          class="custom-select col"
-          :options="statuses"
-          label="Status"
-          dense
-          map-options
-          emit-value
-          outlined
-          flat
-          style="min-width: 150px"
-          @update:model-value="onFilterChange"
-        />
-        <q-input
-          class="col"
-          dense
-          debounce="300"
-          v-model="filter.search"
-          placeholder="Cari"
-          clearable
-          outlined
-        >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-      </div>
-    </q-toolbar>
+          <q-select
+            v-model="filter.status"
+            class="custom-select col"
+            :options="statuses"
+            label="Status"
+            dense
+            map-options
+            emit-value
+            outlined
+            flat
+            style="min-width: 150px"
+            @update:model-value="onFilterChange"
+          />
+          <q-input
+            class="col"
+            dense
+            debounce="300"
+            v-model="filter.search"
+            placeholder="Cari"
+            clearable
+            outlined
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </div>
+      </q-toolbar>
     </template>
     <div class="q-pa-sm mobile-no-padding">
       <q-table
         ref="tableRef"
+        class="full-height-table"
+        :style="{ height: tableHeight }"
         hide-header
         flat
         bordered

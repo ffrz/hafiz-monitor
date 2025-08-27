@@ -10,6 +10,7 @@ import {
   score_to_color,
   format_score,
 } from "@/helpers/utils";
+import useTableHeight from "@/composables/useTableHeight";
 
 const page = usePage();
 
@@ -22,6 +23,9 @@ const title = "Penilaian";
 const $q = useQuasar();
 const rows = ref([]);
 const loading = ref(true);
+const tableRef = ref(null);
+const filterToolbarRef = ref(null);
+const tableHeight = useTableHeight(filterToolbarRef);
 const filter = reactive({
   hafiz_id: "all",
   search: "",
@@ -63,6 +67,7 @@ const fetchItems = (props = null) => {
     loading,
     filter,
     url: route("memorization.data"),
+    tableRef,
   });
   scrollTo(window, 0, 300);
 };
@@ -109,7 +114,7 @@ const showFilter = ref(false);
     </template>
     <template #title>{{ title }}</template>
     <template #header v-if="showFilter">
-      <q-toolbar class="filter-bar">
+      <q-toolbar class="filter-bar" ref="filterToolbarRef">
         <div class="row q-col-gutter-xs items-center q-pa-sm">
           <q-select
             v-model="filter.hafiz_id"
@@ -121,7 +126,7 @@ const showFilter = ref(false);
             emit-value
             outlined
             flat
-            style="min-width: 150px;"
+            style="min-width: 150px"
             @update:model-value="onFilterChange"
           />
           <q-input
@@ -132,7 +137,7 @@ const showFilter = ref(false);
             placeholder="Cari"
             clearable
             outlined
-            style="min-width: 150px;"
+            style="min-width: 150px"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -143,7 +148,9 @@ const showFilter = ref(false);
     </template>
     <div class="q-pa-sm mobile-no-padding">
       <q-table
+        ref="tableRef"
         v-if="hasHafizes || rows.length > 0"
+        :style="{ height: tableHeight }"
         flat
         bordered
         square
@@ -273,9 +280,7 @@ const showFilter = ref(false);
         </template>
       </q-table>
       <div v-else class="q-pa-md text-center">
-        <p class="q-my-sm">
-          Belum ada Hafidz, tambahkan terlebih dahulu.
-        </p>
+        <p class="q-my-sm">Belum ada Hafidz, tambahkan terlebih dahulu.</p>
         <q-btn
           label="Tambah Hafidz"
           color="primary"
