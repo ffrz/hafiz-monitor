@@ -1,13 +1,13 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from "@inertiajs/vue3";
 
 const form = useForm({
-  password: '',
+  password: "",
 });
 
 const submit = () => {
   form.clearErrors();
-  form.post(route('password.confirm'), {
+  form.post(route("password.confirm"), {
     onFinish: () => form.reset(),
   });
 };
@@ -27,20 +27,43 @@ const submit = () => {
               This is a secure area of the application. Please confirm your
               password before continuing.
             </q-card-section>
-            <q-card-section v-if="status" class="text-green-9 text-weight-bold border">
+            <q-card-section
+              v-if="status"
+              class="text-green-9 text-weight-bold border"
+            >
               {{ status }}
             </q-card-section>
             <q-card-section>
-              <q-input autofocus square v-model.trim="form.password" label="Password" type="password" lazy-rules
-                :disable="form.processing" :error="!!form.errors.password" :error-message="form.errors.password"
-                :rules="[(val) => val && val.length > 0 || 'Password field is required.']">
-                  <template v-slot:append>
-                    <q-icon name="key" />
-                  </template>
-                </q-input>
+              <q-input
+                autofocus
+                square
+                v-model.trim="form.password"
+                label="Password"
+                type="password"
+                lazy-rules
+                :disable="form.processing"
+                :error="!!form.errors.password"
+                :error-message="form.errors.password"
+                :rules="[
+                  (val) =>
+                    (val && val.length > 0) || 'Password field is required.',
+                ]"
+                hide-bottom-space
+              >
+                <template v-slot:append>
+                  <q-icon name="key" />
+                </template>
+              </q-input>
             </q-card-section>
             <q-card-actions>
-              <q-btn icon="send" type="submit" color="primary" class="full-width" label="Confirm" :disable="form.processing" />
+              <q-btn
+                icon="send"
+                type="submit"
+                color="primary"
+                class="full-width"
+                label="Confirm"
+                :disable="form.processing"
+              />
             </q-card-actions>
           </q-card>
         </q-form>

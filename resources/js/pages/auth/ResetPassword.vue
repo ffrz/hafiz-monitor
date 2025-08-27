@@ -1,6 +1,6 @@
 <script setup>
 import { validateEmail } from "@/helpers/validations";
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const showPassword = ref(false);
@@ -19,14 +19,14 @@ const props = defineProps({
 const form = useForm({
   token: props.token,
   email: props.email,
-  password: '',
-  password_confirmation: '',
+  password: "",
+  password_confirmation: "",
 });
 
 const submit = () => {
   form.clearErrors();
-  form.post(route('password.store'), {
-    onFinish: () => form.reset('password', 'password_confirmation'),
+  form.post(route("password.store"), {
+    onFinish: () => form.reset("password", "password_confirmation"),
   });
 };
 </script>
@@ -43,15 +43,36 @@ const submit = () => {
                 <h6 class="q-my-sm text-center">Atur Ulang Kata Sandi</h6>
               </q-card-section>
               <q-card-section>
-                <q-input square v-model.trim="form.email" label="Email" lazy-rules :error="!!form.errors.email"
-                  :error-message="form.errors.email" :rules="[(val) => validateEmail(val) || 'Format Email tidak valid']">
+                <q-input
+                  square
+                  v-model.trim="form.email"
+                  label="Email"
+                  lazy-rules
+                  :error="!!form.errors.email"
+                  :error-message="form.errors.email"
+                  :rules="[
+                    (val) => validateEmail(val) || 'Format Email tidak valid',
+                  ]"
+                  hide-bottom-space
+                >
                   <template v-slot:append>
                     <q-icon name="email" />
                   </template>
                 </q-input>
-                <q-input square v-model="form.password" type="password" label="Kata Sandi" :error="!!form.errors.password"
-                  :error-message="form.errors.password" lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Masukkan kata sandi baru']">
+                <q-input
+                  square
+                  v-model="form.password"
+                  type="password"
+                  label="Kata Sandi"
+                  :error="!!form.errors.password"
+                  :error-message="form.errors.password"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val && val.length > 0) || 'Masukkan kata sandi baru',
+                  ]"
+                  hide-bottom-space
+                >
                   <template v-slot:append>
                     <q-btn
                       dense
@@ -62,12 +83,23 @@ const submit = () => {
                     /></q-btn>
                   </template>
                 </q-input>
-                <q-input square v-model="form.password_confirmation" type="password" label="Ulangi Kata Sandi"
-                  :error="!!form.errors.password_confirmation" :error-message="form.errors.password_confirmation"
-                  lazy-rules :rules="[
-                    (val) => (val && val.length > 0) || 'Konfirmasi kata sandi baru.',
-                    () => (form.password == form.password_confirmation) || 'Kata sandi yang dikonfirmasi salah.'
-                  ]">
+                <q-input
+                  square
+                  v-model="form.password_confirmation"
+                  type="password"
+                  label="Ulangi Kata Sandi"
+                  :error="!!form.errors.password_confirmation"
+                  :error-message="form.errors.password_confirmation"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val && val.length > 0) || 'Konfirmasi kata sandi baru.',
+                    () =>
+                      form.password == form.password_confirmation ||
+                      'Kata sandi yang dikonfirmasi salah.',
+                  ]"
+                  hide-bottom-space
+                >
                   <template v-slot:append>
                     <q-btn
                       dense
@@ -80,11 +112,19 @@ const submit = () => {
                 </q-input>
               </q-card-section>
               <q-card-actions>
-                <q-btn icon="send" type="submit" color="primary" class="full-width" label="Reset Password" />
+                <q-btn
+                  icon="send"
+                  type="submit"
+                  color="primary"
+                  class="full-width"
+                  label="Reset Password"
+                />
               </q-card-actions>
               <q-card-section class="text-center q-pa-none q-mt-md">
                 <p class="q-my-xs text-grey-7">
-                  <i-link :href="route('login')">Kembali ke halaman login.</i-link>
+                  <i-link :href="route('login')"
+                    >Kembali ke halaman login.</i-link
+                  >
                 </p>
               </q-card-section>
             </q-card>

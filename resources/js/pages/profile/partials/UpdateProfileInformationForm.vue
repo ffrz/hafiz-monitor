@@ -34,12 +34,14 @@ const submit = () => handleSubmit({ form, url: route("profile.update") });
           :error="!!form.errors.name"
           :error-message="form.errors.name"
           :rules="[(val) => (val && val.length > 0) || 'Name harus diisi.']"
+          hide-bottom-space
         />
         <q-input
           v-model.trim="form.email"
           label="Email"
           readonly=""
           :disable="form.processing"
+          hide-bottom-space
         />
       </q-card-section>
       <q-card-section>

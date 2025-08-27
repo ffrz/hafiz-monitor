@@ -11,8 +11,6 @@ const title = "Hasil Penilaian";
 const data = ref(page.props.data);
 
 onMounted(async () => {
-
-
   for (const surah_id in data.value.details) {
     const surahDetail = data.value.details[surah_id];
     if (!surahDetail || !surahDetail.details) continue;
@@ -29,7 +27,7 @@ onMounted(async () => {
         console.warn(`Ayah not found: Surah ${surah_id}, Ayah ${ayahNumber}`);
       }
 
-      detail.ayah_text = ayah?.text ?? '[Tidak ditemukan]';
+      detail.ayah_text = ayah?.text ?? "[Tidak ditemukan]";
     }
   }
 });
@@ -39,31 +37,55 @@ onMounted(async () => {
   <i-head :title="title" />
   <authenticated-layout>
     <template #left-button v-if="$q.screen.lt.md">
-      <q-btn icon="arrow_back" dense flat @click="router.get(route('memorization.index'))" />
+      <q-btn
+        icon="arrow_back"
+        dense
+        flat
+        @click="router.get(route('memorization.index'))"
+      />
     </template>
     <template #title>{{ title }}</template>
     <template #right-button>
-      <q-btn icon="add" color="primary" dense @click="router.get(route('memorization.create'))" />
+      <q-btn
+        icon="add"
+        color="primary"
+        dense
+        @click="router.get(route('memorization.create'))"
+      />
     </template>
     <div class="row justify-center">
       <div class="col col-md-6 q-pa-sm">
-        <q-card square flat bordered class="col q-pa-sm full-width full-height-card">
+        <q-card
+          square
+          flat
+          bordered
+          class="col q-pa-sm full-width full-height-card"
+        >
           <q-card-section class="q-pa-sm text-center">
             <div class="text-h6">
-              <span><my-link :href="route('hafiz.detail', { id: data.hafiz.id })">{{ data.hafiz.name }}</my-link></span>
+              <span
+                ><my-link
+                  :href="route('hafiz.detail', { id: data.hafiz.id })"
+                  >{{ data.hafiz.name }}</my-link
+                ></span
+              >
             </div>
             <div class="text-caption text-grey-8">
               <span>{{ data.title }}</span>
-              <span>-
-                {{ dayjs(data.created_at).format("DD MMMM YYYY HH:mm") }}</span>
+              <span
+                >-
+                {{ dayjs(data.created_at).format("DD MMMM YYYY HH:mm") }}</span
+              >
             </div>
             <div class="text-subtitle1">
               <span>
-                <span class="text-bold" :style="{ color: score_to_color(data.score) }">{{ score_to_letter(data.score) }}
+                <span
+                  class="text-bold"
+                  :style="{ color: score_to_color(data.score) }"
+                  >{{ score_to_letter(data.score) }}
                   /
-                  {{
-                    format_score(data.score)
-                  }}</span>
+                  {{ format_score(data.score) }}</span
+                >
               </span>
             </div>
             <div v-if="data.notes" class="text-caption text-grey-8">
@@ -73,28 +95,43 @@ onMounted(async () => {
           <q-card-section class="q-pa-sm">
             <template v-for="surah in data.details" :key="surah.id">
               <div class="detail-surah">
-                <my-link :href="route('hafiz.surah-history', {
-                  hafiz_id: data.hafiz.id,
-                  surah_id: surah.id,
-                })
-                  ">{{ surah.id }}: {{ surah.name }} (<span :style="{ color: score_to_color(surah.score) }">{{
-                    score_to_letter(surah.score) }} /
-                    {{ format_score(surah.score) }}</span>)
+                <my-link
+                  :href="
+                    route('hafiz.surah-history', {
+                      hafiz_id: data.hafiz.id,
+                      surah_id: surah.id,
+                    })
+                  "
+                  >{{ surah.id }}: {{ surah.name }} (<span
+                    :style="{ color: score_to_color(surah.score) }"
+                    >{{ score_to_letter(surah.score) }} /
+                    {{ format_score(surah.score) }}</span
+                  >)
                 </my-link>
               </div>
-              <div v-for="detail in surah.details" :key="detail.id" class="detail-item">
+              <div
+                v-for="detail in surah.details"
+                :key="detail.id"
+                class="detail-item"
+              >
                 <div class="ayah-item">
                   <div class="ayah-number">
                     <span>{{ detail.ayah_number }} : </span>
-                    <span :style="{
-                      color: score_to_color(detail.score),
-                    }">{{ score_to_letter(detail.score) }}</span>
+                    <span
+                      :style="{
+                        color: score_to_color(detail.score),
+                      }"
+                      >{{ score_to_letter(detail.score) }}</span
+                    >
                   </div>
                   <div class="ayah-text">
                     {{ detail.ayah_text }}
                   </div>
                 </div>
-                <div v-if="detail.notes" class="text-caption text-grey-8 detail-notes">
+                <div
+                  v-if="detail.notes"
+                  class="text-caption text-grey-8 detail-notes"
+                >
                   <q-icon name="note" />: {{ detail.notes }}
                 </div>
               </div>

@@ -11,20 +11,18 @@ defineProps({
 
 const emailInput = ref();
 const form = useForm({
-  email: '',
+  email: "",
 });
 
 const submit = () => {
   form.clearErrors();
-  form.post(route('password.request'), {
+  form.post(route("password.request"), {
     preserveScroll: true,
     onError: () => {
       emailInput.value.focus();
-    }
+    },
   });
 };
-
-
 </script>
 
 <template>
@@ -39,24 +37,43 @@ const submit = () => {
             </q-card-section>
             <q-card-section class="text-grey-8">
               Lupa kata sandi? Tidak masalah. Beri tahu kami alamat email anda
-              dan kami akan mengirim tautan untuk mengatur ulang kata sandi ke email anda
-              sehingga anda bisa membuat kata sandi baru.
+              dan kami akan mengirim tautan untuk mengatur ulang kata sandi ke
+              email anda sehingga anda bisa membuat kata sandi baru.
             </q-card-section>
-            <q-card-section v-if="status" class="text-green-9 text-weight-bold border">
+            <q-card-section
+              v-if="status"
+              class="text-green-9 text-weight-bold border"
+            >
               {{ status }}
             </q-card-section>
             <q-card-section>
-              <q-input square v-model.trim="form.email" label="Email" lazy-rules :error="!!form.errors.email"
-                :error-message="form.errors.email" :disable="form.processing"
-                :rules="[(val) => validateEmail(val) || 'Format Email tidak valid.']">
+              <q-input
+                square
+                v-model.trim="form.email"
+                label="Email"
+                lazy-rules
+                :error="!!form.errors.email"
+                :error-message="form.errors.email"
+                :disable="form.processing"
+                :rules="[
+                  (val) => validateEmail(val) || 'Format Email tidak valid.',
+                ]"
+                hide-bottom-space
+              >
                 <template v-slot:append>
                   <q-icon name="email" />
                 </template>
               </q-input>
             </q-card-section>
             <q-card-actions>
-              <q-btn icon="email" type="submit" color="primary" class="full-width" label="Email Password Reset Link"
-                :disable="form.processing" />
+              <q-btn
+                icon="email"
+                type="submit"
+                color="primary"
+                class="full-width"
+                label="Email Password Reset Link"
+                :disable="form.processing"
+              />
             </q-card-actions>
             <q-card-section class="text-center q-pa-none q-mt-md">
               <p class="q-my-xs text-grey-7">

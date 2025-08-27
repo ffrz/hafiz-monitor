@@ -51,7 +51,8 @@ const generateTitle = () => {
   }
 
   if (form.end_surah_id && form.end_surah_id != form.start_surah_id) {
-    title += " s.d " + db_surahs.find((surah) => surah.id == form.end_surah_id).name;
+    title +=
+      " s.d " + db_surahs.find((surah) => surah.id == form.end_surah_id).name;
   }
 
   form.title = title;
@@ -62,11 +63,16 @@ const generateTitle = () => {
   <i-head :title="title" />
   <authenticated-layout>
     <template #left-button v-if="$q.screen.lt.md">
-      <q-btn icon="arrow_back" dense flat @click="router.get(route('memorization.index'))"/>
+      <q-btn
+        icon="arrow_back"
+        dense
+        flat
+        @click="router.get(route('memorization.index'))"
+      />
     </template>
     <template #title>{{ title }}</template>
     <div class="row justify-center">
-      <div class="col col-lg-6 q-pa-md">
+      <div class="col col-lg-6 q-pa-sm">
         <q-form class="row" @submit.prevent="submit">
           <q-card square flat bordered class="col">
             <q-card-section class="q-pt-none">
@@ -85,6 +91,7 @@ const generateTitle = () => {
                 transition-hide="jump-up"
                 :error="!!form.errors.hafiz_id"
                 :error-message="form.errors.hafiz_id"
+                hide-bottom-space
               />
               <q-select
                 popup-content-class="custom-select-popup"
@@ -100,6 +107,7 @@ const generateTitle = () => {
                 transition-hide="jump-up"
                 :error="!!form.errors.start_surah_id"
                 :error-message="form.errors.start_surah_id"
+                hide-bottom-space
               />
               <q-select
                 popup-content-class="custom-select-popup"
@@ -116,6 +124,7 @@ const generateTitle = () => {
                 transition-hide="jump-up"
                 :error="!!form.errors.end_surah_id"
                 :error-message="form.errors.end_surah_id"
+                hide-bottom-space
               />
               <q-input
                 v-model.trim="form.title"
@@ -127,6 +136,7 @@ const generateTitle = () => {
                 :rules="[
                   (val) => (val && val.length > 0) || 'Judul sesi harus diisi.',
                 ]"
+                hide-bottom-space
               />
               <q-input
                 v-if="!!form.id"
@@ -135,11 +145,12 @@ const generateTitle = () => {
                 label="Catatan"
                 autogrow
                 counter
-                maxlength="1000"
+                maxlength="250"
                 lazy-rules
                 :disable="form.processing"
                 :error="!!form.errors.notes"
                 :error-message="form.errors.notes"
+                hide-bottom-space
               />
             </q-card-section>
             <q-card-actions class="row">

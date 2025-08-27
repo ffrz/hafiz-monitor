@@ -45,6 +45,7 @@ const submit = () => handleSubmit({ form, url: route("register") });
                   :rules="[
                     (val) => (val && val.length > 0) || 'Nama harus diisi',
                   ]"
+                  hide-bottom-space
                 >
                   <template v-slot:append>
                     <q-icon name="person" />
@@ -59,6 +60,7 @@ const submit = () => handleSubmit({ form, url: route("register") });
                   :error-message="form.errors.email"
                   :disable="form.processing"
                   :rules="[(val) => validateEmail(val) || 'Email tidak valid']"
+                  hide-bottom-space
                 >
                   <template v-slot:append>
                     <q-icon name="email" />
@@ -78,6 +80,7 @@ const submit = () => handleSubmit({ form, url: route("register") });
                       (val && val.length > 0) ||
                       'Silahkan masukkan kata sandi.',
                   ]"
+                  hide-bottom-space
                 >
                   <template v-slot:append>
                     <q-btn
@@ -107,6 +110,7 @@ const submit = () => handleSubmit({ form, url: route("register") });
                       form.password == form.password_confirmation ||
                       'Konfirmasi kata sandi tidak cocok.',
                   ]"
+                  hide-bottom-space
                 >
                   <template v-slot:append>
                     <q-btn

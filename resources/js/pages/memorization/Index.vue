@@ -151,6 +151,7 @@ const showFilter = ref(false);
     </template>
     <div class="q-pa-sm mobile-no-padding">
       <q-table
+        :hide-header="$q.screen.lt.md"
         ref="tableRef"
         v-if="hasHafizes || rows.length > 0"
         class="full-height-table"

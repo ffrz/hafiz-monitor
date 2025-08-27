@@ -30,12 +30,12 @@ import BtnLink from "@/components/BtnLink.vue";
               </div>
             </q-card-actions>
             <q-card-section
-                class="flex justify-center items-center q-px-sm q-py-xs"
-              >
-                <hr class="col line" />
-                <span class="col-auto q-mx-sm">Atau</span>
-                <hr class="col line" />
-              </q-card-section>
+              class="flex justify-center items-center q-px-sm q-py-xs"
+            >
+              <hr class="col line" />
+              <span class="col-auto q-mx-sm">Atau</span>
+              <hr class="col line" />
+            </q-card-section>
             <q-card-actions>
               <div class="full-width q-my-md">
                 <q-btn

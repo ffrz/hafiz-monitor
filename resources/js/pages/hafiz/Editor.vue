@@ -55,6 +55,7 @@ const showDetails = ref(false);
                 :rules="[
                   (val) => (val && val.length > 0) || 'Nama harus diisi.',
                 ]"
+                hide-bottom-space
               />
               <div v-show="showDetails">
                 <date-picker
@@ -62,6 +63,7 @@ const showDetails = ref(false);
                   label="Tanggal Lahir"
                   :error="!!form.errors.birth_date"
                   :disable="form.processing"
+                  hide-bottom-space
                 />
                 <q-select
                   v-model="form.gender"
@@ -75,6 +77,7 @@ const showDetails = ref(false);
                   transition-hide="jump-up"
                   :error="!!form.errors.gender"
                   :error-message="form.errors.gender"
+                  hide-bottom-space
                 />
                 <q-input
                   v-model.trim="form.phone"
@@ -83,6 +86,7 @@ const showDetails = ref(false);
                   :disable="form.processing"
                   :error="!!form.errors.phone"
                   :error-message="form.errors.phone"
+                  hide-bottom-space
                 />
                 <q-input
                   v-model.trim="form.address"
@@ -95,6 +99,7 @@ const showDetails = ref(false);
                   :disable="form.processing"
                   :error="!!form.errors.address"
                   :error-message="form.errors.address"
+                  hide-bottom-space
                 />
                 <q-input
                   v-model.trim="form.notes"
@@ -107,6 +112,7 @@ const showDetails = ref(false);
                   :disable="form.processing"
                   :error="!!form.errors.notes"
                   :error-message="form.errors.notes"
+                  hide-bottom-space
                 />
                 <div style="margin-left: -10px">
                   <q-checkbox
@@ -118,7 +124,11 @@ const showDetails = ref(false);
                 </div>
               </div>
               <div>
-                <span @click="showDetails=!showDetails" class="text-caption text-grey-6">{{ !showDetails ? 'Mode Terperinci' : 'Mode Simple' }}</span>
+                <span
+                  @click="showDetails = !showDetails"
+                  class="text-caption text-grey-6"
+                  >{{ !showDetails ? "Mode Terperinci" : "Mode Simple" }}</span
+                >
               </div>
             </q-card-section>
             <q-card-actions>

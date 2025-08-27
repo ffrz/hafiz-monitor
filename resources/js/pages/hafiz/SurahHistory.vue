@@ -91,7 +91,12 @@ onMounted(() => {
   <i-head :title="title" />
   <authenticated-layout>
     <template #left-button v-if="$q.screen.lt.md">
-      <q-btn icon="arrow_back" dense flat @click="router.get(route('hafiz.detail', { id: hafiz.id }))" />
+      <q-btn
+        icon="arrow_back"
+        dense
+        flat
+        @click="router.get(route('hafiz.detail', { id: hafiz.id }))"
+      />
     </template>
     <template #title>{{ title }}</template>
     <div class="row justify-center">
@@ -101,19 +106,23 @@ onMounted(() => {
             <div class="text-subtitle1 text-bold text-grey-9">
               <my-link :href="route('hafiz.detail', { id: hafiz.id })">{{
                 hafiz.name
-                }}</my-link>
+              }}</my-link>
             </div>
             <div class="text-subtitle2 text-bold text-grey-9">
               {{ surah.name }} ({{ surah.total_ayahs }} ayat)
             </div>
             <div>
               Skor Terakhir:
-              <span class="text-bold text-grey-9">{{ score_to_letter(last_score) }} / {{ last_score }}</span>
+              <span class="text-bold text-grey-9"
+                >{{ score_to_letter(last_score) }} / {{ last_score }}</span
+              >
             </div>
             <div>
               Skor Rata-Rata:
-              <span class="text-bold text-grey-9">{{ score_to_letter(hafiz.average_score) }} /
-                {{ hafiz.average_score.toFixed(2) }}</span>
+              <span class="text-bold text-grey-9"
+                >{{ score_to_letter(hafiz.average_score) }} /
+                {{ hafiz.average_score.toFixed(2) }}</span
+              >
             </div>
             <p class="q-my-sm text-caption">
               Riwayat hafalan terakhir (dibatasi sampai 10 hasil penilaian)
@@ -129,10 +138,17 @@ onMounted(() => {
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th v-for="j in Object.keys(scores)" :key="j" :title="scores[j].created_at">
+                    <th
+                      v-for="j in Object.keys(scores)"
+                      :key="j"
+                      :title="scores[j].created_at"
+                    >
                       <span class="text-vertical">
-                        <my-link :href="route('memorization.view', { id: scores[j].id })
-                          ">
+                        <my-link
+                          :href="
+                            route('memorization.view', { id: scores[j].id })
+                          "
+                        >
                           {{ dayjs(scores[j].created_at).format("DD-MM-YY") }}
                         </my-link>
                       </span>
@@ -140,14 +156,22 @@ onMounted(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="i in Array.from({ length: surah.total_ayahs }, (_, index) => index + 1)" :key="i">
-
+                  <tr
+                    v-for="i in Array.from(
+                      { length: surah.total_ayahs },
+                      (_, index) => index + 1
+                    )"
+                    :key="i"
+                  >
                     <th>{{ i }}</th>
                     <template v-for="j in Object.keys(scores)">
                       <td>
-                        <span class="text-bold" :style="{
-                          color: score_to_color(scores[j].details[i]),
-                        }">
+                        <span
+                          class="text-bold"
+                          :style="{
+                            color: score_to_color(scores[j].details[i]),
+                          }"
+                        >
                           {{
                             scores[j].details[i]
                               ? score_to_letter(scores[j].details[i])

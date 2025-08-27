@@ -127,6 +127,7 @@ const showFilter = ref(false);
         ref="tableRef"
         class="full-height-table"
         :style="{ height: tableHeight }"
+        :hide-header="$q.screen.lt.md"
         flat
         bordered
         square

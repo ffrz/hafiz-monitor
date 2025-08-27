@@ -56,6 +56,7 @@ const updatePassword = () => {
           :rules="[
             (val) => (val && val.length > 0) || 'Kata sandi harus diisi.',
           ]"
+          hide-bottom-space
         >
           <template v-slot:append>
             <q-btn dense flat round @click="showPassword = !showPassword"
@@ -75,6 +76,7 @@ const updatePassword = () => {
           :rules="[
             (val) => (val && val.length > 0) || 'Kata sandi harus diisi.',
           ]"
+          hide-bottom-space
         />
         <q-input
           v-model="form.password_confirmation"
@@ -88,6 +90,7 @@ const updatePassword = () => {
           :rules="[
             (val) => (val && val.length > 0) || 'Kata sandi harus diisi.',
           ]"
+          hide-bottom-space
         />
       </q-card-section>
       <q-card-section>

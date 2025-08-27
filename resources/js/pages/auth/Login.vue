@@ -40,6 +40,7 @@ const submit = () => handleSubmit({ form, url: route("login") });
                   :rules="[
                     (val) => (val && val.length > 0) || 'Masukkan email',
                   ]"
+                  hide-bottom-space
                 >
                   <template v-slot:append>
                     <q-icon name="person" />
@@ -57,6 +58,7 @@ const submit = () => handleSubmit({ form, url: route("login") });
                   :rules="[
                     (val) => (val && val.length > 0) || 'Masukkan kata sandi',
                   ]"
+                  hide-bottom-space
                 >
                   <template v-slot:append>
                     <q-btn

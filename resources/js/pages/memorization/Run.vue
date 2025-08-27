@@ -246,7 +246,9 @@ const generateTitle = () => {
       <q-card-section>
         <div class="text-subtitle1 text-grey-9">
           <b>Catatan Ayat</b> (ayat ke-{{
-            current_ayah ? rows.find((row) => row.id === current_ayah).number : ''
+            current_ayah
+              ? rows.find((row) => row.id === current_ayah).number
+              : ""
           }})
         </div>
       </q-card-section>
