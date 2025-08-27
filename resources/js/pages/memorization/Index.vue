@@ -154,7 +154,6 @@ const showFilter = ref(false);
         flat
         bordered
         square
-        :dense="true || $q.screen.lt.md"
         color="primary"
         row-key="id"
         virtual-scroll
