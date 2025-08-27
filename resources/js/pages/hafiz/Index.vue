@@ -13,7 +13,7 @@ const tableRef = ref(null);
 const filterToolbarRef = ref(null);
 const tableHeight = useTableHeight(
   filterToolbarRef,
-  $q.screen.lt.md ? 67 + 39 : 67
+  $q.screen.lt.md ? 67 + 38 : 67
 );
 
 const statuses = [
