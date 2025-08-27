@@ -27,7 +27,7 @@ const tableRef = ref(null);
 const filterToolbarRef = ref(null);
 const tableHeight = useTableHeight(
   filterToolbarRef,
-  $q.screen.lt.md ? 67 + 55 : 67
+  $q.screen.lt.md ? 67 + 41 : 67
 );
 const filter = reactive({
   hafiz_id: "all",
