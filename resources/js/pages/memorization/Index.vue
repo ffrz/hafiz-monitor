@@ -150,6 +150,7 @@ const showFilter = ref(false);
       <q-table
         ref="tableRef"
         v-if="hasHafizes || rows.length > 0"
+        class="full-height-table"
         :style="{ height: tableHeight }"
         flat
         bordered
