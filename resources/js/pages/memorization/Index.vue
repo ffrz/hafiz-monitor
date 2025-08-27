@@ -166,7 +166,6 @@ const showFilter = ref(false);
         :rows-per-page-options="[10, 25, 50]"
         @request="fetchItems"
         binary-state-sort
-        hide-header
       >
         <template v-slot:loading>
           <q-inner-loading showing color="red" />
